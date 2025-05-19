@@ -3,7 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
     basePath: "/lolesports-live",
-    output: "export",  // <=== enables static exports
+    assetPrefix: "/lolesports-live",
+    output: "export",
     reactStrictMode: true,
 };
 
