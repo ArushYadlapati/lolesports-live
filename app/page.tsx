@@ -34,7 +34,7 @@ export default function Home() {
           >
             <Image
               className="dark:invert"
-              src="/lolesports-live/public/vercel.svg"
+              src="/lolesports-live/vercel.svg"
               alt="Vercel logomark"
               width={20}
               height={20}
@@ -60,7 +60,7 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            src="./lolesports-live/public//file.svg"
+            src="./lolesports-live/file.svg"
             alt="File icon"
             width={16}
             height={16}
