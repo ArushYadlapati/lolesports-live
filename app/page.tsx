@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+const TOKEN = process.env.NEXT_PUBLIC_TOKEN;
 
 export default function Home() {
   const [responseText, setResponseText] = useState("Press Get Match to Load Data");
@@ -12,7 +13,7 @@ export default function Home() {
 
     const response = await fetch(urlString, {
       headers: {
-        'Authorization': `Bearer ${ process.env.NEXT_PUBLIC_TOKEN}`
+        'Authorization': `Bearer ${TOKEN}`
       }
     });
 
