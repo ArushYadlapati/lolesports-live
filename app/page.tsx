@@ -5,31 +5,37 @@ export default function Home() {
   const [responseText, setResponseText] = useState("Press Get Match to Load Data");
   const [isLoading, setIsLoading] = useState(false);
 
-  const urlString = "https://api.pandascore.co/lol/matches?filter[status]=running";
-
   const fetchMatches = async () => {
     setIsLoading(true);
 
-    const response = await fetch(urlString, {
-      headers: {
-        'Authorization': `Bearer bE5TU4_0fsjBuM04FQ0ukBNEcOgkB2UTf9rC_kl0XBbv0PH5z9k`
-        // yes, this is an access token, but it's a public one and not sensitive
-        // the authorization header is required for the API to work, but the token is not sensitive
-      }
-    });
+    try {
+      const token = process.env.NEXT_PUBLIC_TOKEN || "";
 
-    const data = await response.json();
-    setResponseText(JSON.stringify(data, null, 2));
+      const response = await fetch(
+          "https://api.pandascore.co/lol/matches?filter[status]=running",
+          {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          }
+      );
+
+      const data = await response.json();
+      setResponseText(JSON.stringify(data, null, 2));
+    } catch (e) {
+      // uhhhh rip, it got cooked
+    }
     setIsLoading(false);
-
   };
 
+  const executeCurl = () => {
+    setIsLoading(true);
+    setTimeout(fetchMatches, 2000); // mught need to change
+  };
   return (() => {
-    let buttonText;
-
-    if (isLoading) {
-      buttonText = "Loading Match";
-    } else {
+    let buttonText = "Loading Match";
+    if (!isLoading) {
       buttonText = "Get Match";
     }
 
