@@ -6,7 +6,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchMatches = async () => {
-    setIsLoading(true);
+      executeCurl();
 
     try {
       const token = process.env.NEXT_PUBLIC_TOKEN || "";
@@ -33,6 +33,7 @@ export default function Home() {
     setIsLoading(true);
     setTimeout(fetchMatches, 2000); // mught need to change
   };
+  
   return (() => {
     let buttonText = "Loading Match";
     if (!isLoading) {
