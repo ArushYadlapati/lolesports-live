@@ -13,7 +13,9 @@ export default function Home() {
 
     const response = await fetch(urlString, {
       headers: {
-        'Authorization': `Bearer ${TOKEN}`
+        'Authorization': `Bearer bE5TU4_0fsjBuM04FQ0ukBNEcOgkB2UTf9rC_kl0XBbv0PH5z9k`
+        // yes, this is an access token, but it's a public one and not sensitive
+        // the authorization header is required for the API to work, but the token is not sensitive
       }
     });
 
@@ -26,7 +28,7 @@ export default function Home() {
   return (() => {
     let buttonText;
 
-    if (isLoading === true) {
+    if (isLoading) {
       buttonText = "Loading Match";
     } else {
       buttonText = "Get Match";
