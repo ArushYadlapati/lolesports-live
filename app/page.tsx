@@ -1,39 +1,64 @@
 "use client";
 import { useState } from "react";
 
+const leagues = ['lck', 'lpl', 'lec', 'lcs', 'cblol-brazil', 'lla'];
+const token = "0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z";
+
 export default function Home() {
   const [responseText, setResponseText] = useState("Press Get Match to Load Data");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const fetchMatches = async () => {
-      executeCurl();
+        try {
+            const response = await
+                fetch('https://esports-api.lolesports.com/persisted/gw/getLive?hl=en-US',
+                {headers: {'x-api-key': token}}
+            );
 
-    try {
-      const token = process.env.NEXT_PUBLIC_TOKEN || "";
+            const live = await response.json();
+            let events = live?.data?.schedule?.events;
 
-      const response = await fetch(
-          "https://api.pandascore.co/lol/matches?filter[status]=running",
-          {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${token}`
+            const matches = events.filter(
+                (majic: any) => // majic
+                    majic.state === 'inProgress' && leagues.includes(majic.league?.slug)
+            );
+
+            if (matches.length > 0) { // live match!!!
+                setResponseText(JSON.stringify(matches, null, 2));
+            } else {
+                // get next match if no live matches
+                let schedule = await fetch(
+                    'https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=en-US',
+                    {
+                        headers: {
+                            'x-api-key': token,
+                        },
+                    }
+                );
+
+                const scheduleData = await schedule.json();
+                const next: Record<string, any> = {};
+
+                events = scheduleData?.data?.schedule?.events;
+
+                let event;
+                for (event of events) {
+                    // IDK why it's called slug but its really just the league id tags or whatever according to the API docs
+                    const slug = event?.league?.slug;
+                    if (leagues.includes(slug) && event.state === 'unstarted' && !next[slug]) {
+                        next[slug] = event;
+                    }
+                }
+
+                setResponseText(
+                    JSON.stringify(Object.values(next), null, 2)
+                );
             }
-          }
-      );
-
-      const data = await response.json();
-      setResponseText(JSON.stringify(data, null, 2));
     } catch (e) {
       // uhhhh rip, it got cooked
     }
-    setIsLoading(false);
   };
 
-  const executeCurl = () => {
-    setIsLoading(true);
-    setTimeout(fetchMatches, 2000); // mught need to change
-  };
-  
   return (() => {
     let buttonText = "Loading Match";
     if (!isLoading) {
