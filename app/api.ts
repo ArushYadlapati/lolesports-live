@@ -6,6 +6,8 @@ const token = process.env.NEXT_PUBLIC_TOKEN;
 const leagues = ["lck", "lpl", "lec", "lcs", "cblol-brazil", "lla"];
 
 let response = "";
+let data;
+let events: any[] = [];
 
 export async function updateResponse() {
     const headers = new Headers();
@@ -20,28 +22,44 @@ export async function updateResponse() {
                 {headers}
             )
         ).json());
-    } catch (error) {
-        console.error("Failed to fetch schedule data:", error);
+
+        data = JSON.parse(response);
+        events = data?.data?.schedule?.events || [];
+    } catch (e) {
+        // uhhhh rip, it got cooked
     }
 }
+
+export function matchIsLive() {
+    if (!response) {
+        return false;
+    }
+    return getLiveMatch().length > 0;
+}
+
 export function getLiveMatch() {
-    if (!response) return [];
+    if (!response) {
+        return [];
+    }
 
-    const data = JSON.parse(response);
-    const events = data?.data?.schedule?.events || [];
+    const liveMatches: any[] = [];
 
-    return events.filter(
-        (event: any) =>
+    for (const event of events) {
+        if (
             event.state === "inProgress" &&
             leagues.includes(event.league?.slug)
-    );
+        ) {
+            liveMatches.push(event);
+        }
+    }
+
+    return liveMatches;
 }
 
 export function getNextMatch(league: string) {
-    if (!response) return null;
-
-    const data = JSON.parse(response);
-    const events = data?.data?.schedule?.events || [];
+    if (!response) {
+        return null;
+    }
 
     for (const event of events) {
         const slug = event?.league?.slug;

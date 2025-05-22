@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { updateResponse, getLiveMatch, getNextMatch } from "./api";
+import {updateResponse, getLiveMatch, getNextMatch, matchIsLive} from "./api";
 
 const leagues = ["lck", "lpl", "lec", "lcs", "cblol-brazil", "lla"];
 
@@ -11,26 +11,30 @@ export default function Home() {
     const [isLoading] = useState(false);
 
     const fetchMatches = async () => {
-        try {
-            await updateResponse();
-            const liveMatches = getLiveMatch();
+        await updateResponse();
+        const liveMatches = getLiveMatch();
 
-            if (liveMatches.length > 0) {
-                setResponseText(JSON.stringify(liveMatches, null, 2));
-            } else {
-                const nextMatches: any[] = []
+        if (matchIsLive()) {
+            setResponseText(
+                JSON.stringify(
+                    liveMatches, null, 2
+                )
+            );
+        } else {
+            const nextMatches: any[] = []
 
-                for (const league of leagues) {
-                    const match = getNextMatch(league);
-                    if (match) {
-                        nextMatches.push(match);
-                    }
+            for (const league of leagues) {
+                const match = getNextMatch(league);
+                if (match) {
+                    nextMatches.push(match);
                 }
-
-                setResponseText(JSON.stringify(nextMatches, null, 2));
             }
-        } catch (e) {
-            // uhhhh rip, it got cooked
+
+            setResponseText(
+                JSON.stringify(
+                    nextMatches, null, 2
+                )
+            );
         }
     };
 
