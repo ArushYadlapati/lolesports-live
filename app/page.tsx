@@ -12,9 +12,7 @@ export default function Home() {
         await updateResponse();
 
         if (matchIsLive()) {
-            setResponseText(
-                getLiveMatch()
-            );
+            setResponseText(getLiveMatch());
         } else {
             setResponseText(getNextMatches());
         }
