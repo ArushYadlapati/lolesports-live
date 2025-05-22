@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
-import {updateResponse, getLiveMatch, getNextMatch, matchIsLive} from "./api";
-
-const leagues = ["lck", "lpl", "lec", "lcs", "cblol-brazil", "lla"];
+import {updateResponse, getLiveMatch, getNextMatches, matchIsLive} from "./api";
 
 export default function Home() {
     const [responseText, setResponseText] = useState(
@@ -12,29 +10,13 @@ export default function Home() {
 
     const fetchMatches = async () => {
         await updateResponse();
-        const liveMatches = getLiveMatch();
 
         if (matchIsLive()) {
             setResponseText(
-                JSON.stringify(
-                    liveMatches, null, 2
-                )
+                getLiveMatch()
             );
         } else {
-            const nextMatches: any[] = []
-
-            for (const league of leagues) {
-                const match = getNextMatch(league);
-                if (match) {
-                    nextMatches.push(match);
-                }
-            }
-
-            setResponseText(
-                JSON.stringify(
-                    nextMatches, null, 2
-                )
-            );
+            setResponseText(getNextMatches());
         }
     };
 

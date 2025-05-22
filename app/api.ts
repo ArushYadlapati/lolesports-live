@@ -1,9 +1,9 @@
 import * as dotenv from 'dotenv';
+import {getLeagues} from "@/app/leagues";
 
 dotenv.config();
 
 const token = process.env.NEXT_PUBLIC_TOKEN;
-const leagues = ["lck", "lpl", "lec", "lcs", "cblol-brazil", "lla"];
 
 let response = "";
 let data;
@@ -39,34 +39,44 @@ export function matchIsLive() {
 
 export function getLiveMatch() {
     if (!response) {
-        return [];
+        return "[]";
     }
 
     const liveMatches: any[] = [];
 
     for (const event of events) {
-        if (
-            event.state === "inProgress" &&
-            leagues.includes(event.league?.slug)
-        ) {
+        if (event.state === "inProgress" && getLeagues().includes(event.league?.slug)) {
             liveMatches.push(event);
         }
     }
 
-    return liveMatches;
+    return JSON.stringify(
+        liveMatches, null, 2
+    );
 }
-
-export function getNextMatch(league: string) {
+export function getNextMatches() {
     if (!response) {
         return null;
     }
 
-    for (const event of events) {
-        const slug = event?.league?.slug;
-        if (slug === league && event.state === "unstarted") {
-            return event;
+    const nextMatches: any[] = []
+
+    for (const league of getLeagues()) {
+        let match;
+
+        for (const event of events) {
+            const slug = event?.league?.slug;
+            if (slug === league && event.state === "unstarted") {
+                return event;
+            }
+        }
+
+        if (match) {
+            nextMatches.push(match);
         }
     }
 
-    return null;
+    return JSON.stringify(
+        nextMatches, null, 2
+    );
 }
