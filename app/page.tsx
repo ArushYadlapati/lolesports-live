@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
-import * as dotenv from 'dotenv'
-dotenv.config()
+import { updateResponse, getLiveMatch, getNextMatch } from "./api";
 
 const leagues = ["lck", "lpl", "lec", "lcs", "cblol-brazil", "lla"];
-const token = process.env.NEXT_PUBLIC_TOKEN;
+
 export default function Home() {
     const [responseText, setResponseText] = useState(
         "Press Get Match to Load Data"
@@ -13,58 +12,22 @@ export default function Home() {
 
     const fetchMatches = async () => {
         try {
-            const headers = new Headers();
-            headers.set("x-api-key", "");
+            await updateResponse();
+            const liveMatches = getLiveMatch();
 
-            if (token !== null && token !== undefined) {
-                headers.set("x-api-key", token);
-            }
-
-            const response = await fetch(
-                "https://esports-api.lolesports.com/persisted/gw/getLive?hl=en-US",
-                {headers: headers}
-            );
-
-            const live = await response.json();
-            let events = live?.data?.schedule?.events;
-
-            const matches = events.filter(
-                // majic!
-                (majic: any) => majic.state === "inProgress" && leagues.includes(majic.league?.slug)
-            );
-
-            if (matches.length > 0) {
-                // live match!!!
-                setResponseText(JSON.stringify(matches, null, 2));
+            if (liveMatches.length > 0) {
+                setResponseText(JSON.stringify(liveMatches, null, 2));
             } else {
-                // get next match if no live matches
-                let headers = new Headers();
-                headers.set("x-api-key", "");
+                const nextMatches: any[] = []
 
-                if (token !== null && token !== undefined) {
-                    headers.set("x-api-key", token);
-                }
-
-                let schedule = await fetch(
-                    "https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=en-US",
-                    {headers: headers}
-                );
-
-                const scheduleData = await schedule.json();
-                const next: Record<string, any> = {};
-
-                events = scheduleData?.data?.schedule?.events;
-
-                let event;
-                for (event of events) {
-                    // IDK why it's called slug but its really just the league id tags or whatever according to the API docs
-                    const slug = event?.league?.slug;
-                    if (leagues.includes(slug) && event.state === "unstarted" && !next[slug]) {
-                        next[slug] = event;
+                for (const league of leagues) {
+                    const match = getNextMatch(league);
+                    if (match) {
+                        nextMatches.push(match);
                     }
                 }
 
-                setResponseText(JSON.stringify(Object.values(next), null, 2));
+                setResponseText(JSON.stringify(nextMatches, null, 2));
             }
         } catch (e) {
             // uhhhh rip, it got cooked
