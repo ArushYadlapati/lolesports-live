@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import {getLeagues} from "@/app/leagues";
+import { getLeagues } from "@/app/leagues";
 
 dotenv.config();
 
@@ -16,12 +16,14 @@ export async function updateResponse() {
     }
 
     try {
-        response = JSON.stringify(await(
-            await fetch(
-                "https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=en-US",
-                {headers}
-            )
-        ).json());
+        response = JSON.stringify(
+            await(
+                await fetch(
+                    "https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=en-US",
+                    { headers }
+                )
+            ).json()
+        );
 
         data = JSON.parse(response);
         events = data?.data?.schedule?.events || [];
@@ -30,53 +32,46 @@ export async function updateResponse() {
     }
 }
 
-export function matchIsLive() {
-    if (!response) {
-        return false;
+export function getLiveMatches() {
+    const liveMatches = getMatch("inProgress");
+    if (liveMatches.length <= 0 || liveMatches === "[]") {
+        return "";
     }
-    return getLiveMatch().length > 0;
+    return liveMatches;
 }
 
-export function getLiveMatch() {
+export function getNextMatches() {
+    return getMatch("unstarted");
+}
+
+export function getPastMatches() {
+    return getMatch("completed");
+}
+
+export function getMatch(matchType : String) {
     if (!response) {
         return "[]";
     }
 
-    const liveMatches: any[] = [];
-
-    for (const event of events) {
-        if (event.state === "inProgress" && getLeagues().includes(event.league?.slug)) {
-            liveMatches.push(event);
-        }
-    }
-
-    return JSON.stringify(
-        liveMatches, null, 2
-    );
-}
-export function getNextMatches() {
-    if (!response) {
-        return null;
-    }
-
-    const nextMatches: any[] = []
+    const pastMatches: any[] = [];
 
     for (const league of getLeagues()) {
-        let match;
+        let latestMatch = null;
 
         for (const event of events) {
             const slug = event?.league?.slug;
-            if (slug === league && event.state === "unstarted") {
-                return event;
+            if (event.state === matchType && slug === league) {
+                if (!latestMatch || new Date(event.startTime) > new Date(latestMatch.startTime)) {
+                    latestMatch = event;
+                }
             }
         }
 
-        if (match) {
-            nextMatches.push(match);
+        if (latestMatch) {
+            pastMatches.push(latestMatch);
         }
     }
 
-    return JSON.stringify(
-        nextMatches, null, 2
-    );
+    return JSON.stringify(pastMatches, null, 2);
 }
+
