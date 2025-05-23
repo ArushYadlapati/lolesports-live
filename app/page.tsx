@@ -9,8 +9,8 @@ export default function Home() {
 
     const fetchMatches = async () => {
         await updateResponse();
-        setResponseText(getLiveMatches() + getNextMatches() + getPastMatches());
-    };
+        setResponseText("Live Matches\n____________\n" + getLiveMatches() + "\n\nNext Matches\n____________\n" + getNextMatches() + "\n\nPast Matches\n____________\n" + getPastMatches());
+    }
 
     return (() => {
         return (

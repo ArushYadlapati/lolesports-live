@@ -34,8 +34,8 @@ export async function updateResponse() {
 
 export function getLiveMatches() {
     const liveMatches = getMatch("inProgress");
-    if (liveMatches.length <= 0 || liveMatches === "[]") {
-        return "";
+    if (liveMatches.length <= 0 || liveMatches === "[]" || liveMatches === "None") {
+        return "None";
     }
     return liveMatches;
 }
@@ -50,7 +50,7 @@ export function getPastMatches() {
 
 export function getMatch(matchType : String) {
     if (!response) {
-        return "[]";
+        return "None";
     }
 
     const pastMatches: any[] = [];
