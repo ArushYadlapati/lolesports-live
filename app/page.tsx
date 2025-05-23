@@ -9,21 +9,26 @@ export default function Home() {
 
     const fetchMatches = async () => {
         await updateResponse();
-        setResponseText("Live Matches\n____________\n" + getLiveMatches() + "\n\nNext Matches\n____________\n" + getNextMatches() + "\n\nPast Matches\n____________\n" + getPastMatches());
-    }
+        setResponseText("Live Matches\n____________\n" + getLiveMatches() +
+            "\n\nNext Matches\n____________\n" + getNextMatches() +
+            "\n\nPast Matches\n____________\n" + getPastMatches());
+    };
 
     return (() => {
         return (
-            <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-                <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full max-w-4xl">
-                    <div className="w-full bg-black/[.05] dark:bg-white/[.06] rounded-lg p-4 h-96 overflow-auto">
-                        <pre className="text-sm font-[family-name:var(--font-geist-mono)]">
+            <div
+                className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex items-center justify-center px-6 py-12">
+                <main className="w-full max-w-4xl space-y-8">
+                    <div
+                        className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 h-96 overflow-auto border border-gray-200 dark:border-gray-700">
+                        <pre className="text-sm font-mono whitespace-pre-wrap break-words">
                             { responseText }
                         </pre>
                     </div>
-                    <div className="flex gap-4 items-center flex-col sm:flex-row self-center">
-                        <button className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto disabled:opacity-50"
+                    <div className="flex justify-center">
+                        <button
                             onClick={fetchMatches}
+                            className="bg-blue-600 text-white px-6 py-3 rounded-full text-sm sm:text-base hover:bg-blue-700 dark:hover:bg-blue-500 transition duration-200 shadow-md"
                         >
                             Get Match
                         </button>
