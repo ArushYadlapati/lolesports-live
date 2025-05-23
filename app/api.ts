@@ -3,7 +3,8 @@ import { getLeagues } from "@/app/leagues";
 
 dotenv.config();
 
-const token = process.env.NEXT_PUBLIC_TOKEN;
+const token = "0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z";
+// token is public
 
 let response = "";
 let data;
