@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { updateResponse, getLiveMatches, getNextMatches, getPastMatches } from "./api";
+import { updateResponse, getLiveMatches, getNextMatches, getPastMatches } from "./api/apiGetter";
 
 export default function Home() {
     const [responseText, setResponseText] = useState(
@@ -10,8 +10,8 @@ export default function Home() {
     const fetchMatches = async () => {
         await updateResponse();
         setResponseText("Live Matches\n____________\n" + getLiveMatches() +
-            "\n\nNext Matches\n____________\n" + getNextMatches() +
-            "\n\nPast Matches\n____________\n" + getPastMatches());
+                    "\n\nNext Matches\n____________\n" + getNextMatches() +
+                    "\n\nPast Matches\n____________\n" + getPastMatches());
     };
 
     return (() => {

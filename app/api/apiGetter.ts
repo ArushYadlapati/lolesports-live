@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { getLeagues } from "@/app/leagues";
+import { getLeagues } from "@/app/helper/leagues";
 
 dotenv.config();
 
