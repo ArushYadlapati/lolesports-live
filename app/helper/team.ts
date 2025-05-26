@@ -35,10 +35,15 @@ function formatMatch(event: any): string {
 
     return `
         <div style="margin-bottom:24px;">
-            <strong>${ matchNames }</strong>
-            <br/>
-            <em>${ league }</em> — ${ matchTime }
-            <br/>
+            <strong>
+                ${ matchNames }
+            </strong>
+                <br/>
+                    <em>
+                        ${ league }
+                    </em>
+                    — ${ matchTime }
+                <br/>
             <div style="margin-top:8px;">
                 ${ teamImages }
             </div>
@@ -46,12 +51,36 @@ function formatMatch(event: any): string {
     `;
 }
 
+function getFormattedMatch(matchType: any[]) {
+    if (matchType.length > 0) {
+        return matchType.map(formatMatch).join("");
+    }
+
+    return `<p> 
+                None 
+            </p>`
+}
+
 export function getFormattedMatches() {
-    return `<h2 style="margin-top: 16px;">Live Matches</h2>` +
-        (getLiveMatches().length > 0 ? getLiveMatches().map(formatMatch).join('') : "<p>None</p>")
-       + `<h2 style="margin-top: 16px;">Next Matches</h2>` +
-        (getNextMatches().length > 0 ? getNextMatches().map(formatMatch).join('') : "<p>None</p>")
-       + `<h2 style="margin-top: 16px;">Past Matches</h2>` +
-        (getPastMatches().length > 0 ? getPastMatches().map(formatMatch).join('') : "<p>None</p>")
-    ;
+    let result = "";
+
+    result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
+                    Live Matches:
+               </h2>`
+
+    result += getFormattedMatch(getLiveMatches());
+
+    result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
+                    Next Matches:
+               <h2>`
+
+    result += getFormattedMatch(getNextMatches());
+
+    result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
+                    Past Matches:
+               <h2>`
+
+    result += getFormattedMatch(getPastMatches());
+
+    return result;
 }

@@ -33,17 +33,28 @@ export async function updateResponse() {
 
 export function getLiveMatches(): any[] {
     const liveMatches = getMatch("inProgress");
-    return Array.isArray(liveMatches) ? (liveMatches.length > 0 ? liveMatches : []) : [];
+    if (Array.isArray(liveMatches) && liveMatches.length > 0) {
+        return liveMatches;
+    }
+    return [];
 }
 
 export function getNextMatches(): any[] {
     const nextMatches = getMatch("unstarted");
-    return Array.isArray(nextMatches) ? nextMatches : [];
+    if (Array.isArray(nextMatches)){
+        return nextMatches;
+    }
+
+    return [];
 }
 
 export function getPastMatches(): any[] {
     const pastMatches = getMatch("completed");
-    return Array.isArray(pastMatches) ? pastMatches : [];
+    if (Array.isArray(pastMatches)) {
+        return pastMatches;
+    }
+
+    return [];
 }
 
 export function getMatch(matchType : string) {
