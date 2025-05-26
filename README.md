@@ -1,7 +1,7 @@
-# LoL Esports Live
+# [LoL Esports Live](https://lol.arush.me/)
 Get live data for current, past, and future League of Legends pro matches. 
 It uses Twitch API (coming soon) to detect current polls related to those LoL pro matches, allowing you to bet points where it counts.  
-This app was built with Next.js and TypeScript.
+This app was built with Next.js and TypeScript, and can be viewed at [https://lol.arush.me/](https://lol.arush.me/).
 
 ## API
 The API is built from the free LoL esports API, combined with a modified one to get live, real-time data (which normally costs money that I am not spending).
