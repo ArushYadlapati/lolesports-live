@@ -5,6 +5,7 @@ import { useColorScheme, colorSchemes } from "./helper/colorScheme";
 import { updateResponse, getLiveMatches, getNextMatches, getPastMatches } from "./api/apiGetter";
 import { getFormattedMatches } from "./helper/team";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import Image from "next/image";
 
 export default function Home() {
     const [responseHtml, setResponseHtml] = useState("Press Get Match to Load Data");
@@ -32,6 +33,9 @@ export default function Home() {
             >
                 <SpeedInsights />
                     <main className="w-full max-w-4xl space-y-8">
+                        <div className="flex justify-center">
+                            <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />
+                        </div>
                         <div className="flex flex-col items-center space-y-4">
                             <div className="flex items-center space-x-2">
                                 <label className="font-semibold">
