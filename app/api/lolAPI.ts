@@ -8,7 +8,6 @@ const token = process.env.NEXT_PUBLIC_LOL;
 let response: any;
 let data;
 let events: any[] = [];
-let liveMatchNames: any[] = [];
 
 export async function updateResponse() {
     const headers = new Headers();
@@ -35,12 +34,6 @@ export async function updateResponse() {
 export function getLiveMatches(): any[] {
     const liveMatches = getMatch("inProgress");
     if (Array.isArray(liveMatches) && liveMatches.length > 0) {
-        liveMatchNames = liveMatches.map(match => {
-            const teams = match.match.teams;
-            if (teams.length >= 2) {
-                return `${teams[0].name} vs ${teams[1].name}`;
-            }
-        })
         return liveMatches;
     }
     return [];
@@ -91,11 +84,23 @@ export function getMatch(matchType : string) {
     return matches;
 }
 
-export function getLiveMatchNames(): any[] {
-    if (liveMatchNames.length > 0) {
-        return liveMatchNames;
+export function getLiveMatchNames() {
+    if (!response) {
+        return "";
     }
 
-    return [];
+    const matches = getLiveMatches();
+    let liveMatchNames: any[][] = [];
+
+    for (const matchName of matches) {
+
+        const teams = matchName.match.teams;
+        if (teams.length >= 2) {
+            // add an array containing 2 elements - teams[0].name and teams[1].name - to liveMatchNames
+            liveMatchNames.push([teams[0].name, teams[1].name])
+        }
+    }
+
+    return liveMatchNames;
 }
 

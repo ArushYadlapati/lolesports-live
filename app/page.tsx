@@ -2,7 +2,7 @@
 import { useState } from "react";
 import React from "react";
 import { useColorScheme, colorSchemes } from "./helper/colorScheme";
-import { updateResponse, getLiveMatches, getNextMatches, getPastMatches } from "./api/lolAPI";
+import {updateResponse, getLiveMatches, getNextMatches, getPastMatches, getLiveMatchNames} from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Image from "next/image";
@@ -14,8 +14,8 @@ export default function Home() {
     const fetchMatches = async () => {
         await updateResponse();
 
-        setResponseHtml(getFormattedMatches()
-        );
+        setResponseHtml(getFormattedMatches());
+        console.log(getLiveMatchNames());
     };
 
     const handleSchemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
