@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
+import { useEffect } from "react";
 import React from "react";
 import { useColorScheme, colorSchemes } from "./helper/colorScheme";
 import {updateResponse, getLiveMatches, getNextMatches, getPastMatches, getLiveMatchNames} from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Image from "next/image";
+import {getLeagues} from "@/app/helper/leagues";
 
 export default function Home() {
     const [responseHtml, setResponseHtml] = useState("Press Get Match to Load Data");
@@ -15,8 +17,18 @@ export default function Home() {
         await updateResponse();
 
         setResponseHtml(getFormattedMatches());
+        console.log("Fetched");
         console.log(getLiveMatchNames());
     };
+
+    useEffect(() => {
+        fetchMatches().then(r => 0);
+
+        const interval = setInterval(()=> {
+            fetchMatches().then(r => 0);
+        }, 6000000); // in ms, so 600,000 = 600*1000 ms = 600*1 second = 600 seconds = 10 minutes
+        return () => clearInterval(interval);
+    }, []);
 
     const handleSchemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedName = event.target.value;
@@ -25,15 +37,16 @@ export default function Home() {
             setScheme(selectedScheme);
         }
     };
+
     return (() => {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-start px-2 py-2"
+            <div className="min-h-screen flex flex-col items-center justify-start px-6 py-20"
                  style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
                 <SpeedInsights />
-                    <div className="my-0 p-0">
-                        <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />
-                    </div>
+                    {/*<div className="my-0 p-0">*/}
+                    {/*    <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />*/}
+                    {/*</div>*/}
                     <main className="w-full max-w-4xl space-y-6">
                         <div className="flex justify-center">
                         </div>
@@ -57,7 +70,7 @@ export default function Home() {
                         </div>
 
                         <div className="shadow-md rounded-lg p-6 h-96 overflow-auto border"
-                             style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground}}
+                             style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                         >
                         <div className="text-sm font-mono" dangerouslySetInnerHTML={{ __html: responseHtml }} />
                             <br/>
@@ -67,7 +80,9 @@ export default function Home() {
                             <button onClick={ fetchMatches } className="px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
                                     style={{ backgroundColor: scheme.foreground, color: scheme.background }}
                             >
-                                Get Match
+                                Get Matches
+                                {/*{ getLeagues() }*/}
+                                {/*Choose Leagues*/}
                             </button>
                         </div>
                     </main>

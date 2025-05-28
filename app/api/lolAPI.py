@@ -22,6 +22,7 @@ def fetch_schedule():
         # uhhhh rip, it got cooked
         return None
 
+# this is a while loop that will run forever, and poll the API every second. This works, but kind of kills the API.
 def main():
     while True:
         data = fetch_schedule()
