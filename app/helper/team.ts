@@ -1,4 +1,4 @@
-import {getLiveMatches, getNextMatches, getPastMatches} from "@/app/api/apiGetter";
+import {getLiveMatches, getNextMatches, getPastMatches} from "@/app/api/lolAPI";
 
 interface Team {
     name: string;

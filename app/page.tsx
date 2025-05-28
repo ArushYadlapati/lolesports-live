@@ -2,7 +2,7 @@
 import { useState } from "react";
 import React from "react";
 import { useColorScheme, colorSchemes } from "./helper/colorScheme";
-import { updateResponse, getLiveMatches, getNextMatches, getPastMatches } from "./api/apiGetter";
+import { updateResponse, getLiveMatches, getNextMatches, getPastMatches } from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Image from "next/image";

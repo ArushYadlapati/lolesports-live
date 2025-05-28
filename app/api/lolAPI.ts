@@ -1,9 +1,9 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 import {getLeagues} from "@/app/helper/leagues";
 
 dotenv.config();
 
-const token = process.env.NEXT_PUBLIC_TOKEN;
+const token = process.env.NEXT_PUBLIC_LOL;
 
 let response: any;
 let data;
