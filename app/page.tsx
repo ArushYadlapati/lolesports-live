@@ -27,14 +27,15 @@ export default function Home() {
     };
     return (() => {
         return (
-            <div
-                className="min-h-screen flex flex-col items-center justify-center px-6 py-12"
-                style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s"}}
+            <div className="min-h-screen flex flex-col items-center justify-start px-2 py-2"
+                 style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
                 <SpeedInsights />
-                    <main className="w-full max-w-4xl space-y-8">
+                    <div className="my-0 p-0">
+                        <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />
+                    </div>
+                    <main className="w-full max-w-4xl space-y-6">
                         <div className="flex justify-center">
-                            <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />
                         </div>
                         <div className="flex flex-col items-center space-y-4">
                             <div className="flex items-center space-x-2">
@@ -43,7 +44,7 @@ export default function Home() {
                                 </label>
 
                                 <select value= { scheme.name } onChange={ handleSchemeChange } className="p-2 rounded border shadow"
-                                style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                 >
                                 { colorSchemes.map((color) => (
                                     <option key={ color.name } value={ color.name }>
@@ -55,14 +56,11 @@ export default function Home() {
                             </div>
                         </div>
 
-                        <div
-                            className="shadow-md rounded-lg p-6 h-96 overflow-auto border"
-                            style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground}}
+                        <div className="shadow-md rounded-lg p-6 h-96 overflow-auto border"
+                             style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground}}
                         >
-                        <div
-                            className="text-sm font-mono"
-                            dangerouslySetInnerHTML={{ __html: responseHtml }}
-                        />
+                        <div className="text-sm font-mono" dangerouslySetInnerHTML={{ __html: responseHtml }} />
+                            <br/>
                         </div>
 
                         <div className="flex justify-center">
