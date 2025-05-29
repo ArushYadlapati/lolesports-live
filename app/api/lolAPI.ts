@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import {getLeagues} from "@/app/helper/leagues";
+import {getLeagues, ltaCrossExists} from "@/app/helper/leagues";
 
 dotenv.config();
 
@@ -63,6 +63,8 @@ export function getMatch(matchType : string) {
     }
 
     const matches: any[] = [];
+
+    ltaCrossExists();
 
     for (const league of getLeagues()) {
         let latestMatch = null;
