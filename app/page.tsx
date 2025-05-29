@@ -7,25 +7,26 @@ import {updateResponse, getLiveMatches, getNextMatches, getPastMatches, getLiveM
 import { getFormattedMatches } from "./helper/team";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Image from "next/image";
-import {getLeagues} from "@/app/helper/leagues";
+import {changeLeagues, getLeagues} from "@/app/helper/leagues";
 
 export default function Home() {
     const [responseText, setResponseText] = useState("Press Get Match to Load Data");
     const { scheme, setScheme } = useColorScheme();
 
-    const fetchMatches = async () => {
+    let fetchMatches = async () => {
         await updateResponse();
 
         setResponseText(getFormattedMatches());
         console.log("Fetched");
         console.log(getLiveMatchNames());
+        console.log(getLeagues());
     };
 
     useEffect(() => {
-        fetchMatches().then(r => 0);
+        fetchMatches().then(() => null);
 
         const interval = setInterval(()=> {
-            fetchMatches().then(r => 0);
+            fetchMatches().then(() => null);
         }, 6000000); // in ms, so 600,000 = 600*1000 ms = 600*1 second = 600 seconds = 10 minutes
         return () => clearInterval(interval);
     }, []);
@@ -75,7 +76,62 @@ export default function Home() {
                         <div className="text-sm font-mono" dangerouslySetInnerHTML={{ __html: responseText }} />
                             <br/>
                         </div>
+                        <div className="flex justify-center">
+                            <button onClick={()=> { changeLeagues("lck");
+                                                          fetchMatches().then(() => null);
+                                            }}
+                                    className="px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
+                                    style={{ backgroundColor: scheme.foreground, color: scheme.background }}
+                            >
+                                LCK
+                            </button>
+                            <button onClick={()=> { changeLeagues("lpl");
+                                fetchMatches().then(() => null);
+                            }}
+                                    className="px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
+                                    style={{ backgroundColor: scheme.foreground, color: scheme.background }}
+                            >
+                                LPL
+                            </button>
 
+                            <button onClick={()=> { changeLeagues("lec");
+                                fetchMatches().then(() => null);
+                            }}
+                                    className="px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
+                                    style={{ backgroundColor: scheme.foreground, color: scheme.background }}
+                            >
+                                LEC
+                            </button>
+
+                            <button onClick={()=> { changeLeagues("lcs");
+                                fetchMatches().then(() => null);
+                            }}
+                                    className="px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
+                                    style={{ backgroundColor: scheme.foreground, color: scheme.background }}
+                            >
+                                LTA North
+                            </button>
+
+                            <button onClick={()=> { changeLeagues("cblol-brazil");
+                                                          changeLeagues("lla");
+                                                          fetchMatches().then(() => null);
+                            }}
+                                    className="px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
+                                    style={{ backgroundColor: scheme.foreground, color: scheme.background }}
+                            >
+                                LTA South
+                            </button>
+
+                            <button onClick={()=> { changeLeagues("pcs");
+                                                          changeLeagues("lla");
+                                                          fetchMatches().then(() => null);
+                            }}
+                                    className="px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
+                                    style={{ backgroundColor: scheme.foreground, color: scheme.background }}
+                            >
+                                PCS
+                            </button>
+                        </div>
                     </main>
                 <SpeedInsights />
             </div>
