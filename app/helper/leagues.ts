@@ -21,6 +21,8 @@ function addLeagues(league: string) {
     if (!leagues.includes(league) && allLeagues.includes(league)) {
         leagues.splice(allLeagues.indexOf(league), 0, league)
     }
+
+    leagues.sort((league1, league2) => allLeagues.indexOf(league1) - allLeagues.indexOf(league2))
 }
 
 function removeLeagues(league: string) {

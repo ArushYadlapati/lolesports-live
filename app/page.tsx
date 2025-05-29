@@ -76,7 +76,7 @@ export default function Home() {
                         <div className="text-sm font-mono" dangerouslySetInnerHTML={{ __html: responseText }} />
                             <br/>
                         </div>
-                        <div className="flex justify-center">
+                        <div className="flex justify-center space-x-0 flex-wrap gap-4">
                             <button onClick={()=> { changeLeagues("lck");
                                                           fetchMatches().then(() => null);
                                             }}
