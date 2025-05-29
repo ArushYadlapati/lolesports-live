@@ -5,7 +5,6 @@ import React from "react";
 import {useColorScheme, colorSchemes, getButtonColor, getButtonStyle} from "./helper/colorScheme";
 import {updateResponse, getLiveMatches, getNextMatches, getPastMatches, getLiveMatchNames} from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import Image from "next/image";
 import {changeLeagues, getLeagues, hasLeague, ltaCrossExists} from "@/app/helper/leagues";
 
@@ -67,7 +66,6 @@ export default function Home() {
             <div className="min-h-screen flex flex-col items-center justify-start px-4 py-3"
                  style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
-                <SpeedInsights />
                 <div className="my-0 p-0">
                     <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />
                 </div>
@@ -108,7 +106,6 @@ export default function Home() {
                         { getLeagueButton("pcs") }
                     </div>
                 </main>
-                <SpeedInsights />
             </div>
         );
     })();
