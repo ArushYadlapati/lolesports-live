@@ -10,13 +10,13 @@ import Image from "next/image";
 import {getLeagues} from "@/app/helper/leagues";
 
 export default function Home() {
-    const [responseHtml, setResponseHtml] = useState("Press Get Match to Load Data");
+    const [responseText, setResponseText] = useState("Press Get Match to Load Data");
     const { scheme, setScheme } = useColorScheme();
 
     const fetchMatches = async () => {
         await updateResponse();
 
-        setResponseHtml(getFormattedMatches());
+        setResponseText(getFormattedMatches());
         console.log("Fetched");
         console.log(getLiveMatchNames());
     };
@@ -40,13 +40,13 @@ export default function Home() {
 
     return (() => {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-start px-6 py-20"
+            <div className="min-h-screen flex flex-col items-center justify-start px-4 py-3"
                  style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
                 <SpeedInsights />
-                    {/*<div className="my-0 p-0">*/}
-                    {/*    <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />*/}
-                    {/*</div>*/}
+                    <div className="my-0 p-0">
+                        <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />
+                    </div>
                     <main className="w-full max-w-4xl space-y-6">
                         <div className="flex justify-center">
                         </div>
@@ -72,19 +72,10 @@ export default function Home() {
                         <div className="shadow-md rounded-lg p-6 h-96 overflow-auto border"
                              style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                         >
-                        <div className="text-sm font-mono" dangerouslySetInnerHTML={{ __html: responseHtml }} />
+                        <div className="text-sm font-mono" dangerouslySetInnerHTML={{ __html: responseText }} />
                             <br/>
                         </div>
 
-                        <div className="flex justify-center">
-                            <button onClick={ fetchMatches } className="px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
-                                    style={{ backgroundColor: scheme.foreground, color: scheme.background }}
-                            >
-                                Get Matches
-                                {/*{ getLeagues() }*/}
-                                {/*Choose Leagues*/}
-                            </button>
-                        </div>
                     </main>
                 <SpeedInsights />
             </div>
