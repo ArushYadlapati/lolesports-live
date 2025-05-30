@@ -1,12 +1,11 @@
 "use client";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
-import {useColorScheme, colorSchemes, getButtonColor, getButtonStyle} from "./helper/colorScheme";
-import {updateResponse, getLiveMatches, getNextMatches, getPastMatches, getLiveMatchNames} from "./api/lolAPI";
+import {useColorScheme, colorSchemes, getButtonStyle} from "./helper/colorScheme";
+import {updateResponse, getLiveMatchNames} from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import Image from "next/image";
-import {changeLeagues, getLeagues, hasLeague, ltaCrossExists} from "@/app/helper/leagues";
+import {changeLeagues, getLeagues, hasLeague} from "@/app/helper/leagues";
 
 export default function Home() {
     const [responseText, setResponseText] = useState("Press Get Match to Load Data");
@@ -26,7 +25,7 @@ export default function Home() {
 
         const interval = setInterval(()=> {
             fetchMatches().then(() => null);
-        }, 6000000); // in ms, so 600,000 = 600*1000 ms = 600*1 second = 600 seconds = 10 minutes
+        }, 600000); // in ms, so 600,000 = 600*1000 ms = 600*1 second = 600 seconds = 10 minutes
         return () => clearInterval(interval);
     }, []);
 
@@ -45,7 +44,7 @@ export default function Home() {
                 fetchMatches().then(() => null);
             }}
                     className={`px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md
-                ${ hasLeague(league) ? "ring-4 scale-105" : "" }` }
+                ${ [hasLeague(league) && "ring-4 scale-105"].filter(Boolean).join(" ") }` }
                     style={getButtonStyle(league, scheme)}
             >
                 { buttonName }
@@ -103,7 +102,7 @@ export default function Home() {
                         { getLeagueButton("lec") }
                         { getLeagueButton("lta_n") }
                         { getLeagueButton("lta_s") }
-                        { getLeagueButton("pcs") }
+                        { getLeagueButton("lcp") }
                     </div>
                 </main>
             </div>

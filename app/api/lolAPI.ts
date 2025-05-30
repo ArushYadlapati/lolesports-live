@@ -6,7 +6,6 @@ dotenv.config();
 const token = process.env.NEXT_PUBLIC_LOL;
 
 let response: any;
-let data;
 let events: any[] = [];
 
 export async function updateResponse() {

@@ -1,5 +1,6 @@
-let leagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "pcs"];
-const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "pcs"];
+let leagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
+const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
+// TODO: add internation events (MSI coming up soon)!
 
 export function getLeagues() {
     return leagues;

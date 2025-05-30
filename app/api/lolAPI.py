@@ -18,7 +18,7 @@ def fetch_schedule():
         response = requests.get("https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=en-US", headers=headers)
         response.raise_for_status()
         return response.json()
-    except requests.RequestException as e:
+    except requests.RequestException:
         # uhhhh rip, it got cooked
         return None
 
