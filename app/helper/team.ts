@@ -1,4 +1,5 @@
 import {getLiveMatches, getNextMatches, getPastMatches} from "@/app/api/lolAPI";
+import {getCurrentSortMode} from "@/app/helper/leagues";
 
 interface Team {
     name: string;
@@ -15,11 +16,11 @@ function formatMatch(event: any): string {
         day: "numeric"
     });
 
-    const teams: Team[] = event.match?.teams?.map((team: any) => ({
+    const teams: Team[] = event.match?.teams?.map((team: any) : { name : any, image : any, abbreviation : any } => ({
         name: team?.name,
         image: team?.image,
         abbreviation: team?.code || team?.abbreviation
-    }));
+    })) || [];
 
     const league = event.league?.name;
     const matchNames = teams.map((team) => team.name).join(" vs ");
@@ -39,8 +40,8 @@ function formatMatch(event: any): string {
                 ${ matchNames }
             </strong>
                 <br/>
-                    <em>
-                        ${ league }
+                    <em> 
+                        ${ league } 
                     </em>
                     — ${ matchTime }
                 <br/>
@@ -56,31 +57,39 @@ function getFormattedMatch(matchType: any[]) {
         return matchType.map(formatMatch).join("");
     }
 
-    return `<p> 
-                None 
-            </p>`
+    return `<p> </p>`
 }
 
 export function getFormattedMatches() {
     let result = "";
+    if (getCurrentSortMode() === "status") {
+        result +=
+            `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;"> 
+        Live Matches: 
+    </h2>`
 
-    result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
-                    Live Matches:
-               </h2>`
+        result += getFormattedMatch(getLiveMatches());
 
-    result += getFormattedMatch(getLiveMatches());
+        result +=
+            `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
+        Next Matches: 
+    <h2>`
 
-    result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
-                    Next Matches:
-               <h2>`
+        result += getFormattedMatch(getNextMatches());
 
-    result += getFormattedMatch(getNextMatches());
+        result +=
+            `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
+        Past Matches: 
+    <h2>`
 
-    result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
-                    Past Matches:
-               <h2>`
+        result += getFormattedMatch(getPastMatches());
+    } else if (getCurrentSortMode() === "date") {
+        result += getFormattedMatch(getLiveMatches()) + getFormattedMatch(getNextMatches()) + getFormattedMatch(getPastMatches());
+    }
 
-    result += getFormattedMatch(getPastMatches());
+    if (result == "") {
+        result = "No matches found. Try choosing different ";
+    }
 
     return result;
 }

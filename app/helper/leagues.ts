@@ -1,6 +1,16 @@
+import {capitalize} from "@/app/helper/util";
+
 let leagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
-const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
-// TODO: add internation events (MSI coming up soon)!
+const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"]; // TODO: add internation events (MSI coming up soon!)
+
+export enum SortModes {
+    status = "status",
+    league = "league",
+    date = "date",
+    playoffs = "playoffs"
+}
+
+let currentSortMode = SortModes.date;
 
 export function getLeagues() {
     return leagues;
@@ -38,4 +48,29 @@ function removeLeagues(league: string) {
     if (leagues.includes(league)) {
         leagues = leagues.filter((l) => l !== league);
     }
+}
+
+export function setSortMode(newSortMode : string) {
+    try {
+        if (Object.values(SortModes).includes(newSortMode as SortModes)) {
+            currentSortMode = newSortMode as SortModes;
+        }
+    }
+
+    catch (error ) {
+
+    }
+
+}
+
+export function getCurrentSortMode() {
+    return currentSortMode.toString();
+}
+
+export function getSortMode() {
+    return Object.values(SortModes).map(( sortMode) => {
+        `<option key = { sortMode } value = { sortMode } >`
+            { capitalize(sortMode) }
+        `</option>`;
+    })
 }

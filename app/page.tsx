@@ -5,10 +5,14 @@ import {useColorScheme, colorSchemes, getButtonStyle} from "./helper/colorScheme
 import {updateResponse, getLiveMatchNames} from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import Image from "next/image";
-import {changeLeagues, getLeagues, hasLeague} from "@/app/helper/leagues";
+import {setSortMode, SortModes} from "@/app/helper/leagues";
+import {changeLeagues, getLeagues, getCurrentSortMode, hasLeague } from "@/app/helper/leagues";
+
+import {capitalize} from "@/app/helper/util";
 
 export default function Home() {
     const [responseText, setResponseText] = useState("Press Get Match to Load Data");
+    const [ sort, setSort ] = useState(getCurrentSortMode());
     const { scheme, setScheme } = useColorScheme();
 
     let fetchMatches = async () => {
@@ -18,6 +22,7 @@ export default function Home() {
         console.log("Fetched");
         console.log(getLiveMatchNames());
         console.log(getLeagues());
+        console.log(getCurrentSortMode());
     };
 
     useEffect(() => {
@@ -74,9 +79,26 @@ export default function Home() {
                     <div className="flex flex-col items-center space-y-4">
                         <div className="flex items-center space-x-2">
                             <label className="font-semibold">
+                                Sort By:
+                            </label>
+                            <select value={ sort } onChange={(event) => {
+                                    setSort(event.target.value);
+                                    setSortMode(event.target.value);
+                                    fetchMatches().then(() => {});
+                                }}
+                                    className="p-2 rounded border shadow"
+                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                            >
+                                { Object.values(SortModes).map(( sortMode) => {
+                                    return (<option key={ sortMode } value={ sortMode }>
+                                        { capitalize( sortMode) }
+                                    </option>);
+                                })}
+                            </select>
+
+                            <label className="font-semibold">
                                 Color Scheme:
                             </label>
-
                             <select value= { scheme.name } onChange={ handleSchemeChange } className="p-2 rounded border shadow"
                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                             >
