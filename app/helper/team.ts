@@ -1,4 +1,4 @@
-import { getLiveMatches, getMatchesByDate, getNextMatches, getPastMatches } from "@/app/api/lolAPI";
+import { getMatches, getMatchesByDate } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
 
 interface Team {
@@ -60,7 +60,7 @@ function getFormattedMatch(matches: any[], matchType : string) {
     if (matchType === "") {
         return "No Matches Found."
     }
-    
+
     return "No " + matchType + " Matches Found."
 }
 
@@ -72,23 +72,23 @@ export function getFormattedMatches() {
         Live Matches: 
     </h2>`
 
-        result += getFormattedMatch(getLiveMatches(), "Live");
+        result += getFormattedMatch(getMatches("live"), "Live");
 
         result +=
             `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
         Next Matches: 
     <h2>`
 
-        result += getFormattedMatch(getNextMatches(), "Next");
+        result += getFormattedMatch(getMatches("next"), "Next");
 
         result +=
             `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
         Past Matches: 
     <h2>`
 
-        result += getFormattedMatch(getPastMatches(), "Past");
+        result += getFormattedMatch(getMatches("past"), "Past");
     } else if (getCurrentSortMode() === "date") {
-        result += getFormattedMatch(getMatchesByDate(), "");
+        result += getFormattedMatch(getMatches("date"), "");
     }
 
     if (result == "") {

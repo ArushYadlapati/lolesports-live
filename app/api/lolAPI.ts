@@ -30,32 +30,6 @@ export async function updateResponse() : Promise<void> {
     }
 }
 
-export function getLiveMatches() : any[] {
-    const liveMatches = getMatches("inProgress");
-    if (Array.isArray(liveMatches) && liveMatches.length > 0) {
-        return liveMatches;
-    }
-    return [];
-}
-
-export function getNextMatches() : any[] {
-    const nextMatches = getMatches("unstarted");
-    if (Array.isArray(nextMatches)){
-        return nextMatches;
-    }
-
-    return [];
-}
-
-export function getPastMatches() : any[] {
-    const pastMatches = getMatches("completed");
-    if (Array.isArray(pastMatches)) {
-        return pastMatches;
-    }
-
-    return [];
-}
-
 export function getMatchesByDate() {
     if (!response) {
         return [];
@@ -63,18 +37,49 @@ export function getMatchesByDate() {
 
     const matches: any[] = [];
 
-    ltaCrossExists()
 
-    for (const match of events) {
-        if (getLeagues().includes(match?.league?.slug)) {
-            matches.push(match);
+}
+
+export function getMatches(match : string) : any[] {
+    let matches  : any[] | "None" = "None";
+
+    if (!response) {
+        return [];
+    } else if (match === "live") {
+        matches = availableMatches("inProgress");
+    } else if (match === "next") {
+        matches = availableMatches("unstarted");
+    } else if (match === "past") {
+        matches = availableMatches("completed");
+    } else if (match === "playoffs") {
+        matches = [];
+        ltaCrossExists()
+
+        for (const match of events) {
+            if (getLeagues().includes(match?.league?.slug)) {
+                matches.push(match);
+            }
+        }
+
+    } else { // default: sort by date
+        matches = [];
+        ltaCrossExists()
+
+        for (const match of events) {
+            if (getLeagues().includes(match?.league?.slug)) {
+                matches.push(match);
+            }
         }
     }
 
-    return matches;
+    if (matches !== "None" && Array.isArray(matches) && matches.length > 0) {
+        return matches;
+    }
+
+    return [];
 }
 
-export function getMatches(matchType : string) {
+function availableMatches(matchType : string) {
     if (!response) {
         return "None";
     }
@@ -99,12 +104,14 @@ export function getMatches(matchType : string) {
     return matches;
 }
 
+// for TESTING ONLY
+// TODO: delete when done
 export function getLiveMatchNames() {
     if (!response) {
         return "";
     }
 
-    const matches = getLiveMatches();
+    const matches = getMatches("live");
     let liveMatchNames: any[][] = [];
 
     for (const matchName of matches) {
