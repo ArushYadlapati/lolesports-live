@@ -1,18 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import React from "react";
-import {useColorScheme, colorSchemes, getButtonStyle} from "./helper/colorScheme";
-import {updateResponse, getLiveMatchNames} from "./api/lolAPI";
+import {useColorScheme, colorSchemes, getButtonStyle } from "./helper/colorScheme";
+import {updateResponse, getLiveMatchNames } from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import Image from "next/image";
-import {setSortMode, SortModes} from "@/app/helper/leagues";
-import {changeLeagues, getLeagues, getCurrentSortMode, hasLeague } from "@/app/helper/leagues";
+import { setSortMode, SortModes } from "@/app/helper/leagues";
+import { changeLeagues, getLeagues, getCurrentSortMode, hasLeague } from "@/app/helper/leagues";
 
 import {capitalize} from "@/app/helper/util";
 
 export default function Home() {
     const [responseText, setResponseText] = useState("Press Get Match to Load Data");
-    const [ sort, setSort ] = useState(getCurrentSortMode());
+    const [sort, setSort] = useState(getCurrentSortMode());
     const { scheme, setScheme } = useColorScheme();
 
     let fetchMatches = async () => {

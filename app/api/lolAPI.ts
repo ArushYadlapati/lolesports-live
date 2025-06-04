@@ -31,7 +31,7 @@ export async function updateResponse() : Promise<void> {
 }
 
 export function getLiveMatches() : any[] {
-    const liveMatches = getMatch("inProgress");
+    const liveMatches = getMatches("inProgress");
     if (Array.isArray(liveMatches) && liveMatches.length > 0) {
         return liveMatches;
     }
@@ -39,7 +39,7 @@ export function getLiveMatches() : any[] {
 }
 
 export function getNextMatches() : any[] {
-    const nextMatches = getMatch("unstarted");
+    const nextMatches = getMatches("unstarted");
     if (Array.isArray(nextMatches)){
         return nextMatches;
     }
@@ -48,7 +48,7 @@ export function getNextMatches() : any[] {
 }
 
 export function getPastMatches() : any[] {
-    const pastMatches = getMatch("completed");
+    const pastMatches = getMatches("completed");
     if (Array.isArray(pastMatches)) {
         return pastMatches;
     }
@@ -56,11 +56,25 @@ export function getPastMatches() : any[] {
     return [];
 }
 
-export function getMatchesByDate() : any[] {
-    return [];
+export function getMatchesByDate() {
+    if (!response) {
+        return [];
+    }
+
+    const matches: any[] = [];
+
+    ltaCrossExists()
+
+    for (const match of events) {
+        if (getLeagues().includes(match?.league?.slug)) {
+            matches.push(match);
+        }
+    }
+
+    return matches;
 }
 
-export function getMatch(matchType : string) {
+export function getMatches(matchType : string) {
     if (!response) {
         return "None";
     }
@@ -73,53 +87,17 @@ export function getMatch(matchType : string) {
         let latestMatch = null;
 
         for (const event of events) {
-            const slug = event?.league?.slug;
-            if (event.state === matchType && slug === league) {
+            if (event.state === matchType && event?.league?.slug === league) {
                 if (!latestMatch || new Date(event.startTime) > new Date(latestMatch.startTime)) {
                     latestMatch = event;
                     matches.push(event);
                 }
             }
         }
-
-        if (latestMatch) {
-            // matches.push(latestMatch);
-        }
     }
 
     return matches;
 }
-
-
-/* gets matches by time (sorted by time)
-export function getMatch(matchType: string) {
-    if (!response) {
-        return "None";
-    }
-
-    const matches: any[] = [];
-    ltaCrossExists();
-
-    for (const league of getLeagues()) {
-        const leagueMatches = events.filter(
-            (event) => event.state === matchType && event?.league?.slug === league
-        );
-
-        // Sort by startTime ascending within the league
-        leagueMatches.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
-
-        // Take up to the first 3 per league
-        const topThree = leagueMatches.slice(0, 3);
-
-        matches.push(...topThree);
-    }
-
-    // After combining, sort the final list by startTime ascending
-    matches.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
-
-    return matches;
-}
-*/
 
 export function getLiveMatchNames() {
     if (!response) {

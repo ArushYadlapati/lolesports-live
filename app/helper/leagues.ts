@@ -10,7 +10,7 @@ export enum SortModes {
     playoffs = "playoffs"
 }
 
-let currentSortMode = SortModes.date;
+export let currentSortMode = SortModes.date;
 
 export function getLeagues() {
     return leagues;
@@ -58,9 +58,8 @@ export function setSortMode(newSortMode : string) {
     }
 
     catch (error ) {
-
+        // uhhhh rip, it got cooked
     }
-
 }
 
 export function getCurrentSortMode() {

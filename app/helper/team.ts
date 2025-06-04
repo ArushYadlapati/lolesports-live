@@ -1,5 +1,5 @@
-import {getLiveMatches, getNextMatches, getPastMatches} from "@/app/api/lolAPI";
-import {getCurrentSortMode} from "@/app/helper/leagues";
+import { getLiveMatches, getMatchesByDate, getNextMatches, getPastMatches } from "@/app/api/lolAPI";
+import { getCurrentSortMode } from "@/app/helper/leagues";
 
 interface Team {
     name: string;
@@ -45,19 +45,23 @@ function formatMatch(event: any): string {
                     </em>
                     — ${ matchTime }
                 <br/>
-            <div style="margin-top:8px;">
+            <div style="margin-top: 8px;">
                 ${ teamImages }
             </div>
         </div>
     `;
 }
 
-function getFormattedMatch(matchType: any[]) {
-    if (matchType.length > 0) {
-        return matchType.map(formatMatch).join("");
+function getFormattedMatch(matches: any[], matchType : string) {
+    if (matches.length > 0) {
+        return matches.map(formatMatch).join("");
     }
 
-    return `<p> </p>`
+    if (matchType === "") {
+        return "No Matches Found."
+    }
+    
+    return "No " + matchType + " Matches Found."
 }
 
 export function getFormattedMatches() {
@@ -68,27 +72,27 @@ export function getFormattedMatches() {
         Live Matches: 
     </h2>`
 
-        result += getFormattedMatch(getLiveMatches());
+        result += getFormattedMatch(getLiveMatches(), "Live");
 
         result +=
             `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
         Next Matches: 
     <h2>`
 
-        result += getFormattedMatch(getNextMatches());
+        result += getFormattedMatch(getNextMatches(), "Next");
 
         result +=
             `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline;">
         Past Matches: 
     <h2>`
 
-        result += getFormattedMatch(getPastMatches());
+        result += getFormattedMatch(getPastMatches(), "Past");
     } else if (getCurrentSortMode() === "date") {
-        result += getFormattedMatch(getLiveMatches()) + getFormattedMatch(getNextMatches()) + getFormattedMatch(getPastMatches());
+        result += getFormattedMatch(getMatchesByDate(), "");
     }
 
     if (result == "") {
-        result = "No matches found. Try choosing different ";
+        result = "No matches found. Try choosing different filters.";
     }
 
     return result;
