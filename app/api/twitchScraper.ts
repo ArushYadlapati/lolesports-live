@@ -16,7 +16,7 @@ const polls: any[] = [``, // lck
 export async function getTwitchPolls() {
     for (const stream of streams) {
         try {
-
+            // stream.toString()
         } catch (e) {
            // uhhhh rip, it got cooked
         }
