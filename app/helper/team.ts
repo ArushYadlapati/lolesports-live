@@ -1,4 +1,4 @@
-import { getMatches, getMatchesByDate } from "@/app/api/lolAPI";
+import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
 
 interface Team {

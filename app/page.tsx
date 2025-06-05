@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import {useColorScheme, colorSchemes, getButtonStyle } from "./helper/colorScheme";
-import {updateResponse, getLiveMatchNames } from "./api/lolAPI";
+import {updateResponse } from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import Image from "next/image";
-import { FilterModes, getCurrentFilterKey, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
-import { changeLeagues, getLeagues, getCurrentSortMode, hasLeague } from "@/app/helper/leagues";
+import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
+import { changeLeagues, getCurrentSortMode, hasLeague } from "@/app/helper/leagues";
 
 import {capitalize} from "@/app/helper/util";
 

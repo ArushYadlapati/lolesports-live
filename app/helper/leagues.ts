@@ -103,6 +103,7 @@ export function getCurrentFilterMode() {
     return currentFilterMode.toString();
 }
 
+/* Old Methods:
 export function getCurrentFilterKey() : string {
     // returns the key in the currentFilterMode of FilterModes
     const key = Object.entries(FilterModes).find(([key, value]) => value === currentFilterMode);
@@ -127,3 +128,5 @@ export function getFilterMode() {
         `</option>`;
     })
 }
+
+*/

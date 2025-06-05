@@ -30,16 +30,6 @@ export async function updateResponse() : Promise<void> {
     }
 }
 
-export function getMatchesByDate() {
-    if (!response) {
-        return [];
-    }
-
-    const matches: any[] = [];
-
-
-}
-
 export function getMatches(match : string) : any[] {
     let matches : any[] | "None" = "None";
 
@@ -111,8 +101,6 @@ function availableMatches(match : string) {
     ltaCrossExists();
 
     for (const league of getLeagues()) {
-        let latestMatch = null;
-
         for (const event of events) {
             if (event.state === match && event?.league?.slug === league && filterMatch(event)) {
                 matches.push(event);
@@ -124,6 +112,7 @@ function availableMatches(match : string) {
     return matches;
 }
 
+// TODO: use this for twitch API (hopefully!)
 export function getLiveMatchNames() {
     if (!response) {
         return "";

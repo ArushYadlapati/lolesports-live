@@ -12,18 +12,15 @@ Additionally, the twitch API handling is located in `app/api/twitchAPI.ts`, and 
 ## Current Features
 - Get live data for current, past, and future League of Legends pro matches.
 - Only Tier 1 leagues are supported (LTA North & South, LEC, LCK, LPL).
-    - The API is old, so LTAN is actually LCS still, and LTA South is actually CBLOL + LLA.
 
 ## Future Plans
 - Add Twitch API to get current polls for live LoL matches.
 - Redesign the UI to be more user-friendly (because right now it's just 1 giant text box).
-- Add league selector (shows highlighted leagues, and then you can select or unselect what leagues you want to see).
-    - Currently, it shows all leagues by default, but this will be customizable.
-- Show the next 3 matches for each league by default, but have this number be customizable
-  - Currently only shows next 1 match for each league.
+- Customize # of leagues to show per match
+- Add international events (like First Stand, MSI, and Worlds)
 - Add login system to allow users to save their settings (like league selector, color scheme, etc.)
-    - Login will be done via Twitch (I still need to figure out how to do this.)
-- Get data automatically (auto-refresh every 10 minutes or so to prevent killing the API rates)
+    - Login will be done via Twitch (I still need to figure out how to do this)
+~~Get data automatically (auto-refresh every 10 minutes or so to prevent killing the API rates)~~ **(ADDED)**
 
 ## Running Locally
 
