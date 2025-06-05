@@ -1,14 +1,15 @@
-import {capitalize} from "@/app/helper/util";
-
+// Controls what leagues are shown on website (and also their sort order as a result of this)
 let leagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
 const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"]; // TODO: add internation events (MSI coming up soon!)
 
+// SortModes: Sort (does not hide) the matches by a certain mode
 export enum SortModes {
     status = "status",
     importance = "importance",
     date = "date",
 }
 
+// FilterModes: Filter (hides) matches that do not fix a certain criteria
 export enum FilterModes {
     none = "None",
     playoffs = "Playoffs",
@@ -20,11 +21,22 @@ export enum FilterModes {
 export let currentSortMode = SortModes.date;
 export let currentFilterMode = FilterModes.none;
 
-export function getLeagues() {
+/**
+ * Getter method for leagues
+ * @return { string[] } - leagues that are currently selected that we want to show
+ */
+export function getLeagues() : string[] {
     return leagues;
 }
 
-export function ltaCrossExists() {
+/**
+ * This is an interesting method. Basically, I was too lazy to have LTA Cross Conference (which is LTA North + LTA South) to be a separate league,
+ * so I made it so that the LTA Cross Conference only shows up if both LTA North AND LTA South are selected.
+ * Basically, this method checks whether the LTA Cross Conference should exist based off the currently-selected leagues.
+ *
+ * @return { void } Nothing, because it updates the leagues array directly.
+ */
+export function ltaCrossExists() : void {
     if (leagues.includes("lta_n") && leagues.includes("lta_s")) {
         addLeagues("lta_cross");
     } else {
@@ -103,7 +115,7 @@ export function getCurrentFilterMode() {
     return currentFilterMode.toString();
 }
 
-/* Old Methods:
+/* Old Methods (I might use them later, so I shoved them at the bottom for now):
 export function getCurrentFilterKey() : string {
     // returns the key in the currentFilterMode of FilterModes
     const key = Object.entries(FilterModes).find(([key, value]) => value === currentFilterMode);
