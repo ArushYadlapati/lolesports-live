@@ -1,12 +1,18 @@
 import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
 
+// The interface for the Team formatting
 interface Team {
     name: string;
     image: string;
     abbreviation: string;
 }
 
+/**
+ * Formats a match given a match (which I called event because match is a different thing)
+ * @param event - The event/match/whatever to format
+ * @return { string } - 1formatted string that represents 1 match
+ */
 function formatMatch(event: any): string {
     const matchTime = new Date(event.startTime).toLocaleString("en-US", {
         minute: "2-digit",
@@ -54,7 +60,13 @@ function formatMatch(event: any): string {
     `;
 }
 
-function getFormattedMatch(matches: any[], matchType : string) {
+/**
+ * Gets formatted match (by using the formatMatch() function)
+ * @param matches The matches to format
+ * @param matchType The match type ("Live", "Next" or "Past")
+ * @return { string } - A formatted string of formatted matches
+ */
+function getFormattedMatch(matches: any[], matchType : string): string {
     if (matches.length > 0) {
         return matches.map(formatMatch).join("");
     }
@@ -66,7 +78,11 @@ function getFormattedMatch(matches: any[], matchType : string) {
     return "No " + matchType + " Matches Found."
 }
 
-export function getFormattedMatches() {
+/**
+ * Gets formatted match given the current sort mode combined with HTML string & formatting
+ * @return { string } - A HTML string of formatted matches that can be directly called in the UI page.tsx
+ */
+export function getFormattedMatches(): string {
     let result = "";
     if (getCurrentSortMode() === "status") {
         result +=

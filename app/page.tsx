@@ -16,16 +16,20 @@ export default function Home() {
     const [filter, setFilter] = useState(getCurrentFilterMode());
     const { scheme, setScheme } = useColorScheme();
 
+    // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
         await updateResponse();
 
         setResponseText(getFormattedMatches());
+
+        // console.log() for testing
         console.log("Fetched");
         // console.log(getLiveMatchNames());
         // console.log(getLeagues());
         // console.log(getCurrentSortMode());
     };
 
+    // A useEffect hook that fetches matches automatically after 10 min
     useEffect(() => {
         fetchMatches().then(() => null);
 
@@ -35,6 +39,11 @@ export default function Home() {
         return () => clearInterval(interval);
     }, []);
 
+    /**
+     * Creates a button for each league in leagues, which controls which leagues are shown
+     * @param league - the league for the button to based upon
+     * @return {React.JSX.Element} - A button for that league
+     */
     function getLeagueButton(league: string): React.JSX.Element {
         let buttonName = league.toUpperCase();
 
@@ -58,6 +67,7 @@ export default function Home() {
         );
     }
 
+    // As the function name says, this handles the scheme/color change on-click whenever you change the color scheme via dropdown
     const handleSchemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedName = event.target.value;
         const selectedScheme = colorSchemes.find((s) => s.name === selectedName);
@@ -68,17 +78,19 @@ export default function Home() {
 
     return (() => {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-start px-4 py-3"
+            <div className="h-screen flex flex-col items-center px-4 py-3"
                  style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
-                <div className="my-0 p-0">
+                <div className="flex-shrink-0">
+                    {/* Logo: */}
                     <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />
                 </div>
-                <main className="w-full max-w-4xl space-y-6">
-                    <div className="flex justify-center">
+                <main className="w-full max-w-4xl flex flex-col flex-1 min-h-0">
+                    <div className="flex justify-center mb-6">
                     </div>
-                    <div className="flex flex-col items-center space-y-4">
+                    <div className="flex flex-col items-center mb-6 flex-shrink-0">
                         <div className="flex items-center space-x-2">
+                            {/* Filter By Dropdown: */}
                             <label className="font-semibold">
                                 Filter By:
                             </label>
@@ -87,16 +99,18 @@ export default function Home() {
                                     setFilterMode(event.target.value);
                                     fetchMatches().then(() => {});
                                 }}
-                                    className="p-2 text sm rounded border shadow w-32"
+                                    className="p-2 text sm rounded border shadow flex"
+                                    // className="p-2 text sm rounded border shadow w-44"
                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                             >
-                                { Object.entries(FilterModes).map(([k, v]) => {
-                                    return (<option key={ k } value={ v }>
-                                        { v }
+                                { Object.entries(FilterModes).map(([key, value]) => {
+                                    return (<option key={ key } value={ value }>
+                                        { value }
                                     </option>);
                                 })}
                             </select>
 
+                            {/* Sort By Dropdown: */}
                             <label className="font-semibold">
                                 Sort By:
                             </label>
@@ -115,6 +129,7 @@ export default function Home() {
                                 })}
                             </select>
 
+                            {/* Color Scheme Dropdown: */}
                             <label className="font-semibold">
                                 Color Scheme:
                             </label>
@@ -131,13 +146,16 @@ export default function Home() {
                         </div>
                     </div>
 
-                    <div className="shadow-md rounded-lg p-6 h-96 overflow-auto border"
+                    {/* Box that shows all of the information: */}
+                    <div className="flex-1 shadow-md rounded-lg p-6 overflow-auto border mb-6 min-h-0"
                          style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                     >
                         <div className="text-sm font-mono" dangerouslySetInnerHTML={{ __html: responseText }} />
                         <br/>
                     </div>
-                    <div className="flex justify-center space-x-0 flex-wrap gap-4">
+
+                    {/* And at the very bottom, the buttons to control what leagues to show: */}
+                    <div className="flex justify-center space-x-0 flex-wrap gap-4 flex-shrink-0">
                         { getLeagueButton("lck") }
                         { getLeagueButton("lpl") }
                         { getLeagueButton("lec") }
