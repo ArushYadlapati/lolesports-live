@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import {getCurrentSortMode, getLeagues, ltaCrossExists} from "@/app/helper/leagues";
+import {filterMatch, getLeagues, ltaCrossExists} from "@/app/helper/leagues";
 
 dotenv.config();
 
@@ -41,36 +41,42 @@ export function getMatchesByDate() {
 }
 
 export function getMatches(match : string) : any[] {
-    let matches  : any[] | "None" = "None";
+    let matches : any[] | "None" = "None";
 
     if (!response) {
         return [];
-    } else if (match === "live") {
+    }
+    // TODO: make sort mode also by date after mode
+    if (match === "live") {
         matches = availableMatches("inProgress");
     } else if (match === "next") {
         matches = availableMatches("unstarted");
     } else if (match === "past") {
         matches = availableMatches("completed");
-    } else if (match === "playoffs") {
+    }
+
+    else if (match === "league") {
         matches = [];
         ltaCrossExists()
 
         for (const match of events) {
-            if (getLeagues().includes(match?.league?.slug)) {
-                matches.push(match);
-            }
-        }
-
-    } else { // default: sort by date
-        matches = [];
-        ltaCrossExists()
-
-        for (const match of events) {
-            if (getLeagues().includes(match?.league?.slug)) {
+            if (getLeagues().includes(match?.league?.slug) && match?.state === "completed") {
                 matches.push(match);
             }
         }
     }
+
+    else { // default: sort by date
+        matches = [];
+        ltaCrossExists()
+
+        for (const match of events) {
+            if (getLeagues().includes(match?.league?.slug) && filterMatch(match)) {
+                matches.push(match);
+            }
+        }
+    }
+
 
     if (matches !== "None" && Array.isArray(matches) && matches.length > 0) {
         return matches;
@@ -93,14 +99,12 @@ function availableMatches(matchType : string) {
 
         for (const event of events) {
             if (event.state === matchType && event?.league?.slug === league) {
-                if (!latestMatch || new Date(event.startTime) > new Date(latestMatch.startTime)) {
-                    latestMatch = event;
-                    matches.push(event);
-                }
+                matches.push(event);
             }
         }
     }
 
+    matches.sort((match1, match2) => new Date(match1.startTime).getTime() - new Date(match2.startTime).getTime())
     return matches;
 }
 

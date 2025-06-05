@@ -22,8 +22,9 @@ function formatMatch(event: any): string {
         abbreviation: team?.code || team?.abbreviation
     })) || [];
 
-    const league = event.league?.name;
     const matchNames = teams.map((team) => team.name).join(" vs ");
+    const gameType = event.blockName;
+    const league = event.league?.name;
 
     const teamImages = teams.map(team =>
         `<div style="display:inline-block; text-align:center; margin:0 10px;">
@@ -41,7 +42,8 @@ function formatMatch(event: any): string {
             </strong>
                 <br/>
                     <em> 
-                        ${ league } 
+                        ${ league }
+                        (${ gameType }) 
                     </em>
                     — ${ matchTime }
                 <br/>
@@ -87,7 +89,9 @@ export function getFormattedMatches() {
     <h2>`
 
         result += getFormattedMatch(getMatches("past"), "Past");
-    } else if (getCurrentSortMode() === "date") {
+    } else if (getCurrentSortMode() === "league") {
+        result += getFormattedMatch(getMatches("league"), "");
+    } else  { // default: sort by date
         result += getFormattedMatch(getMatches("date"), "");
     }
 

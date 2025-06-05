@@ -5,7 +5,7 @@ import {useColorScheme, colorSchemes, getButtonStyle } from "./helper/colorSchem
 import {updateResponse, getLiveMatchNames } from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import Image from "next/image";
-import { setSortMode, SortModes } from "@/app/helper/leagues";
+import { FilterModes, getCurrentFilterKey, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { changeLeagues, getLeagues, getCurrentSortMode, hasLeague } from "@/app/helper/leagues";
 
 import {capitalize} from "@/app/helper/util";
@@ -13,6 +13,7 @@ import {capitalize} from "@/app/helper/util";
 export default function Home() {
     const [responseText, setResponseText] = useState("Press Get Match to Load Data");
     const [sort, setSort] = useState(getCurrentSortMode());
+    const [filter, setFilter] = useState(getCurrentFilterMode());
     const { scheme, setScheme } = useColorScheme();
 
     let fetchMatches = async () => {
@@ -20,9 +21,9 @@ export default function Home() {
 
         setResponseText(getFormattedMatches());
         console.log("Fetched");
-        console.log(getLiveMatchNames());
-        console.log(getLeagues());
-        console.log(getCurrentSortMode());
+        // console.log(getLiveMatchNames());
+        // console.log(getLeagues());
+        // console.log(getCurrentSortMode());
     };
 
     useEffect(() => {
@@ -79,13 +80,31 @@ export default function Home() {
                     <div className="flex flex-col items-center space-y-4">
                         <div className="flex items-center space-x-2">
                             <label className="font-semibold">
+                                Filter By:
+                            </label>
+                            <select value={ filter } onChange={(event) => {
+                                    setFilter(event.target.value);
+                                    setFilterMode(event.target.value);
+                                    fetchMatches().then(() => {});
+                                }}
+                                    className="p-2 text sm rounded border shadow w-32"
+                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                            >
+                                { Object.entries(FilterModes).map(([k, v]) => {
+                                    return (<option key={ k } value={ v }>
+                                        { v }
+                                    </option>);
+                                })}
+                            </select>
+
+                            <label className="font-semibold">
                                 Sort By:
                             </label>
                             <select value={ sort } onChange={(event) => {
-                                    setSort(event.target.value);
-                                    setSortMode(event.target.value);
-                                    fetchMatches().then(() => {});
-                                }}
+                                setSort(event.target.value);
+                                setSortMode(event.target.value);
+                                fetchMatches().then(() => {});
+                            }}
                                     className="p-2 rounded border shadow"
                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                             >

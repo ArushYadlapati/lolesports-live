@@ -7,10 +7,18 @@ export enum SortModes {
     status = "status",
     league = "league",
     date = "date",
-    playoffs = "playoffs"
+}
+
+export enum FilterModes {
+    none = "None",
+    playoffs = "Playoffs",
+    regional = "Regional Qualifier",
+    finals = "Finals",
+    week = "Regular Season"
 }
 
 export let currentSortMode = SortModes.date;
+export let currentFilterMode = FilterModes.none;
 
 export function getLeagues() {
     return leagues;
@@ -57,19 +65,65 @@ export function setSortMode(newSortMode : string) {
         }
     }
 
-    catch (error ) {
+    catch (e) {
         // uhhhh rip, it got cooked
     }
+}
+
+export function setFilterMode(newFilterMode : string) {
+    try {
+        if (Object.values(FilterModes).includes(newFilterMode as FilterModes)) {
+            currentFilterMode = newFilterMode as FilterModes
+        }
+    } catch (e) {
+        // uhhhh rip, it got cooked
+    }
+}
+
+export function filterMatch(match : any) : boolean {
+    let blockName = match.blockName;
+    let filterMode = getCurrentFilterMode();
+
+    if (getCurrentFilterMode() === FilterModes.none) {
+        return true;
+    } else if (getCurrentFilterMode() === FilterModes.week) {
+        blockName = blockName.toLowerCase().split(" ")[0];
+        filterMode = "week";
+        console.log(blockName, getCurrentFilterMode());
+    }
+
+    return blockName === filterMode;
 }
 
 export function getCurrentSortMode() {
     return currentSortMode.toString();
 }
 
+export function getCurrentFilterMode() {
+    return currentFilterMode.toString();
+}
+
+export function getCurrentFilterKey() : string {
+    // returns the key in the currentFilterMode of FilterModes
+    const key = Object.entries(FilterModes).find(([key, value]) => value === currentFilterMode);
+    if (key) {
+        return key[0];
+    }
+    return "None"
+}
+
 export function getSortMode() {
-    return Object.values(SortModes).map(( sortMode) => {
+    return Object.values(SortModes).map((sortMode) => {
         `<option key = { sortMode } value = { sortMode } >`
             { capitalize(sortMode) }
+        `</option>`;
+    })
+}
+
+export function getFilterMode() {
+    return Object.values(FilterModes).map((filterMode) => {
+        `<option key = { filterMode } value = { filterMode } >`
+        { capitalize(filterMode) }
         `</option>`;
     })
 }
