@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import {filterMatch, getLeagues, ltaCrossExists} from "@/app/helper/leagues";
+import { filterMatch, getLeagues, ltaCrossExists } from "@/app/helper/leagues";
 
 dotenv.config();
 
@@ -55,15 +55,31 @@ export function getMatches(match : string) : any[] {
         matches = availableMatches("completed");
     }
 
-    else if (match === "league") {
+    else if (match === "importance") {
+        const matchImportance = ["Finals", "Playoffs", "Regional Qualifier", "Regular Season"];
+
         matches = [];
         ltaCrossExists()
 
         for (const match of events) {
-            if (getLeagues().includes(match?.league?.slug) && match?.state === "completed") {
+            if (getLeagues().includes(match?.league?.slug) && filterMatch(match)) {
                 matches.push(match);
             }
         }
+
+        matches.sort((match1, match2) => {
+            let m1 = matchImportance.length;
+            let m2 = matchImportance.length;
+            if (matchImportance.indexOf(match1.blockName) !== -1) {
+                m1 = matchImportance.indexOf(match1.blockName);
+            }
+
+            if (matchImportance.indexOf(match2.blockName) !== -1) {
+                m2 = matchImportance.indexOf(match2.blockName);
+            }
+
+            return m1 - m2;
+        });
     }
 
     else { // default: sort by date
@@ -85,7 +101,7 @@ export function getMatches(match : string) : any[] {
     return [];
 }
 
-function availableMatches(matchType : string) {
+function availableMatches(match : string) {
     if (!response) {
         return "None";
     }
@@ -98,7 +114,7 @@ function availableMatches(matchType : string) {
         let latestMatch = null;
 
         for (const event of events) {
-            if (event.state === matchType && event?.league?.slug === league) {
+            if (event.state === match && event?.league?.slug === league && filterMatch(event)) {
                 matches.push(event);
             }
         }
@@ -108,8 +124,6 @@ function availableMatches(matchType : string) {
     return matches;
 }
 
-// for TESTING ONLY
-// TODO: delete when done
 export function getLiveMatchNames() {
     if (!response) {
         return "";

@@ -5,7 +5,7 @@ const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"]; 
 
 export enum SortModes {
     status = "status",
-    league = "league",
+    importance = "importance",
     date = "date",
 }
 

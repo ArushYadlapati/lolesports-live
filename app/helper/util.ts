@@ -1,4 +1,4 @@
-import {SortModes} from "@/app/helper/leagues";
+import { SortModes } from "@/app/helper/leagues";
 
 export function capitalize(word : any) : string {
     word = word.toString();

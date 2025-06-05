@@ -89,8 +89,8 @@ export function getFormattedMatches() {
     <h2>`
 
         result += getFormattedMatch(getMatches("past"), "Past");
-    } else if (getCurrentSortMode() === "league") {
-        result += getFormattedMatch(getMatches("league"), "");
+    } else if (getCurrentSortMode() === "importance") {
+        result += getFormattedMatch(getMatches("importance"), "");
     } else  { // default: sort by date
         result += getFormattedMatch(getMatches("date"), "");
     }
