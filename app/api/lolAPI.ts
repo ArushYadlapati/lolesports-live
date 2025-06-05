@@ -31,7 +31,7 @@ export async function updateResponse() : Promise<void> {
 }
 
 export function getMatches(match : string) : any[] {
-    let matches : any[] | "None" = "None";
+    let matches: any[] | "None" = "None";
 
     if (!response) {
         return [];
@@ -91,7 +91,7 @@ export function getMatches(match : string) : any[] {
     return [];
 }
 
-function availableMatches(match : string) {
+function availableMatches(match: string) {
     if (!response) {
         return "None";
     }

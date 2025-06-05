@@ -1,20 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
 import React from "react";
-import {useColorScheme, colorSchemes, getButtonStyle } from "./helper/colorScheme";
-import {updateResponse } from "./api/lolAPI";
+import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
+import { updateResponse } from "./api/lolAPI";
 import { getFormattedMatches } from "./helper/team";
 import Image from "next/image";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
-import { changeLeagues, getCurrentSortMode, hasLeague } from "@/app/helper/leagues";
+import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 
-import {capitalize} from "@/app/helper/util";
+import { capitalize } from "@/app/helper/util";
 
 export default function Home() {
     const [responseText, setResponseText] = useState("Press Get Match to Load Data");
     const [sort, setSort] = useState(getCurrentSortMode());
     const [filter, setFilter] = useState(getCurrentFilterMode());
     const { scheme, setScheme } = useColorScheme();
+    const [button, setButton] = useState<{ [key: string] : boolean }>({ });
+    // const [buttonStates, setButtonStates] = useState<{[key: string]: boolean}>( {});
 
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
@@ -57,10 +59,15 @@ export default function Home() {
             <button key = { league } onClick={() => {
                 changeLeagues(league);
                 fetchMatches().then(() => null);
+
+                setButton(button => ({
+                    ...button,
+                    [league]: !button[league]
+                }));
             }}
-                    className={`px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md
-                ${ [hasLeague(league) && "ring-4 scale-105"].filter(Boolean).join(" ") }` }
-                    style={getButtonStyle(league, scheme)}
+                className={ getButtonClassName(league) }
+
+                style={getButtonStyle(button[league], scheme)}
             >
                 { buttonName }
             </button>
@@ -146,7 +153,7 @@ export default function Home() {
                         </div>
                     </div>
 
-                    {/* Box that shows all of the information: */}
+                    {/* Box that shows all the information of the matches given the constraints (league restrictions + sort/filter modes): */}
                     <div className="flex-1 shadow-md rounded-lg p-6 overflow-auto border mb-6 min-h-0"
                          style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                     >

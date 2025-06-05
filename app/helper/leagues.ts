@@ -70,19 +70,17 @@ function removeLeagues(league: string) {
     }
 }
 
-export function setSortMode(newSortMode : string) {
+export function setSortMode(newSortMode: string) {
     try {
         if (Object.values(SortModes).includes(newSortMode as SortModes)) {
             currentSortMode = newSortMode as SortModes;
         }
-    }
-
-    catch (e) {
+    } catch (e) {
         // uhhhh rip, it got cooked
     }
 }
 
-export function setFilterMode(newFilterMode : string) {
+export function setFilterMode(newFilterMode: string) {
     try {
         if (Object.values(FilterModes).includes(newFilterMode as FilterModes)) {
             currentFilterMode = newFilterMode as FilterModes
@@ -92,7 +90,7 @@ export function setFilterMode(newFilterMode : string) {
     }
 }
 
-export function filterMatch(match : any) : boolean {
+export function filterMatch(match: any) : boolean {
     let blockName = match.blockName;
     let filterMode = getCurrentFilterMode();
 

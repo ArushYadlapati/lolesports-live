@@ -67,17 +67,27 @@ export function useColorScheme() {
     return { scheme: scheme || colorSchemes[1], setScheme };
 }
 
-export function getButtonStyle (league: string, scheme: ColorScheme): React.CSSProperties {
+export function getButtonStyle(button: any, scheme: ColorScheme): React.CSSProperties {
     const style: React.CSSProperties = {
         backgroundColor: scheme.foreground,
         color: scheme.background,
         borderColor: "transparent",
     };
 
-    if (hasLeague(league)) {
+    if (!button) {
         style.borderColor = scheme.buttonColor;
         style.boxShadow = `0 0 0 4px ${ scheme.buttonColor }`;
     }
 
     return style;
+}
+
+export function getButtonClassName(league: any) {
+    let className = "px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
+
+    if (hasLeague(league)) {
+        className += "ring-4 scale-105";
+    }
+
+    return className;
 }
