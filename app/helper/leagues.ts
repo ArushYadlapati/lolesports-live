@@ -18,7 +18,7 @@ export enum FilterModes {
     week = "Regular Season"
 }
 
-export let currentSortMode = SortModes.date;
+export let currentSortMode = SortModes.status;
 export let currentFilterMode = FilterModes.none;
 
 /**

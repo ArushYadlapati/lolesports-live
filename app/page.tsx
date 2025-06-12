@@ -1,28 +1,29 @@
 "use client";
-import { useState, useEffect } from "react";
-import React from "react";
-import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
-import { updateResponse } from "./api/lolAPI";
-import { getFormattedMatches } from "./helper/team";
-import Image from "next/image";
-import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
-import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 
+import React from "react";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { updateResponse } from "./api/lolAPI";
 import { capitalize } from "@/app/helper/util";
+import { getFormattedMatches } from "./helper/team";
+import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
+import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
+import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
 
 export default function Home() {
-    const [responseText, setResponseText] = useState("Press Get Match to Load Data");
+    const { scheme, setScheme } = useColorScheme();
     const [sort, setSort] = useState(getCurrentSortMode());
     const [filter, setFilter] = useState(getCurrentFilterMode());
-    const { scheme, setScheme } = useColorScheme();
     const [button, setButton] = useState<{ [key: string] : boolean }>({ });
+    const [responseText, setResponseText] = useState("Press Get Match to Load Data");
+
     // const [buttonStates, setButtonStates] = useState<{[key: string]: boolean}>( {});
 
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
         await updateResponse();
 
-        setResponseText(getFormattedMatches());
+        setResponseText(getFormattedMatches(scheme));
 
         // console.log() for testing
         console.log("Fetched");
@@ -83,6 +84,7 @@ export default function Home() {
         }
     };
 
+
     return (() => {
         return (
             <div className="h-screen flex flex-col items-center px-4 py-3"
@@ -121,10 +123,10 @@ export default function Home() {
                             <label className="font-semibold">
                                 Sort By:
                             </label>
-                            <select value={ sort } onChange={(event) => {
+                            <select value={ sort } onChange={ (event) => {
                                 setSort(event.target.value);
                                 setSortMode(event.target.value);
-                                fetchMatches().then(() => {});
+                                fetchMatches().then(() => { });
                             }}
                                     className="p-2 rounded border shadow"
                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
@@ -140,8 +142,12 @@ export default function Home() {
                             <label className="font-semibold">
                                 Color Scheme:
                             </label>
-                            <select value= { scheme.name } onChange={ handleSchemeChange } className="p-2 rounded border shadow"
+                            <select value= { scheme.name } className="p-2 rounded border shadow"
                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                    onChange={(event) => {
+                                        handleSchemeChange(event);
+                                        fetchMatches().then(() => {});
+                                    }}
                             >
                                 { colorSchemes.map((color) => (
                                     <option key={ color.name } value={ color.name }>
