@@ -1,6 +1,6 @@
 import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
-import { ColorScheme } from "@/app/helper/colorScheme";
+import {ColorScheme, getCurrentColorScheme} from "@/app/helper/colorScheme";
 
 // The interface for the Team formatting
 interface Team {
@@ -80,7 +80,7 @@ function getFormattedMatch(matches: any[], matchType: string, scheme: ColorSchem
         formattedMatch = "No " + matchType + " Matches Found.";
     }
 
-    return `<div style ="margin: 16px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; background-color: ${ scheme.buttonColor };">
+    return `<div style ="margin: 16px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; background-color: ${ getCurrentColorScheme().buttonColor };">
             ${ formattedMatch }
         </div>
        `;
