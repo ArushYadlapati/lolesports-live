@@ -1,6 +1,7 @@
 import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
 import {ColorScheme, getCurrentColorScheme} from "@/app/helper/colorScheme";
+import {calculateSizeAdjustValues} from "next/dist/server/font-utils";
 
 // The interface for the Team formatting
 interface Team {
@@ -12,10 +13,9 @@ interface Team {
 /**
  * Formats a match given a match (which I called event because match is a different thing)
  * @param event - The event/match/whatever to format
- * @param scheme - The current color scheme to use for formatting
  * @return { string } - 1formatted string that represents 1 match
  */
-function formatMatch(event: any, scheme: ColorScheme): string {
+function formatMatch(event: any): string {
     const matchTime = new Date(event.startTime).toLocaleString("en-US", {
         minute: "2-digit",
         hour: "2-digit",
@@ -69,21 +69,23 @@ function formatMatch(event: any, scheme: ColorScheme): string {
  * @param scheme
  * @return { string } - A formatted string of formatted matches
  */
-function getFormattedMatch(matches: any[], matchType: string, scheme: ColorScheme): string {
+function getFormattedMatch(matches: any[], matchType: string): string {
     let formattedMatch = "";
 
     if (matches.length > 0) {
-        formattedMatch = matches.map(event => formatMatch(event, scheme)).join("");
+        formattedMatch = matches.map(event => formatMatch(event)).join("");
     } else if (matchType === "") {
         formattedMatch = "No Matches Found.";
     } else {
         formattedMatch = "No " + matchType + " Matches Found.";
     }
 
-    return `<div style ="margin: 16px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; background-color: ${ getCurrentColorScheme().buttonColor };">
-            ${ formattedMatch }
-        </div>
-       `;
+    return `<div style ="margin: 16px auto; padding: 16px; border: 1px solid #ccc; border-radius: 8px; background-color: ${ getCurrentColorScheme().buttonColor }; 
+                display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; max-width: 800px;width: 100%; ">
+                <div style = "width: 100%;">
+                    ${ formattedMatch }
+                </div>
+            </div>`;
 
 }
 
@@ -98,18 +100,24 @@ export async function getFormattedMatches(scheme: ColorScheme): Promise<string> 
     const sortMode = getCurrentSortMode();
 
     if (sortMode === "status") {
-        result += `<h2>Live Matches:</h2>`;
-        result += getFormattedMatch(getMatches("live"), "Live", scheme);
+        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center">
+                         Live Matches:
+                   </h2>`;
+        result += getFormattedMatch(getMatches("live"), "Live");
 
-        result += `<h2>Next Matches:</h2>`;
-        result += getFormattedMatch(getMatches("next"), "Next", scheme);
+        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center">
+                         Next Matches:
+                   </h2>`;
+        result += getFormattedMatch(getMatches("next"), "Next");
 
-        result += `<h2>Past Matches:</h2>`;
-        result += getFormattedMatch(getMatches("past"), "Past", scheme);
+        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center">
+                         Past Matches:
+                   </h2>`;
+        result += getFormattedMatch(getMatches("past"), "Past");
     } else if (sortMode === "importance") {
-        result += getFormattedMatch(getMatches("importance"), "", scheme);
+        result += getFormattedMatch(getMatches("importance"), "");
     } else {
-        result += getFormattedMatch(getMatches("date"), "", scheme);
+        result += getFormattedMatch(getMatches("date"), "");
     }
 
     return result || "No matches found.";
