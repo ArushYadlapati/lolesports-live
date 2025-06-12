@@ -1,7 +1,6 @@
 import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
-import {ColorScheme, getCurrentColorScheme} from "@/app/helper/colorScheme";
-import {calculateSizeAdjustValues} from "next/dist/server/font-utils";
+import { ColorScheme, getCurrentColorScheme } from "@/app/helper/colorScheme";
 
 // The interface for the Team formatting
 interface Team {
@@ -66,7 +65,6 @@ function formatMatch(event: any): string {
  * Gets formatted match (by using the formatMatch() function)
  * @param matches The matches to format
  * @param matchType The match type ("Live", "Next" or "Past")
- * @param scheme
  * @return { string } - A formatted string of formatted matches
  */
 function getFormattedMatch(matches: any[], matchType: string): string {
@@ -81,8 +79,8 @@ function getFormattedMatch(matches: any[], matchType: string): string {
     }
 
     return `<div style ="margin: 16px auto; padding: 16px; border: 1px solid #ccc; border-radius: 8px; background-color: ${ getCurrentColorScheme().buttonColor }; 
-                display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; max-width: 800px;width: 100%; ">
-                <div style = "width: 100%;">
+                display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: fit-content };">
+                <div style = "display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     ${ formattedMatch }
                 </div>
             </div>`;
@@ -93,24 +91,27 @@ function getFormattedMatch(matches: any[], matchType: string): string {
  * Gets formatted match given the current sort mode combined with HTML string & formatting
  * @return { string } - A HTML string of formatted matches that can be directly called in the UI page.tsx
  */
-export async function getFormattedMatches(scheme: ColorScheme): Promise<string> {
+export function getFormattedMatches(): string {
     let result = "";
 
 
     const sortMode = getCurrentSortMode();
 
     if (sortMode === "status") {
-        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center">
+        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center;
+                         display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                          Live Matches:
                    </h2>`;
         result += getFormattedMatch(getMatches("live"), "Live");
 
-        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center">
+        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center;
+                         display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                          Next Matches:
                    </h2>`;
         result += getFormattedMatch(getMatches("next"), "Next");
 
-        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center">
+        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center;
+                         display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                          Past Matches:
                    </h2>`;
         result += getFormattedMatch(getMatches("past"), "Past");

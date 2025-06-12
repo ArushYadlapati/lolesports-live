@@ -8,33 +8,23 @@ import { capitalize } from "@/app/helper/util";
 import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
-import {
-    useColorScheme,
-    colorSchemes,
-    getButtonStyle,
-    getButtonClassName,
-    setCurrentColorScheme
-} from "./helper/colorScheme";
+import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme} from "./helper/colorScheme";
 
 export default function Home() {
     const { scheme, setScheme } = useColorScheme();
     const [sort, setSort] = useState(getCurrentSortMode());
     const [filter, setFilter] = useState(getCurrentFilterMode());
     const [button, setButton] = useState<{ [key: string] : boolean }>({ });
-    const [responseText, setResponseText] = useState("Press Get Match to Load Data");
-
-    // const [buttonStates, setButtonStates] = useState<{[key: string]: boolean}>( {});
-
+    const [responseText, setResponseText] = useState("Loading Matches...");
 
     setCurrentColorScheme(scheme);
-
 
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
         await updateResponse();
-        setResponseText(await getFormattedMatches(scheme));
-        await updateResponse();
-        console.log(scheme) // ok something is overriding it
+        setResponseText(getFormattedMatches());
+
+
         // console.log() for testing
         console.log("Fetched");
         // console.log(getLiveMatchNames());
@@ -54,7 +44,6 @@ export default function Home() {
 
     // Updates scheme
     useEffect(() => {
-        fetchMatches();
         fetchMatches().then(() => { });
     }, [scheme]);
 
@@ -103,29 +92,28 @@ export default function Home() {
 
     return (() => {
         return (
-            <div className="h-screen flex flex-col items-center px-4 py-3"
+            <div className="h-screen flex flex-col items-center justify-center px-4 py-3"
                  style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
                 <div className="flex-shrink-0">
                     {/* Logo: */}
-                    <Image src="/logo-v1.svg" alt="Logo" width={150} height={150} />
+                    <Image src="/logo-v1.svg" alt="Logo" width={ 150 } height={ 150 } />
                 </div>
-                <main className="w-full max-w-4xl flex flex-col flex-1 min-h-0">
+                <main className="w-full max-w-4xl flex flex-col flex-1 min-h-0 container mx-2 items-center">
                     <div className="flex justify-center mb-6">
                     </div>
                     <div className="flex flex-col items-center mb-6 flex-shrink-0">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 mb-3.5">
                             {/* Filter By Dropdown: */}
                             <label className="font-semibold">
                                 Filter By:
                             </label>
                             <select value={ filter } onChange={(event) => {
-                                    setFilter(event.target.value);
-                                    setFilterMode(event.target.value);
-                                    fetchMatches().then(() => {});
-                                }}
+                                setFilter(event.target.value);
+                                setFilterMode(event.target.value);
+                                fetchMatches().then(() => {});
+                            }}
                                     className="p-2 text sm rounded border shadow flex"
-                                    // className="p-2 text sm rounded border shadow w-44"
                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                             >
                                 { Object.entries(FilterModes).map(([key, value]) => {
@@ -176,10 +164,13 @@ export default function Home() {
                     </div>
 
                     {/* Box that shows all the information of the matches given the constraints (league restrictions + sort/filter modes): */}
-                    <div className="flex-1 shadow-md rounded-lg p-6 overflow-auto border mb-6 min-h-0"
+                    <div className="flex-1 shadow-md rounded-lg p-6 overflow-auto border mb-6 w-full max-w-3xl"
                          style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                     >
-                        <div className="text-sm font-mono" dangerouslySetInnerHTML={{ __html: responseText }} />
+                        <div className="flex flex-col items-center w-full" style={{ accentColor: scheme.foreground }}>
+                            <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }} />
+                        </div>
+
                         <br/>
                     </div>
 

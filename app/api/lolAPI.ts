@@ -83,7 +83,6 @@ export function getMatches(match : string) : any[] {
         }
     }
 
-
     if (matches !== "None" && Array.isArray(matches) && matches.length > 0) {
         return matches;
     }
