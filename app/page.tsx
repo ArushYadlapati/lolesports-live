@@ -8,7 +8,13 @@ import { capitalize } from "@/app/helper/util";
 import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
-import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
+import {
+    useColorScheme,
+    colorSchemes,
+    getButtonStyle,
+    getButtonClassName,
+    setCurrentColorScheme
+} from "./helper/colorScheme";
 
 export default function Home() {
     const { scheme, setScheme } = useColorScheme();
@@ -19,11 +25,16 @@ export default function Home() {
 
     // const [buttonStates, setButtonStates] = useState<{[key: string]: boolean}>( {});
 
+
+    setCurrentColorScheme(scheme);
+
+
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
         await updateResponse();
         setResponseText(await getFormattedMatches(scheme));
-
+        await updateResponse();
+        console.log(scheme) // ok something is overriding it
         // console.log() for testing
         console.log("Fetched");
         // console.log(getLiveMatchNames());
@@ -43,6 +54,7 @@ export default function Home() {
 
     // Updates scheme
     useEffect(() => {
+        fetchMatches();
         fetchMatches().then(() => { });
     }, [scheme]);
 
@@ -72,7 +84,7 @@ export default function Home() {
             }}
                 className={ getButtonClassName(league) }
 
-                style={getButtonStyle(button[league], scheme)}
+                style={ getButtonStyle(button[league], scheme) }
             >
                 { buttonName }
             </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {hasLeague} from "@/app/helper/leagues";
+import { hasLeague } from "@/app/helper/leagues";
 
 export interface ColorScheme {
     name: string;
@@ -31,6 +31,16 @@ export const colorSchemes: ColorScheme[] = [
     { name: "Fuchsia Sunset", background: "#ff6e7f", foreground: "#4a148c", buttonColor: "#d946ef" },
 ];
 
+let currentColorScheme = colorSchemes[1];
+
+export function getCurrentColorScheme(): ColorScheme {
+    return currentColorScheme;
+}
+
+export function setCurrentColorScheme(scheme: ColorScheme) {
+    currentColorScheme = scheme;
+}
+
 export function useColorScheme() {
     const [scheme, setScheme] = useState<ColorScheme | null>(null);
 
@@ -52,8 +62,17 @@ export function useColorScheme() {
             setScheme(parsed);
             applyColorScheme(parsed);
         } else {
-            setScheme(colorSchemes[1]);
-            applyColorScheme(colorSchemes[1]);
+            try {
+                const savedScheme = localStorage.getItem("colorScheme");
+                if (savedScheme) {
+                    const parsed = JSON.parse(savedScheme);
+                    setScheme(parsed);
+                    applyColorScheme(parsed);
+                }
+            } catch (e) {
+                setScheme(colorSchemes[1]);
+                applyColorScheme(colorSchemes[1]);
+            }
         }
     }, []);
 
