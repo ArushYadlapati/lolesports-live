@@ -91,30 +91,25 @@ function getFormattedMatch(matches: any[], matchType: string, scheme: ColorSchem
  * Gets formatted match given the current sort mode combined with HTML string & formatting
  * @return { string } - A HTML string of formatted matches that can be directly called in the UI page.tsx
  */
-export function getFormattedMatches(scheme: ColorScheme): string {
+export async function getFormattedMatches(scheme: ColorScheme): Promise<string> {
     let result = "";
 
-    const live = getMatches("live");
-    const next = getMatches("next");
-    const past = getMatches("past");
-    const importance = getMatches("importance");
-    const date = getMatches("date");
 
     const sortMode = getCurrentSortMode();
 
     if (sortMode === "status") {
         result += `<h2>Live Matches:</h2>`;
-        result += getFormattedMatch(live, "Live", scheme);
+        result += getFormattedMatch(getMatches("live"), "Live", scheme);
 
         result += `<h2>Next Matches:</h2>`;
-        result += getFormattedMatch(next, "Next", scheme);
+        result += getFormattedMatch(getMatches("next"), "Next", scheme);
 
         result += `<h2>Past Matches:</h2>`;
-        result += getFormattedMatch(past, "Past", scheme);
+        result += getFormattedMatch(getMatches("past"), "Past", scheme);
     } else if (sortMode === "importance") {
-        result += getFormattedMatch(importance, "", scheme);
+        result += getFormattedMatch(getMatches("importance"), "", scheme);
     } else {
-        result += getFormattedMatch(date, "", scheme);
+        result += getFormattedMatch(getMatches("date"), "", scheme);
     }
 
     return result || "No matches found.";

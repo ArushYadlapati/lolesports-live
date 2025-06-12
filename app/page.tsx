@@ -22,8 +22,7 @@ export default function Home() {
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
         await updateResponse();
-
-        setResponseText(getFormattedMatches(scheme));
+        setResponseText(await getFormattedMatches(scheme));
 
         // console.log() for testing
         console.log("Fetched");
@@ -41,6 +40,11 @@ export default function Home() {
         }, 600000); // in ms, so 600,000 = 600*1000 ms = 600*1 second = 600 seconds = 10 minutes
         return () => clearInterval(interval);
     }, []);
+
+    // Updates scheme
+    useEffect(() => {
+        fetchMatches().then(() => { });
+    }, [scheme]);
 
     /**
      * Creates a button for each league in leagues, which controls which leagues are shown
@@ -146,7 +150,7 @@ export default function Home() {
                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                     onChange={(event) => {
                                         handleSchemeChange(event);
-                                        fetchMatches().then(() => {});
+                                        fetchMatches().then(() => { });
                                     }}
                             >
                                 { colorSchemes.map((color) => (
