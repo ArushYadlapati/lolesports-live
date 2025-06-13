@@ -100,66 +100,70 @@ export default function Home() {
                     <Image src="/logo-v1.svg" alt="Logo" width={ 150 } height={ 150 } />
                 </div>
                 <main className="w-full max-w-4xl flex flex-col flex-1 min-h-0 container mx-2 items-center">
-                    <div className="flex justify-center mb-6">
-                    </div>
-                    <div className="flex flex-col items-center mb-6 flex-shrink-0">
-                        <div className="flex items-center space-x-2 mb-3.5">
+                    <div className="flex flex-wrap items-center flex-shrink-0">
+                        <div className="flex flex-wrap items-center justify-center gap-4 mb-3.5 w-full">
                             {/* Filter By Dropdown: */}
-                            <label className="font-semibold">
-                                Filter By:
-                            </label>
-                            <select value={ filter } onChange={(event) => {
-                                setFilter(event.target.value);
-                                setFilterMode(event.target.value);
-                                fetchMatches().then(() => {});
-                            }}
-                                    className="p-2 text sm rounded border shadow flex"
-                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                            >
-                                { Object.entries(FilterModes).map(([key, value]) => {
-                                    return (<option key={ key } value={ value }>
-                                        { value }
-                                    </option>);
-                                })}
-                            </select>
+                            <div className="flex items-center space-x-2">
+                                <label className="font-semibold">
+                                    Filter By:
+                                </label>
+                                <select value={ filter } onChange={(event) => {
+                                    setFilter(event.target.value);
+                                    setFilterMode(event.target.value);
+                                    fetchMatches().then(() => {});
+                                }}
+                                        className="p-2 text sm rounded border shadow flex"
+                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                >
+                                    { Object.entries(FilterModes).map(([key, value]) => {
+                                        return (<option key={ key } value={ value }>
+                                            { value }
+                                        </option>);
+                                    })}
+                                </select>
+                            </div>
 
                             {/* Sort By Dropdown: */}
-                            <label className="font-semibold">
-                                Sort By:
-                            </label>
-                            <select value={ sort } onChange={ (event) => {
-                                setSort(event.target.value);
-                                setSortMode(event.target.value);
-                                fetchMatches().then(() => { });
-                            }}
-                                    className="p-2 rounded border shadow"
-                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                            >
-                                { Object.values(SortModes).map(( sortMode) => {
-                                    return (<option key={ sortMode } value={ sortMode }>
-                                        { capitalize( sortMode) }
-                                    </option>);
-                                })}
-                            </select>
+                            <div className="flex items-center space-x-2">
+                                <label className="font-semibold">
+                                    Sort By:
+                                </label>
+                                <select value={ sort } onChange={ (event) => {
+                                    setSort(event.target.value);
+                                    setSortMode(event.target.value);
+                                    fetchMatches().then(() => { });
+                                }}
+                                        className="p-2 rounded border shadow"
+                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                >
+                                    { Object.values(SortModes).map(( sortMode) => {
+                                        return (<option key={ sortMode } value={ sortMode }>
+                                            { capitalize( sortMode) }
+                                        </option>);
+                                    })}
+                                </select>
+                            </div>
 
                             {/* Color Scheme Dropdown: */}
-                            <label className="font-semibold">
-                                Color Scheme:
-                            </label>
-                            <select value= { scheme.name } className="p-2 rounded border shadow"
-                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                                    onChange={(event) => {
-                                        handleSchemeChange(event);
-                                        fetchMatches().then(() => { });
-                                    }}
-                            >
-                                { colorSchemes.map((color) => (
-                                    <option key={ color.name } value={ color.name }>
-                                        { color.name }
-                                    </option>
-                                ))}
+                            <div className="flex items-center space-x-2">
+                                <label className="font-semibold">
+                                    Color Scheme:
+                                </label>
+                                <select value= { scheme.name } className="p-2 rounded border shadow"
+                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                        onChange={(event) => {
+                                            handleSchemeChange(event);
+                                            fetchMatches().then(() => { });
+                                        }}
+                                >
+                                    { colorSchemes.map((color) => (
+                                        <option key={ color.name } value={ color.name }>
+                                            { color.name }
+                                        </option>
+                                    ))}
 
-                            </select>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
