@@ -9,7 +9,7 @@ import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme } from "./helper/colorScheme";
-import { getTask } from "@/app/api/gprAPI";
+import { getGPR } from "@/app/api/gprAPI";
 
 export default function Home() {
     const { scheme, setScheme } = useColorScheme();
@@ -28,7 +28,7 @@ export default function Home() {
         // console.log() for testing
         console.log("Fetched");
 
-        console.log(getTask());
+        console.log(await getGPR());
         // console.log(getMatches("past"));
         // console.log(getLiveMatchNames());
         // console.log(getLeagues());

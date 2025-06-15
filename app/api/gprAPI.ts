@@ -10,7 +10,7 @@ if (!robotId || !authorization) {
     
 }
 
-export async function getTask() {
+export async function getGPR() {
     try {
         if (!taskId) {
             const taskListUrl = `https://api.browse.ai/v2/robots/${robotId}/tasks`;
@@ -38,30 +38,23 @@ export async function getTask() {
             },
         });
 
-        const data = await response.json();
+        let task = (await response.json()).result.capturedTexts;
 
-        const rawTexts = Object.values(data?.result?.capturedTexts ?? {}) as unknown[];
+        const formatted = Object.values(task).map(entry => {
+            if (typeof entry !== "string") return null;
 
-        const textEntries = rawTexts.map(obj => {
-            if (typeof obj === "object" && obj !== null) {
-                return Object.values(obj)[0];
+            // Match pattern: [team name] followed by \n\nLCK\n\n and then \t[pts] pts
+            const match = entry.match(/\n\n([^\n]+)\n\nLCK\n\n\t(\d+)\spts/);
+            if (match) {
+                const team = match[1].trim();
+                const pts = match[2].trim();
+                return `${team} ${pts}`;
             }
-            return "";
-        });
 
-        return textEntries
-            .map(entry => {
-                if (typeof entry !== "string") return null;
+            return null;
+        }).filter(Boolean);
 
-                const match = entry.match(/\n\n(.+?)\n\n[\s\S]*?\n\n\t(\d+ pts)/);
-                if (match && match.length >= 3) {
-                    const team = match[1].trim();
-                    const pts = match[2].trim();
-                    return {team, pts};
-                }
-                return null;
-            })
-            .filter(Boolean) as { team: string; pts: string }[];
+        return formatted.reverse();
 
     } catch (error) {
 
