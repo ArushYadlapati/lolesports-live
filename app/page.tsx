@@ -8,7 +8,8 @@ import { capitalize } from "@/app/helper/util";
 import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
-import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme} from "./helper/colorScheme";
+import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme } from "./helper/colorScheme";
+import { getTask } from "@/app/api/gprAPI";
 
 export default function Home() {
     const { scheme, setScheme } = useColorScheme();
@@ -27,6 +28,8 @@ export default function Home() {
 
         // console.log() for testing
         console.log("Fetched");
+        console.log(getTask());
+        // console.log(getMatches("past"));
         // console.log(getLiveMatchNames());
         // console.log(getLeagues());
         // console.log(getCurrentSortMode());
@@ -110,7 +113,7 @@ export default function Home() {
                                 <select value={ filter } onChange={(event) => {
                                     setFilter(event.target.value);
                                     setFilterMode(event.target.value);
-                                    fetchMatches().then(() => {});
+                                    fetchMatches().then(() => { });
                                 }}
                                         className="p-2 text sm rounded border shadow flex"
                                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}

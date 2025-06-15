@@ -36,7 +36,7 @@ export function getMatches(match : string) : any[] {
     if (!response) {
         return [];
     }
-    // TODO: make sort mode also by date after mode
+
     if (match === "live") {
         matches = availableMatches("inProgress");
     } else if (match === "next") {

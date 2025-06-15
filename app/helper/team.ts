@@ -43,7 +43,7 @@ function formatMatch(event: any): string {
     ).join('');
 
     return `
-        <div style="margin-bottom:24px;">
+        <div style="margin-bottom: 24px;">
             <strong>
                 ${ matchNames }
             </strong>
