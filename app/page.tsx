@@ -9,7 +9,7 @@ import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme } from "./helper/colorScheme";
-import { getGPR } from "@/app/api/gprAPI";
+import {getGPR, updateGPR} from "@/app/api/gprAPI";
 
 export default function Home() {
     const { scheme, setScheme } = useColorScheme();
@@ -22,6 +22,7 @@ export default function Home() {
 
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
+        await updateGPR();
         await updateResponse();
         setResponseText(getFormattedMatches());
 

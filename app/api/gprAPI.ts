@@ -6,6 +6,8 @@ let robotId = process.env.NEXT_PUBLIC_ROBOT_ID || "";
 let taskId = "3f486765-9250-4306-8498-9fa1ded7dd10";
 let authorization = process.env.NEXT_PUBLIC_BROWSE_AUTH || "";
 
+export let gpr = await getGPR();
+
 if (!robotId || !authorization) {
     
 }
@@ -60,4 +62,8 @@ export async function getGPR() {
 
         return [];
     }
+}
+
+export async function updateGPR() {
+    gpr = await getGPR();
 }

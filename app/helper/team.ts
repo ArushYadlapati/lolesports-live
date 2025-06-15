@@ -1,6 +1,7 @@
-import { getMatches } from "@/app/api/lolAPI";
-import { getCurrentSortMode } from "@/app/helper/leagues";
-import { ColorScheme, getCurrentColorScheme } from "@/app/helper/colorScheme";
+import {getMatches} from "@/app/api/lolAPI";
+import {getCurrentSortMode} from "@/app/helper/leagues";
+import {getCurrentColorScheme} from "@/app/helper/colorScheme";
+import {gpr} from "@/app/api/gprAPI";
 
 // The interface for the Team formatting
 interface Team {
@@ -23,7 +24,7 @@ function formatMatch(event: any): string {
         day: "numeric"
     });
 
-    const teams: Team[] = event.match?.teams?.map((team: any) : { name : any, image : any, abbreviation : any } => ({
+    const teams: Team[] = event.match?.teams?.map((team: any): { name: any; image: any; abbreviation: any; } => ({
         name: team?.name,
         image: team?.image,
         abbreviation: team?.code || team?.abbreviation
@@ -33,33 +34,66 @@ function formatMatch(event: any): string {
     const gameType = event.blockName;
     const league = event.league?.name;
 
-    const teamImages = teams.map(team =>
-        `<div style="display:inline-block; text-align:center; margin:0 10px;">
-            <img src="${ team.image }" alt="${ team.name }" width="40" height="40"/>
-            <span>
-                ${ team.abbreviation }
-            </span>
-        </div>`
-    ).join('');
+    const scoreMap = Object.fromEntries(
+        gpr.map(line => {
+            if (!line) line = "";
+            const [teamName, score] = line.split(/ (?=\d+$)/);
+            return [teamName.trim(), score.trim()];
+        })
+    );
+
+    const teamImages = teams.map(team => {
+        const score = scoreMap[team.name];
+        const scoreSuffix = (league === "LCK" && score) ? ` (${ score })` : "";
+
+        return `
+            <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
+                <img src="${ team.image }" alt="${ team.name }" width="40" height="40"/>
+                <span style="margin-top: 4px; text-align: center;">
+                    ${ team.abbreviation }${ scoreSuffix }
+                </span>
+            </div>
+        `;
+    }).join('');
+
+    let probabilityBar = "";
+    if (league === "LCK" && teams.length === 2) {
+        const [team1, team2] = teams;
+
+        if (parseInt(scoreMap[team1.name] || "0", 10) + parseInt(scoreMap[team2.name] || "0", 10) > 0) {
+            const exp = 15;
+            const scaledTotal = Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) + Math.pow(parseInt(scoreMap[team2.name] || "0", 10), 15);
+
+            const a = Math.round((Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) / scaledTotal) * 100);
+            const b = 100 - a;
+
+            probabilityBar = `
+                <div style="margin-top: 12px; width: 100%; height: 8px; display: flex; border-radius: 4px; overflow: hidden; background: #e0e0e0;">
+                    <div style="width: ${ a }%; background-color: #4caf50;">               
+                    </div>
+                    <div style="width: ${ b }%; background-color: #f44336;">
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 4px;">
+                    <span>${ team1.abbreviation } ${ a }%</span>
+                    <span>${ team2.abbreviation } ${ b }%</span>
+                </div>
+            `;
+        }
+    }
 
     return `
         <div style="margin-bottom: 24px;">
-            <strong>
-                ${ matchNames }
-            </strong>
-                <br/>
-                    <em> 
-                        ${ league }
-                        (${ gameType }) 
-                    </em>
-                    — ${ matchTime }
-                <br/>
-            <div style="margin-top: 8px;">
+            <strong>${ matchNames }</strong><br/>
+            <em>${ league } (${ gameType })</em> — ${ matchTime }<br/>
+            <div style="margin-top: 8px; display: flex; justify-content: center;">
                 ${ teamImages }
             </div>
+            ${ probabilityBar }
         </div>
     `;
 }
+
 
 /**
  * Gets formatted match (by using the formatMatch() function)
