@@ -25,9 +25,9 @@ export default function Home() {
         await updateResponse();
         setResponseText(getFormattedMatches());
 
-
         // console.log() for testing
         console.log("Fetched");
+
         console.log(getTask());
         // console.log(getMatches("past"));
         // console.log(getLiveMatchNames());
