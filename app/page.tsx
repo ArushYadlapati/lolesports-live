@@ -22,13 +22,13 @@ export default function Home() {
 
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
-        await updateGPR();
         await updateResponse();
         setResponseText(getFormattedMatches());
 
         // console.log() for testing
         console.log("Fetched");
 
+        await updateGPR();
         console.log(await getGPR());
     };
 
