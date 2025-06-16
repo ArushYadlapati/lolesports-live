@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const token = process.env.NEXT_PUBLIC_TWITCH;
+const token = process.env.TWITCH_API;
 
 // using Twitch API to show live polls (not the streams themselves) for each relevant match
 // so basically we need to save the match result and from each match result we need to get the poll, and then show everything all at once

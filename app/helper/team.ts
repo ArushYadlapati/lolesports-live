@@ -44,13 +44,19 @@ function formatMatch(event: any): string {
 
     const teamImages = teams.map(team => {
         const score = scoreMap[team.name];
-        const scoreSuffix = (league === "LCK" && score) ? ` (${ score })` : "";
+        let ss = "";
+
+        // So far, only supports LCK leagues for win % because I'm broke and can't get the data for other leagues
+        // easily without paying :(
+        if (league === "LCK" && score) {
+            ss = ` (${ score })`;
+        }
 
         return `
             <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
                 <img src="${ team.image }" alt="${ team.name }" width="40" height="40"/>
                 <span style="margin-top: 4px; text-align: center;">
-                    ${ team.abbreviation }${ scoreSuffix }
+                    ${ team.abbreviation }${ ss }
                 </span>
             </div>
         `;

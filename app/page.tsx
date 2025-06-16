@@ -30,10 +30,6 @@ export default function Home() {
         console.log("Fetched");
 
         console.log(await getGPR());
-        // console.log(getMatches("past"));
-        // console.log(getLiveMatchNames());
-        // console.log(getLeagues());
-        // console.log(getCurrentSortMode());
     };
 
     // A useEffect hook that fetches matches automatically after 10 min
@@ -92,7 +88,6 @@ export default function Home() {
             setScheme(selectedScheme);
         }
     };
-
 
     return (() => {
         return (

@@ -2,9 +2,9 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-let robotId = process.env.NEXT_PUBLIC_ROBOT_ID || "";
+let robotId = process.env.ROBOT_ID || "";
 let taskId = "3f486765-9250-4306-8498-9fa1ded7dd10";
-let authorization = process.env.NEXT_PUBLIC_BROWSE_AUTH || "";
+let authorization = process.env.BROWSE_AUTH || "";
 
 export let gpr = await getGPR();
 
