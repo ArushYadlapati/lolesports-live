@@ -15,7 +15,7 @@ if (!robotId || !authorization) {
 export async function getGPR() {
     try {
         if (!taskId) {
-            const taskListUrl = `https://api.browse.ai/v2/robots/${robotId}/tasks`;
+            const taskListUrl = `https://api.browse.ai/v2/robots/${ robotId }/tasks`;
 
             const taskListRes = await fetch(taskListUrl, {
                 headers: {

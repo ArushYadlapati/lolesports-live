@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
-token = os.getenv("NEXT_PUBLIC_TOKEN")
+token = os.getenv("LOL_API")
 delay = 1
 
 def fetch_schedule():
