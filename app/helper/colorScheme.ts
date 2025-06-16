@@ -11,7 +11,7 @@ export interface ColorScheme {
 export const colorSchemes: ColorScheme[] = [
     // TODO: fix the buttonColors so that they are more visible/different from background colors
     { name: "Light", background: "#ffffff", foreground: "#171717", buttonColor: "#d5e7eb" },
-    { name: "Dark", background: "#0a0a0a", foreground: "#ededed", buttonColor: "#1f2937" },
+    { name: "Dark", background: "#0a0a0a", foreground: "#ededed", buttonColor: "#3E526E" },
     { name: "Red", background: "#b91c1c", foreground: "#ffffff", buttonColor: "#fca5a5" },
     { name: "Orange", background: "#c2410c", foreground: "#ffffff", buttonColor: "#fb923c" },
     { name: "Yellow", background: "#ca8a04", foreground: "#ffffff", buttonColor: "#fde047" },
