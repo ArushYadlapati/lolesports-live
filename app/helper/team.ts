@@ -1,6 +1,6 @@
-import {getMatches} from "@/app/api/lolAPI";
-import {getCurrentSortMode} from "@/app/helper/leagues";
-import {getCurrentColorScheme} from "@/app/helper/colorScheme";
+import { getMatches } from "@/app/api/lolAPI";
+import { getCurrentSortMode } from "@/app/helper/leagues";
+import { getCurrentColorScheme } from "@/app/helper/colorScheme";
 import {gpr} from "@/app/api/gprAPI";
 
 // The interface for the Team formatting
@@ -62,7 +62,7 @@ function formatMatch(event: any): string {
 
         if (parseInt(scoreMap[team1.name] || "0", 10) + parseInt(scoreMap[team2.name] || "0", 10) > 0) {
             const exp = 15;
-            const scaledTotal = Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) + Math.pow(parseInt(scoreMap[team2.name] || "0", 10), 15);
+            const scaledTotal = Math.pow(parseInt(scoreMap[team1.name] || "0", 10), exp) + Math.pow(parseInt(scoreMap[team2.name] || "0", 10), exp);
 
             const a = Math.round((Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) / scaledTotal) * 100);
             const b = 100 - a;
@@ -102,7 +102,7 @@ function formatMatch(event: any): string {
  * @return { string } - A formatted string of formatted matches
  */
 function getFormattedMatch(matches: any[], matchType: string): string {
-    let formattedMatch = "";
+    let formattedMatch;
 
     if (matches.length > 0) {
         formattedMatch = matches.map(event => formatMatch(event)).join("");
