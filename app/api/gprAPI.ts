@@ -19,7 +19,7 @@ export async function getGPR() {
 
             const taskListRes = await fetch(taskListUrl, {
                 headers: {
-                    'Authorization TEST': authorization,
+                    'Authorization': authorization,
                     'Content-Type': 'application/json',
                 },
             });
