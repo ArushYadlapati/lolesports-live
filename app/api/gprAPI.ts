@@ -2,9 +2,9 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-let robotId = process.env.ROBOT_ID || "";
-let taskId = "e671f903-4468-4346-b023-dd874b26f1e1x"
-let authorization = process.env.BROWSE_AUTH || "";
+let robotId = "097c1e1d-24ce-4217-a942-8e9cf96e1b35";
+let taskId = "e671f903-4468-4346-b023-dd874b26f1e1"
+let authorization = "Bearer 8f9c5d61-a7ef-4c96-9cbc-44f5fcf7fd0a:75395595-810d-44b2-9b7f-a1aee2d1bc32";
 
 export let gpr = await getGPR();
 
@@ -15,11 +15,11 @@ if (!robotId || !authorization) {
 export async function getGPR() {
     try {
         if (!taskId) {
-            const taskListUrl = `https://api.browse.ai/v2/robots/${robotId}/tasks`;
+            const taskListUrl = `https://api.browse.ai/v2/robots/${ robotId }/tasks`;
 
             const taskListRes = await fetch(taskListUrl, {
                 headers: {
-                    'Authorization': authorization,
+                    'Authorization TEST': authorization,
                     'Content-Type': 'application/json',
                 },
             });
