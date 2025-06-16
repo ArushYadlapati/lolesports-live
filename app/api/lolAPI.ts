@@ -3,6 +3,7 @@ import { filterMatch, getLeagues, ltaCrossExists } from "@/app/helper/leagues";
 
 dotenv.config();
 
+
 const token = process.env.LOL_API;
 
 let response: any;

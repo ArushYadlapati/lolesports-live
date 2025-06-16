@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 let robotId = process.env.ROBOT_ID || "";
-let taskId = "3f486765-9250-4306-8498-9fa1ded7dd10";
+let taskId = "e671f903-4468-4346-b023-dd874b26f1e1x"
 let authorization = process.env.BROWSE_AUTH || "";
 
 export let gpr = await getGPR();
@@ -15,7 +15,7 @@ if (!robotId || !authorization) {
 export async function getGPR() {
     try {
         if (!taskId) {
-            const taskListUrl = `https://api.browse.ai/v2/robots/${ robotId }/tasks`;
+            const taskListUrl = `https://api.browse.ai/v2/robots/${robotId}/tasks`;
 
             const taskListRes = await fetch(taskListUrl, {
                 headers: {
