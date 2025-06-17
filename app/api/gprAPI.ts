@@ -3,9 +3,10 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 let robotId = "097c1e1d-24ce-4217-a942-8e9cf96e1b35";
-let taskId = "e671f903-4468-4346-b023-dd874b26f1e1"
+let taskId = "7a2a8581-7556-42dc-92d0-a9630af660d7"
 let authorization = "Bearer 8f9c5d61-a7ef-4c96-9cbc-44f5fcf7fd0a:75395595-810d-44b2-9b7f-a1aee2d1bc32";
 
+// yoinked w/o API
 let localGpr: string[] = [
     "Gen.G Esports 1599",
     "Hanwha Life Esports 1570",
