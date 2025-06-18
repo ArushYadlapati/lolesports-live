@@ -63,12 +63,15 @@ export async function getGPR() {
                 return null;
             }
 
-            const match = entry.match(new RegExp(`\\n\\n([^\\n]+)\\n\\n(${leaguePattern})\\n\\n\\t(\\d+)\\spts`));
+            const match = entry.match(
+                new RegExp(`\\n\\n([^\\n]+)\\n\\n(${ leaguePattern })\\n\\n\\t(\\d+)\\spts`)
+
+            );
             if (match) {
                 const team = match[1].trim();
                 const league = match[2].trim();
                 const pts = match[3].trim();
-                return `${team}|||${pts}`;
+                return `${ team }|||${ pts }`;
             }
 
             return null;
