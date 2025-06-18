@@ -188,13 +188,13 @@ export default function Home() {
 
                     {/* And at the very bottom, the buttons to control what leagues to show: */}
                     <div className="flex justify-center space-x-0 flex-wrap gap-4 flex-shrink-0">
+                        { getLeagueButton("msi") }
                         { getLeagueButton("lck") }
                         { getLeagueButton("lpl") }
                         { getLeagueButton("lec") }
                         { getLeagueButton("lta_n") }
                         { getLeagueButton("lta_s") }
                         { getLeagueButton("lcp") }
-                        {/* { getLeagueButton("msi") } */}
                     </div>
                 </main>
             </div>
