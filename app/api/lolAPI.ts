@@ -48,6 +48,8 @@ export function getMatches(match : string) : any[] {
 
     else if (match === "importance") {
         const matchImportance = ["Finals", "Playoffs", "Regional Qualifier", "Regular Season"];
+        // const matchImportance = ["Grand Finals", "Playoffs", "Regional Qualifier", "Regular Season"];
+
 
         matches = [];
         ltaCrossExists()

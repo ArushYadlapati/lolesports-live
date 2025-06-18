@@ -1,7 +1,7 @@
 import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
 import { getCurrentColorScheme } from "@/app/helper/colorScheme";
-import {gpr} from "@/app/api/gprAPI";
+import { gpr } from "@/app/api/gprAPI";
 
 // The interface for the Team formatting
 interface Team {
@@ -13,7 +13,7 @@ interface Team {
 /**
  * Formats a match given a match (which I called event because match is a different thing)
  * @param event - The event/match/whatever to format
- * @return { string } - 1formatted string that represents 1 match
+ * @return { string } - A formatted string that represents 1 match
  */
 function formatMatch(event: any): string {
     const matchTime = new Date(event.startTime).toLocaleString("en-US", {
@@ -35,10 +35,11 @@ function formatMatch(event: any): string {
     const league = event.league?.name;
 
     const scoreMap = Object.fromEntries(
-        gpr.map(line => {
-            if (!line) line = "";
-            const [teamName, score] = line.split(/ (?=\d+$)/);
-            return [teamName.trim(), score.trim()];
+        gpr.map((line: string) => {
+            if (line) {
+                const [teamName, score] = line.split("|||");
+                return [teamName.trim(), score.trim()];
+            }
         })
     );
 
@@ -48,9 +49,16 @@ function formatMatch(event: any): string {
 
         // So far, only supports LCK leagues for win % because I'm broke and can't get the data for other leagues
         // easily without paying :(
-        if (league === "LCK" && score) {
+        // TODO: make this support other leagues
+        if (score) {
             ss = ` (${ score })`;
         }
+
+        // if (score) {
+        //     ss = ` (${ score })`;
+        // } else {
+        //     ss = "";
+        // }
 
         return `
             <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
@@ -60,10 +68,10 @@ function formatMatch(event: any): string {
                 </span>
             </div>
         `;
-    }).join('');
+    }).join("");
 
     let probabilityBar = "";
-    if (league === "LCK" && teams.length === 2) {
+    if (teams.length === 2) {
         const [team1, team2] = teams;
 
         if (parseInt(scoreMap[team1.name] || "0", 10) + parseInt(scoreMap[team2.name] || "0", 10) > 0) {
@@ -73,16 +81,25 @@ function formatMatch(event: any): string {
             const a = Math.round((Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) / scaledTotal) * 100);
             const b = 100 - a;
 
+
             probabilityBar = `
-                <div style="margin-top: 12px; width: 100%; height: 8px; display: flex; border-radius: 4px; overflow: hidden; background: #e0e0e0;">
-                    <div style="width: ${ a }%; background-color: #4caf50;">               
+                <div style="margin: 12px auto; width: 360px; height: 12px; display: flex; border-radius: 6px; overflow: hidden; background: #e0e0e0;">
+                    <div style="width: ${ a }%; background-color: #4caf50;"> 
+                        </br>
                     </div>
+                    
                     <div style="width: ${ b }%; background-color: #f44336;">
+                        </br>
                     </div>
+                    
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 4px;">
-                    <span>${ team1.abbreviation } ${ a }%</span>
-                    <span>${ team2.abbreviation } ${ b }%</span>
+                    <div style="width: 360px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
+                        <span>
+                            ${ team1.abbreviation } ${ a }%
+                        </span>
+                    <span>
+                        ${ team2.abbreviation } ${ b }%
+                    </span>
                 </div>
             `;
         }

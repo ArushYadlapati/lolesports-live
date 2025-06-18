@@ -10,7 +10,9 @@ import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme } from "./helper/colorScheme";
 import {getGPR, updateGPR} from "@/app/api/gprAPI";
+import * as dotenv from "dotenv";
 
+dotenv.config();
 export default function Home() {
     const { scheme, setScheme } = useColorScheme();
     const [sort, setSort] = useState(getCurrentSortMode());
@@ -22,6 +24,7 @@ export default function Home() {
 
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
+        console.log("id" + process.env.ROBOT_ID);
         await updateResponse();
         setResponseText(getFormattedMatches());
 
@@ -29,7 +32,9 @@ export default function Home() {
         console.log("Fetched");
 
         await updateGPR();
-        console.log(await getGPR());
+
+        const currentGpr = await getGPR();
+        console.log(currentGpr);
     };
 
     // A useEffect hook that fetches matches automatically after 10 min
@@ -50,7 +55,7 @@ export default function Home() {
     /**
      * Creates a button for each league in leagues, which controls which leagues are shown
      * @param league - the league for the button to based upon
-     * @return {React.JSX.Element} - A button for that league
+     * @return { React.JSX.Element } - A button for that league
      */
     function getLeagueButton(league: string): React.JSX.Element {
         let buttonName = league.toUpperCase();
@@ -95,13 +100,13 @@ export default function Home() {
                  style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
                 <div className="flex-shrink-0">
-                    {/* Logo: */}
+                    { /* Logo: */ }
                     <Image src="/logo-v1.svg" alt="Logo" width={ 150 } height={ 150 } />
                 </div>
                 <main className="w-full max-w-4xl flex flex-col flex-1 min-h-0 container mx-2 items-center">
                     <div className="flex flex-wrap items-center flex-shrink-0">
                         <div className="flex flex-wrap items-center justify-center gap-4 mb-3.5 w-full">
-                            {/* Filter By Dropdown: */}
+                            { /* Filter By Dropdown: */ }
                             <div className="flex items-center space-x-2">
                                 <label className="font-semibold">
                                     Filter By:
@@ -115,14 +120,16 @@ export default function Home() {
                                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                 >
                                     { Object.entries(FilterModes).map(([key, value]) => {
-                                        return (<option key={ key } value={ value }>
-                                            { value }
-                                        </option>);
+                                        return (
+                                            <option key={ key } value={ value }>
+                                                { value }
+                                            </option>
+                                        );
                                     })}
                                 </select>
                             </div>
 
-                            {/* Sort By Dropdown: */}
+                            { /* Sort By Dropdown: */ }
                             <div className="flex items-center space-x-2">
                                 <label className="font-semibold">
                                     Sort By:
@@ -136,9 +143,11 @@ export default function Home() {
                                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                 >
                                     { Object.values(SortModes).map(( sortMode) => {
-                                        return (<option key={ sortMode } value={ sortMode }>
-                                            { capitalize( sortMode) }
-                                        </option>);
+                                        return (
+                                            <option key={ sortMode } value={ sortMode }>
+                                                { capitalize( sortMode) }
+                                            </option>
+                                        );
                                     })}
                                 </select>
                             </div>
@@ -185,6 +194,7 @@ export default function Home() {
                         { getLeagueButton("lta_n") }
                         { getLeagueButton("lta_s") }
                         { getLeagueButton("lcp") }
+                        {/* { getLeagueButton("msi") } */}
                     </div>
                 </main>
             </div>

@@ -1,6 +1,18 @@
 // Controls what leagues are shown on website (and also their sort order as a result of this)
 let leagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
+// let leagues = ["msi", "lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
 const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"]; // TODO: add internation events (MSI coming up soon!)
+// const allLeagues = ["msi", "lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
+
+export const leagueMap: { [key: string]: string } = {
+    lck: "LCK",
+    lpl: "LPL",
+    lec: "LEC",
+    lta_n: "LTA North",
+    lta_s: "LTA South",
+    lta_cross: "LTA Cross",
+    lcp: "LCP",
+};
 
 // SortModes: Sort (does not hide) the matches by a certain mode
 export enum SortModes {
