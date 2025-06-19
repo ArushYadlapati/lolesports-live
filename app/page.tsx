@@ -18,7 +18,7 @@ export default function Home() {
     const [sort, setSort] = useState(getCurrentSortMode());
     const [filter, setFilter] = useState(getCurrentFilterMode());
     const [button, setButton] = useState<{ [key: string] : boolean }>({ });
-    const [responseText, setResponseText] = useState("Loading Matches...");
+    const [responseText, setResponseText] = useState("Loading Matches (just for you!)...");
 
     setCurrentColorScheme(scheme);
 

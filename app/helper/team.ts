@@ -1,7 +1,7 @@
 import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
 import { getCurrentColorScheme } from "@/app/helper/colorScheme";
-import { gpr } from "@/app/api/gprAPI";
+import {getGPR, gpr} from "@/app/api/gprAPI";
 import { betNameMap } from "@/app/api/betAPI";
 
 // The interface for the Team formatting

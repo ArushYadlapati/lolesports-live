@@ -1,6 +1,5 @@
 # [LoL Esports Live](https://lol.arush.me/)
-Get live data for current, past, and future League of Legends pro matches. 
-It uses Twitch API (coming soon) to detect current polls related to those LoL pro matches, allowing you to bet points where it counts.  
+Get live data for current, past, and future League of Legends pro matches.
 This app was built with Next.js and TypeScript, and can be viewed at [https://lol.arush.me/](https://lol.arush.me/).
 
 ## API
@@ -9,7 +8,7 @@ Previously, I used PandaScore for the previous version of this app, but I found 
 The main API handling is located in `app/api/lolAPI.ts`. A python version of that API can also be found there.
 
 ## Match Betting
-An unaffiliated (I don't make commissions or anything) betting website called bet365.
+The betting system uses an unaffiliated (I don't make commissions or anything) betting website called [bet365](https://www.bet365.com/). Specifically, it uses the [League of Legends section](https://www.co.bet365.com/#/AC/B151/C1/D50/E3/F163/) of their website.
 It is a match betting website that allows you to bet with REAL MONEY on that League of Legend match.
 
 I do NOT recommend gambling with REAL MONEY. I added this because adding my own betting system is way harder,
@@ -19,11 +18,16 @@ and I don't want to deal with a login system and a database.
 - Get live data for current, past, and future League of Legends pro matches.
 - Only Tier 1 leagues are supported (LTA North & South, LEC, LCK, LPL), as well as Internationals (First Stand, MSI, & Worlds). 
 - Game win % (via Amazon GPR) for each match
-- Betting link to bet365 for each match (again, for real money, this is just a proof of concept)
-- Color scheme selectors, 
+- Betting link to bet365 for each match (again, for real money)
+- Color scheme selectors (lots of options!)
+- Filter matches by type of match (finals, playoffs, regular season)
+- Sort modes for matches (by status, by date, and importance)
+- League selector buttons
 
 ## Future Plans
-- Redesign the UI to be more user-friendly (because right now it's just 1 giant text box).
+- Add more leagues (LJL, EMEA Masters, etc.)
+- Redesign the UI to be more user-friendly.
+- Add more pages (make website more realistic)
 
 ## Running Locally
 First, run `npm install` in the project root. 
