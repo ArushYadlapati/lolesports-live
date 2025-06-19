@@ -4,7 +4,7 @@ let leagues = ["msi", "lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"]
 // const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s" "lta_cross", "lcp"];
 const allLeagues = ["msi", "lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
 
-export const leagueMap: { [key: string]: string } = {
+export const leagueNameMap: { [key: string]: string } = {
     lck: "LCK",
     lpl: "LPL",
     lec: "LEC",
@@ -37,7 +37,7 @@ export let currentFilterMode = FilterModes.none;
  * Getter method for leagues
  * @return { string[] } - leagues that are currently selected that we want to show
  */
-export function getLeagues() : string[] {
+export function getLeagues(): string[] {
     return leagues;
 }
 
@@ -48,7 +48,7 @@ export function getLeagues() : string[] {
  *
  * @return { void } Nothing, because it updates the leagues array directly.
  */
-export function ltaCrossExists() : void {
+export function ltaCrossExists(): void {
     if (leagues.includes("lta_n") && leagues.includes("lta_s")) {
         addLeagues("lta_cross");
     } else {
@@ -60,7 +60,7 @@ export function hasLeague(league: string) {
     return (leagues.includes(league));
 }
 
-export function changeLeagues(league : string) {
+export function changeLeagues(league: string) {
     if (hasLeague(league)) {
         removeLeagues(league);
     } else {

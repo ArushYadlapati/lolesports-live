@@ -2,6 +2,7 @@ import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
 import { getCurrentColorScheme } from "@/app/helper/colorScheme";
 import { gpr } from "@/app/api/gprAPI";
+import { betNameMap } from "@/app/api/betAPI";
 
 // The interface for the Team formatting
 interface Team {
@@ -31,8 +32,18 @@ function formatMatch(event: any): string {
     })) || [];
 
     const matchNames = teams.map((team) => team.name).join(" vs ");
+    const betURL = betNameMap[matchNames];
+    const isCompleted = event.state === "completed";
+
     const gameType = event.blockName;
     const league = event.league?.name;
+
+    // TODO: get match score
+    let matchScores: number[] = [0, 0];
+    let score = event.match?.score || event.score || "0 - 0";
+    console.log(score);
+
+
 
     const scoreMap = Object.fromEntries(
         gpr.map((line: string) => {
@@ -45,26 +56,17 @@ function formatMatch(event: any): string {
 
     const teamImages = teams.map(team => {
         const score = scoreMap[team.name];
-        let ss = "";
+        let teamScore = "";
 
-        // So far, only supports LCK leagues for win % because I'm broke and can't get the data for other leagues
-        // easily without paying :(
-        // TODO: make this support other leagues
         if (score) {
-            ss = ` (${ score })`;
+            teamScore = ` (${ score })`;
         }
-
-        // if (score) {
-        //     ss = ` (${ score })`;
-        // } else {
-        //     ss = "";
-        // }
 
         return `
             <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
                 <img src="${ team.image }" alt="${ team.name }" width="40" height="40"/>
                 <span style="margin-top: 4px; text-align: center;">
-                    ${ team.abbreviation }${ ss }
+                    ${ team.abbreviation }${ teamScore }
                 </span>
             </div>
         `;
@@ -78,48 +80,73 @@ function formatMatch(event: any): string {
             const exp = 15;
             const scaledTotal = Math.pow(parseInt(scoreMap[team1.name] || "0", 10), exp) + Math.pow(parseInt(scoreMap[team2.name] || "0", 10), exp);
 
-            const a = Math.round((Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) / scaledTotal) * 100);
-            const b = 100 - a;
+            const team1Score: number = Math.round((Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) / scaledTotal) * 100);
+            const team2Score: number = 100 - team1Score;
 
 
             probabilityBar = `
                 <div style="margin: 12px auto; width: 360px; height: 12px; display: flex; border-radius: 6px; overflow: hidden; background: #e0e0e0;">
-                    <div style="width: ${ a }%; background-color: #4caf50;"> 
+                    <div style="width: ${ team1Score }%; background-color: #4caf50;"> 
                         </br>
                     </div>
                     
-                    <div style="width: ${ b }%; background-color: #f44336;">
+                    <div style="width: ${ team2Score }%; background-color: #f44336;">
                         </br>
                     </div>
                     
                 </div>
                     <div style="width: 360px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
                         <span>
-                            ${ team1.abbreviation } ${ a }%
+                            ${ team1.abbreviation } ${ team1Score }%
                         </span>
                     <span>
-                        ${ team2.abbreviation } ${ b }%
+                        ${ team2.abbreviation } ${ team2Score }%
                     </span>
                 </div>
             `;
         }
     }
 
+    let betButton = ``;
+
+    if (!isCompleted && betURL) {
+        betButton =
+            `<a href="${ betURL }" target="_blank" rel="noopener noreferrer"
+                style="padding: 6px 12px; background-color: #1e88e5; color: white; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 14px;">
+                Bet Now
+            </a>`
+    }
+
     return `
-        <div style="margin-bottom: 24px;">
-            <strong>${ matchNames }</strong><br/>
-            <em>${ league } (${ gameType })</em> — ${ matchTime }<br/>
-            <div style="margin-top: 8px; display: flex; justify-content: center;">
-                ${ teamImages }
+        <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid
+            ${ getCurrentColorScheme().foreground }50;"
+        >   
+            <strong>
+                ${ matchNames }
+            </strong>
+        
+            <br>
+                <em>
+                    ${ league } (${ gameType })
+                </em>
+                — ${ matchTime }
+            <br/>
+
+            <div style="margin-top: 8px; display: flex; justify-content: center; align-items: center; gap: 16px;">
+                <div style="display: flex;">
+                    ${ teamImages }
+                </div>
             </div>
+        
             ${ probabilityBar }
+            ${ betButton }
         </div>
     `;
 }
 
 
 /**
- * Gets formatted match (by using the formatMatch() function)
+ * Gets formatted match (by using the {@link formatMatch()} function)
  * @param matches The matches to format
  * @param matchType The match type ("Live", "Next" or "Past")
  * @return { string } - A formatted string of formatted matches

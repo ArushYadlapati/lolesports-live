@@ -9,7 +9,7 @@ import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme } from "./helper/colorScheme";
-import {getGPR, updateGPR} from "@/app/api/gprAPI";
+import { updateGPR} from "@/app/api/gprAPI";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -24,7 +24,6 @@ export default function Home() {
 
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
-        console.log("id" + process.env.ROBOT_ID);
         await updateResponse();
         setResponseText(getFormattedMatches());
 
@@ -32,9 +31,6 @@ export default function Home() {
         console.log("Fetched");
 
         await updateGPR();
-
-        const currentGpr = await getGPR();
-        console.log(currentGpr);
     };
 
     // A useEffect hook that fetches matches automatically after 10 min
