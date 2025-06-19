@@ -113,25 +113,3 @@ function availableMatches(match: string) {
     matches.sort((match1, match2) => new Date(match1.startTime).getTime() - new Date(match2.startTime).getTime())
     return matches;
 }
-
-// TODO: use this for twitch API (hopefully!)
-export function getLiveMatchNames() {
-    if (!response) {
-        return "";
-    }
-
-    const matches = getMatches("live");
-    let liveMatchNames: any[][] = [];
-
-    for (const matchName of matches) {
-
-        const teams = matchName.match?.teams;
-
-        if (teams && teams.length >= 2) {
-            liveMatchNames.push([teams[0].name, teams[1].name])
-        }
-    }
-
-    return liveMatchNames;
-}
-
