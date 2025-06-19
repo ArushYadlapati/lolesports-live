@@ -9,12 +9,13 @@ interface Team {
     name: string;
     image: string;
     abbreviation: string;
+    matchScore: number;
 }
 
 /**
  * Formats a match given a match (which I called event because match is a different thing)
  * @param event - The event/match/whatever to format
- * @return { string } - A formatted string that represents 1 match
+ * @return { string } - A formatted string that represents 1 match√
  */
 function formatMatch(event: any): string {
     const matchTime = new Date(event.startTime).toLocaleString("en-US", {
@@ -25,10 +26,19 @@ function formatMatch(event: any): string {
         day: "numeric"
     });
 
-    const teams: Team[] = event.match?.teams?.map((team: any): { name: any; image: any; abbreviation: any; } => ({
+    let winnerIndex = -1;
+
+    if (event.match?.teams[0].result?.outcome === "win") {
+        winnerIndex = 0;
+    } else if (event.match?.teams[1].result?.outcome === "win") {
+        winnerIndex = 1;
+    }
+
+    const teams: Team[] = event.match?.teams?.map((team: any): Team => ({
         name: team?.name,
         image: team?.image,
-        abbreviation: team?.code || team?.abbreviation
+        abbreviation: team?.code || team?.abbreviation,
+        matchScore: team?.result?.gameWins || 0
     })) || [];
 
     const matchNames = teams.map((team) => team.name).join(" vs ");
@@ -37,13 +47,6 @@ function formatMatch(event: any): string {
 
     const gameType = event.blockName;
     const league = event.league?.name;
-
-    // TODO: get match score
-    let matchScores: number[] = [0, 0];
-    let score = event.match?.score || event.score || "0 - 0";
-    console.log(score);
-
-
 
     const scoreMap = Object.fromEntries(
         gpr.map((line: string) => {
@@ -54,9 +57,15 @@ function formatMatch(event: any): string {
         })
     );
 
-    const teamImages = teams.map(team => {
-        const score = scoreMap[team.name];
+    const teamImages = teams.map((team: Team, index: number): string => {
+        let bold = "";
+
+        if (index === winnerIndex) {
+            bold = "font-weight: bold;";
+        }
+
         let teamScore = "";
+        const score = scoreMap[team.name];
 
         if (score) {
             teamScore = ` (${ score })`;
@@ -65,8 +74,8 @@ function formatMatch(event: any): string {
         return `
             <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
                 <img src="${ team.image }" alt="${ team.name }" width="40" height="40"/>
-                <span style="margin-top: 4px; text-align: center;">
-                    ${ team.abbreviation }${ teamScore }
+                <span style="margin-top: 4px; text-align: center; font-size: 15px; ${ bold }">
+                    ${ team.abbreviation }: ${ team.matchScore } ${ teamScore }
                 </span>
             </div>
         `;
@@ -162,13 +171,14 @@ function getFormattedMatch(matches: any[], matchType: string): string {
         formattedMatch = "No " + matchType + " Matches Found.";
     }
 
-    return `<div style ="margin: 16px auto; padding: 16px; border: 1px solid #ccc; border-radius: 8px; background-color: ${ getCurrentColorScheme().buttonColor }; 
-                display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: fit-content };">
-                <div style = "display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    ${ formattedMatch }
-                </div>
-            </div>`;
-
+    return `
+        <div style ="margin: 16px auto; padding: 16px; border: 1px solid #ccc; border-radius: 8px; background-color: ${ getCurrentColorScheme().buttonColor }; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: fit-content };">
+            <div style = "display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                ${ formattedMatch }
+            </div>
+        </div>
+    `;
 }
 
 /**

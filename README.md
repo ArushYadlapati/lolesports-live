@@ -21,13 +21,14 @@ and I don't want to deal with a login system and a database.
 - Betting link to bet365 for each match (again, for real money)
 - Color scheme selectors (lots of options!)
 - Filter matches by type of match (finals, playoffs, regular season)
-- Sort modes for matches (by status, by date, and importance)
+- Sort modes for matches (by status, by date, and importance of match)
 - League selector buttons
 
 ## Future Plans
-- Add more leagues (LJL, EMEA Masters, etc.)
+- Add more leagues (NLC, EMEA Masters, etc.)
 - Redesign the UI to be more user-friendly.
 - Add more pages (make website more realistic)
+- Add a login system (maybe)
 
 ## Running Locally
 First, run `npm install` in the project root. 
