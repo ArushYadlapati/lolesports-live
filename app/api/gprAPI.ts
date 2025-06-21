@@ -3,13 +3,12 @@ import { leagueNameMap } from "@/app/helper/leagues";
 
 dotenv.config();
 
-
 // TODO: use webhook to get latest taskId
 let taskId: string = "c9f453f5-e9a4-4f60-93f0-c359d53db332"
 
 // TODO: fix env vars (use NEXT_PUBLIC)
-let robotId: string = "3c9525d6-d42b-4137-b15a-9cf46a7e7d80";
-let authorization: string = "Bearer 8f9c5d61-a7ef-4c96-9cbc-44f5fcf7fd0a:75395595-810d-44b2-9b7f-a1aee2d1bc32";
+let robotId: string = process.env.NEXT_PUBLIC_ROBOT_ID || "";
+let authorization: string = process.env.NEXT_PUBLIC_BROWSE_AUTH || "";
 
 // export let gpr = await getGPR();
 export let gpr = await getGPR();
