@@ -6,11 +6,9 @@ dotenv.config();
 // TODO: use webhook to get latest taskId
 let taskId: string = "c9f453f5-e9a4-4f60-93f0-c359d53db332"
 
-// TODO: fix env vars (use NEXT_PUBLIC)
 let robotId: string = process.env.NEXT_PUBLIC_ROBOT_ID || "";
 let authorization: string = process.env.NEXT_PUBLIC_BROWSE_AUTH || "";
 
-// export let gpr = await getGPR();
 export let gpr = await getGPR();
 
 export async function getGPR() {
