@@ -4,7 +4,8 @@ import { filterMatch, getLeagues, ltaCrossExists } from "@/app/helper/leagues";
 dotenv.config();
 
 
-const token = "0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z";
+const token = process.env.NEXT_PUBLIC_LOL_API || "";
+
 
 let response: any;
 let events: any[] = [];
