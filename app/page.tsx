@@ -13,6 +13,7 @@ import { updateGPR} from "@/app/api/gprAPI";
 import * as dotenv from "dotenv";
 
 dotenv.config();
+
 export default function Home() {
     const { scheme, setScheme } = useColorScheme();
     const [sort, setSort] = useState(getCurrentSortMode());
