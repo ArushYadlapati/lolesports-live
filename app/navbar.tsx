@@ -5,8 +5,7 @@ import Image from "next/image";
 import { useColorScheme } from "@/app/helper/colorScheme";
 
 export default function Navbar() {
-    const { scheme } = useColorScheme();
-
+    const { scheme, setScheme } = useColorScheme();
     return (
         <nav className="flex justify-between items-center px-6 py-4 w-full z-50"
              style={{ backgroundColor: scheme.foreground, color: scheme.background,
