@@ -26,9 +26,12 @@ and I don't want to deal with a login system and a database.
 
 ## Future Plans
 - Add more leagues (NLC, EMEA Masters, etc.)
+  - A bit tricky to do w/o redesign or more dropdown menus
 - Redesign the UI to be more user-friendly.
+  - Add more pages (Betting Disclaimer, About Page, link to GitHub repo, etc.)
 - Add more pages (make website more realistic)
 - Add a login system (maybe)
+  - Prolly for saving themes
 
 ## Running Locally
 First, run `npm install` in the project root. 
@@ -46,6 +49,6 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the main home page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

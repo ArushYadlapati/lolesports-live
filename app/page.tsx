@@ -84,7 +84,7 @@ export default function Home() {
 
     // As the function name says, this handles the scheme/color change on-click whenever you change the color scheme via dropdown
     const handleSchemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedName = event.target.value;
+        const selectedName: string = event.target.value;
         const selectedScheme = colorSchemes.find((s) => s.name === selectedName);
         if (selectedScheme) {
             setScheme(selectedScheme);
@@ -131,6 +131,7 @@ export default function Home() {
                                 <label className="font-semibold">
                                     Sort By:
                                 </label>
+
                                 <select value={ sort } onChange={ (event) => {
                                     setSort(event.target.value);
                                     setSortMode(event.target.value);
