@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Navbar from "@/app/navbar";
+import Navbar, {setCurrentPage} from "@/app/navbar";
 import { useColorScheme } from "@/app/helper/colorScheme";
 
 export default function Betting() {
     const { scheme } = useColorScheme();
+
+    setCurrentPage("betting");
 
     return (
         <main className="flex flex-col min-h-screen px-4 py-3" style={{ backgroundColor: scheme.background, color: scheme.foreground }}>

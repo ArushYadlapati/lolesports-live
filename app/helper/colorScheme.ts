@@ -31,20 +31,25 @@ export const colorSchemes: ColorScheme[] = [
     { name: "Fuchsia Sunset", background: "#ff6e7f", foreground: "#4a148c", buttonColor: "#d946ef" },
 ];
 
-let currentColorScheme = colorSchemes[1];
+let globalColorScheme = colorSchemes[1];
+let getters: Array<(scheme: ColorScheme) => void> = [];
 
 export function getCurrentColorScheme(): ColorScheme {
-    return currentColorScheme;
+    return globalColorScheme;
 }
 
 export function setCurrentColorScheme(scheme: ColorScheme) {
-    currentColorScheme = scheme;
+    globalColorScheme = scheme;
+    applyColorScheme(scheme);
+    if (typeof window !== "undefined") {
+        localStorage.setItem("colorScheme", JSON.stringify(scheme));
+    }
+
+    getters.forEach(accessors => accessors(scheme));
 }
 
-export function useColorScheme() {
-    const [scheme, setScheme] = useState<ColorScheme | null>(null);
-
-    const applyColorScheme = (colorScheme: ColorScheme) => {
+function applyColorScheme(colorScheme: ColorScheme) {
+    if (typeof document !== 'undefined') {
         document.documentElement.style.setProperty(
             "--background-color",
             colorScheme.background
@@ -53,37 +58,44 @@ export function useColorScheme() {
             "--foreground-color",
             colorScheme.foreground
         );
-    };
+    }
+}
+
+export function useColorScheme() {
+    const [scheme, setScheme] = useState<ColorScheme>(globalColorScheme);
 
     useEffect(() => {
-        const savedScheme = localStorage.getItem("colorScheme");
-        if (savedScheme) {
-            const parsed = JSON.parse(savedScheme);
-            setScheme(parsed);
-            applyColorScheme(parsed);
-        } else {
-            try {
-                const savedScheme = localStorage.getItem("colorScheme");
-                if (savedScheme) {
+        if (typeof window !== "undefined") {
+            const savedScheme = localStorage.getItem("colorScheme");
+            if (savedScheme) {
+                try {
                     const parsed = JSON.parse(savedScheme);
+                    globalColorScheme = parsed;
                     setScheme(parsed);
                     applyColorScheme(parsed);
+                } catch (e) {
+                    // uhhhh rip, it got cooked
                 }
-            } catch (e) {
-                setScheme(colorSchemes[1]);
-                applyColorScheme(colorSchemes[1]);
+            } else {
+                applyColorScheme(globalColorScheme);
             }
         }
+
+        const listener = (newScheme: ColorScheme) => {
+            setScheme(newScheme);
+        };
+        getters.push(listener);
+
+        return () => {
+            getters = getters.filter(listen => listen !== listener);
+        };
     }, []);
 
-    useEffect(() => {
-        if (scheme) {
-            localStorage.setItem("colorScheme", JSON.stringify(scheme));
-            applyColorScheme(scheme);
-        }
-    }, [scheme]);
+    const updateScheme = (newScheme: ColorScheme) => {
+        setCurrentColorScheme(newScheme);
+    };
 
-    return { scheme: scheme || colorSchemes[1], setScheme };
+    return { scheme, setScheme: updateScheme };
 }
 
 export function getButtonStyle(button: any, scheme: ColorScheme): React.CSSProperties {

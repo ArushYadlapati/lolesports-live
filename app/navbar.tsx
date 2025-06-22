@@ -2,12 +2,38 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {colorSchemes, getCurrentColorScheme, setCurrentColorScheme, useColorScheme} from "@/app/helper/colorScheme";
+import {colorSchemes, useColorScheme } from "@/app/helper/colorScheme";
 import React from "react";
-import { updatePageScheme } from "@/app/page";
+
+let appBold = "";
+let aboutBold = "";
+let bettingBold = "";
+
+export function setCurrentPage(name: string) {
+    switch (name) {
+        case "app":
+            appBold = "font-bold";
+            aboutBold = "";
+            bettingBold = "";
+            break;
+        case "about":
+            appBold = "";
+            aboutBold = "font-bold";
+            bettingBold = "";
+            break;
+        case "betting":
+            appBold = "";
+            aboutBold = "";
+            bettingBold = "font-bold";
+            break;
+        default:
+            appBold = "";
+            aboutBold = "";
+            bettingBold = "";
+    }
+}
 
 export default function Navbar() {
-    const colorScheme = getCurrentColorScheme();
     const { scheme, setScheme } = useColorScheme();
 
     const handleSchemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -15,20 +41,13 @@ export default function Navbar() {
         const selectedScheme = colorSchemes.find((s) => s.name === selectedName);
         if (selectedScheme) {
             setScheme(selectedScheme);
-            setCurrentColorScheme(selectedScheme);
-            updatePageScheme(selectedScheme);
         }
-        console.log("Selected Scheme", selectedScheme);
-        // setScheme(selectedScheme);
-        // setCurrentColorScheme(selectedScheme);
-        updatePageScheme(selectedScheme);
     };
-
+    console.log(appBold);
     return (
         <nav className="flex justify-between items-center px-6 py-4 w-full z-50"
-             style={{ backgroundColor: colorScheme.foreground, color: colorScheme.background,
-                      transition: "background-color 0.3s, color 0.3s", boxShadow: `0 6px 20px ${ colorScheme.foreground }`,
-                      borderBottom: `2px solid ${ colorScheme.foreground }22`,
+             style={{ backgroundColor: scheme.foreground, color: scheme.background,
+                 transition: "background-color 0.3s, color 0.3s", boxShadow: `0 0px 1000px ${ scheme.foreground }`,
              }}
         >
             <div className="flex items-center space-x-3">
@@ -39,11 +58,11 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center space-x-6">
-                <Link href="/" className="hover:underline">
+                <Link href="/" className="hover:underline { appBold }">
                     View Matches
                 </Link>
 
-                <Link href="/about" className="hover:underline">
+                <Link href="/about" className="hover:underline { aboutBold }">
                     About
                 </Link>
 
@@ -51,24 +70,20 @@ export default function Navbar() {
                     Source Code (GitHub)
                 </a>
 
-                <Link href="/betting" className="hover:underline">
+                <Link href="/betting" className="hover:underline { bettingBold }">
                     Betting
                 </Link>
 
                 <select value= { scheme.name } className="p-2 rounded border shadow"
                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                        onChange={(event) => {
-                            handleSchemeChange(event);
-                        }}
+                        onChange={ handleSchemeChange }
                 >
                     { colorSchemes.map((color) => (
                         <option key={ color.name } value={ color.name }>
                             { color.name }
                         </option>
                     ))}
-
                 </select>
-
             </div>
         </nav>
     );

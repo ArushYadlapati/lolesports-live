@@ -8,16 +8,12 @@ import { capitalize } from "@/app/helper/util";
 import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
-import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme } from "./helper/colorScheme";
+import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, getCurrentColorScheme } from "./helper/colorScheme";
 import { updateGPR} from "@/app/api/gprAPI";
 import * as dotenv from "dotenv";
-import Navbar from "@/app/navbar";
+import Navbar, {setCurrentPage} from "@/app/navbar";
 
 dotenv.config();
-
-export function updatePageScheme(selectedScheme: any) {
-    setCurrentColorScheme(selectedScheme);
-}
 
 export default function Home() {
     const { scheme, setScheme } = useColorScheme();
@@ -25,12 +21,6 @@ export default function Home() {
     const [filter, setFilter] = useState(getCurrentFilterMode());
     const [button, setButton] = useState<{ [key: string] : boolean }>({ });
     const [responseText, setResponseText] = useState("Loading Matches (just for you!)...");
-
-    function alsoUpdatePageScheme(selectedScheme: any) {
-        setCurrentColorScheme(selectedScheme);
-    }
-
-    setCurrentColorScheme(scheme);
 
     // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
@@ -91,14 +81,7 @@ export default function Home() {
         );
     }
 
-    // As the function name says, this handles the scheme/color change on-click whenever you change the color scheme via dropdown
-    const handleSchemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedName: string = event.target.value;
-        const selectedScheme = colorSchemes.find((s) => s.name === selectedName);
-        if (selectedScheme) {
-            setScheme(selectedScheme);
-        }
-    };
+    setCurrentPage("app");
 
     return (() => {
         return (
@@ -157,27 +140,6 @@ export default function Home() {
                                             </option>
                                         );
                                     })}
-                                </select>
-                            </div>
-
-                            {/* Color Scheme Dropdown: */}
-                            <div className="flex items-center space-x-2">
-                                <label className="font-semibold">
-                                    Color Scheme:
-                                </label>
-                                <select value= { scheme.name } className="p-2 rounded border shadow"
-                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                                        onChange={(event) => {
-                                            handleSchemeChange(event);
-                                            fetchMatches().then(() => { });
-                                        }}
-                                >
-                                    { colorSchemes.map((color) => (
-                                        <option key={ color.name } value={ color.name }>
-                                            { color.name }
-                                        </option>
-                                    ))}
-
                                 </select>
                             </div>
                         </div>
