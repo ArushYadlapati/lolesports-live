@@ -1,13 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Navbar, {setCurrentPage} from "@/app/navbar";
+import Navbar from "@/app/navbar";
 import { useColorScheme } from "@/app/helper/colorScheme";
 
 export default function Betting() {
     const { scheme } = useColorScheme();
-
-    setCurrentPage("betting");
 
     return (
         <main className="flex flex-col min-h-screen px-4 py-3" style={{ backgroundColor: scheme.background, color: scheme.foreground }}>
@@ -33,7 +31,7 @@ export default function Betting() {
 
                 <div className="flex flex-col items-center md:items-end pr-50 pt-15">
                     <Image src="/bet365.webp" alt="bet365 Logo" width={ 400 } height={ 400 } className="drop-shadow-lg"/>
-                    <p className="text-lg leading-relaxed mt-4 max-w-[400px] text-center md:text-center">
+                    <p className="text-lg leading-relaxed mt-4 max-w-[400px] text-center md:text-center pt-5">
                         bet365 was chosen because it was a simple website that allowed me to get the link without too much work.
                         It didn’t have an API however, so that made getting the information a bit tricky (but still possible).
                     </p>

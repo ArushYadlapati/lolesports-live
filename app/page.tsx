@@ -11,7 +11,7 @@ import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortMode
 import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, getCurrentColorScheme } from "./helper/colorScheme";
 import { updateGPR} from "@/app/api/gprAPI";
 import * as dotenv from "dotenv";
-import Navbar, {setCurrentPage} from "@/app/navbar";
+import Navbar from "@/app/navbar";
 
 dotenv.config();
 
@@ -80,8 +80,6 @@ export default function Home() {
             </button>
         );
     }
-
-    setCurrentPage("app");
 
     return (() => {
         return (

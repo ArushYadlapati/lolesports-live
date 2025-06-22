@@ -4,37 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import {colorSchemes, useColorScheme } from "@/app/helper/colorScheme";
 import React from "react";
+import { usePathname } from "next/navigation";
 
-let appBold = "";
-let aboutBold = "";
-let bettingBold = "";
 
-export function setCurrentPage(name: string) {
-    switch (name) {
-        case "app":
-            appBold = "font-bold";
-            aboutBold = "";
-            bettingBold = "";
-            break;
-        case "about":
-            appBold = "";
-            aboutBold = "font-bold";
-            bettingBold = "";
-            break;
-        case "betting":
-            appBold = "";
-            aboutBold = "";
-            bettingBold = "font-bold";
-            break;
-        default:
-            appBold = "";
-            aboutBold = "";
-            bettingBold = "";
-    }
-}
 
 export default function Navbar() {
     const { scheme, setScheme } = useColorScheme();
+    let pathName = usePathname()
 
     const handleSchemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedName: string = event.target.value;
@@ -43,7 +19,13 @@ export default function Navbar() {
             setScheme(selectedScheme);
         }
     };
-    console.log(appBold);
+
+    const isBold = (path: string) => {
+        if (path === pathName) {
+            return "font-bold"
+        }
+    }
+
     return (
         <nav className="flex justify-between items-center px-6 py-4 w-full z-50"
              style={{ backgroundColor: scheme.foreground, color: scheme.background,
@@ -58,11 +40,11 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center space-x-6">
-                <Link href="/" className="hover:underline { appBold }">
+                <Link href="/" className={ `${ isBold("/") } hover:underline`}>
                     View Matches
                 </Link>
 
-                <Link href="/about" className="hover:underline { aboutBold }">
+                <Link href="/about" className={ `${ isBold("/about") } hover:underline`}>
                     About
                 </Link>
 
@@ -70,7 +52,7 @@ export default function Navbar() {
                     Source Code (GitHub)
                 </a>
 
-                <Link href="/betting" className="hover:underline { bettingBold }">
+                <Link href="/betting" className={ `${ isBold("/betting") } hover:underline` }>
                     Betting
                 </Link>
 
