@@ -12,7 +12,7 @@ export default function Navbar() {
              style={{ backgroundColor: scheme.foreground, color: scheme.background,
                       transition: "background-color 0.3s, color 0.3s", boxShadow: `0 6px 20px ${ scheme.foreground }`,
                       borderBottom: `2px solid ${ scheme.foreground }22`,
-            }}
+             }}
         >
             <div className="flex items-center space-x-3">
                 <Image src="/favicon-clearbg.png" alt="Logo" width={ 40 } height={ 40 } />
@@ -34,7 +34,9 @@ export default function Navbar() {
                     Source Code (GitHub)
                 </a>
 
-                <Link href="/betting" className="hover:underline">Betting</Link>
+                <Link href="/betting" className="hover:underline">
+                    Betting
+                </Link>
 
                 <Image src="/colorCircleIcon.png" alt="Change Color Scheme" width={ 40 } height={ 40 } style={{ cursor: "pointer" }}/>
             </div>
