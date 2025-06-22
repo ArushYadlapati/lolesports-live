@@ -7,7 +7,7 @@ The API is built from the free LoL esports API, combined with a modified one to 
 Previously, I used PandaScore for the previous version of this app, but I found the free plan too limiting (so I switched to the modified one).
 The main API handling is located in `app/api/lolAPI.ts`. A python version of that API can also be found there.
 
-## Match Betting
+## Match Page
 The betting system uses an unaffiliated (I don't make commissions or anything) betting website called [bet365](https://www.bet365.com/). Specifically, it uses the [League of Legends section](https://www.co.bet365.com/#/AC/B151/C1/D50/E3/F163/) of their website.
 It is a match betting website that allows you to bet with REAL MONEY on that League of Legend match.
 
@@ -18,7 +18,7 @@ and I don't want to deal with a login system and a database.
 - Get live data for current, past, and future League of Legends pro matches.
 - Only Tier 1 leagues are supported (LTA North & South, LEC, LCK, LPL), as well as Internationals (First Stand, MSI, & Worlds). 
 - Game win % (via Amazon GPR) for each match
-- Betting link to bet365 for each match (again, for real money)
+- Page link to bet365 for each match (again, for real money)
 - Color scheme selectors (lots of options!)
 - Filter matches by type of match (finals, playoffs, regular season)
 - Sort modes for matches (by status, by date, and importance of match)
@@ -28,7 +28,7 @@ and I don't want to deal with a login system and a database.
 - Add more leagues (NLC, EMEA Masters, etc.)
   - A bit tricky to do w/o redesign or more dropdown menus
 - Redesign the UI to be more user-friendly.
-  - Add more pages (Betting Disclaimer, About Page, link to GitHub repo, etc.)
+  - Add more pages (Page Disclaimer, Page Page, link to GitHub repo, etc.)
 - Add more pages (make website more realistic)
 - Add a login system (maybe)
   - Prolly for saving themes

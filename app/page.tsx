@@ -11,6 +11,7 @@ import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortMode
 import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, setCurrentColorScheme } from "./helper/colorScheme";
 import { updateGPR} from "@/app/api/gprAPI";
 import * as dotenv from "dotenv";
+import Navbar from "@/app/navbar";
 
 dotenv.config();
 
@@ -96,6 +97,7 @@ export default function Home() {
             <div className="h-screen flex flex-col items-center justify-center px-4 py-3"
                  style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
+                <Navbar/>
                 <div className="flex-shrink-0">
                     { /* Logo: */ }
                     <Image src="/logo-v1.svg" alt="Logo" width={ 150 } height={ 150 } />
