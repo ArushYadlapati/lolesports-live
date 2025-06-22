@@ -6,8 +6,6 @@ import {colorSchemes, useColorScheme } from "@/app/helper/colorScheme";
 import React from "react";
 import { usePathname } from "next/navigation";
 
-
-
 export default function Navbar() {
     const { scheme, setScheme } = useColorScheme();
     let pathName = usePathname()
@@ -18,7 +16,7 @@ export default function Navbar() {
         if (selectedScheme) {
             setScheme(selectedScheme);
         }
-    };
+    }
 
     const isBold = (path: string) => {
         if (path === pathName) {

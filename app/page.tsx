@@ -8,10 +8,10 @@ import { capitalize } from "@/app/helper/util";
 import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
-import { useColorScheme, colorSchemes, getButtonStyle, getButtonClassName, getCurrentColorScheme } from "./helper/colorScheme";
+import { useColorScheme, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
 import { updateGPR} from "@/app/api/gprAPI";
-import * as dotenv from "dotenv";
 import Navbar from "@/app/navbar";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 
