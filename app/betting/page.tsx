@@ -1,15 +1,42 @@
-import Navbar from "@/app/navbar";
+"use client";
 
-export default function BettingPage() {
+import Image from "next/image";
+import Navbar from "@/app/navbar";
+import { useColorScheme } from "@/app/helper/colorScheme";
+
+export default function Betting() {
+    const { scheme } = useColorScheme();
+
     return (
-        <main className="flex flex-col items-center justify-top min-h-screen px-4 py-3">
-            <Navbar/>
-            <h1 className="text-3xl font-bold mb-4">
-                Betting Disclaimer
-            </h1>
-            <p className="max-w-xl text-center">
-                text goes here
-            </p>
+        <main className="flex flex-col min-h-screen px-4 py-3" style={{ backgroundColor: scheme.background, color: scheme.foreground }}>
+            <Navbar />
+            <div className="flex flex-col md:flex-row justify-between items-start mt-12 gap-12 pl-10 pt-7">
+                <div className="flex-1">
+                    <h1 className="text-5xl font-bold mb-6">
+                        Betting Disclaimer
+                    </h1>
+
+                    <p className="text-lg leading-relaxed mb-10 max-w-xl">
+                        The betting system uses an unaffiliated (meaning that I don't make any commissions) betting website called bet365.
+                        Specifically, it uses the League of Legends section of their website. It is a match betting website
+                        that allows you to bet with REAL MONEY on that League of Legends esports match.
+                    </p>
+
+                    <p className="text-lg leading-relaxed mb-10 max-w-xl">
+                        I do <strong>NOT</strong> recommend gambling with REAL MONEY. Betting on any form of Esports is a form of gambling.
+                        I added this because adding my own betting system is way harder, and I don't want to deal with a login system and a database.
+                        Thank you for understanding.
+                    </p>
+                </div>
+
+                <div className="flex flex-col items-center md:items-end pr-50 pt-15">
+                    <Image src="/bet365.webp" alt="bet365 Logo" width={ 400 } height={ 400 } className="drop-shadow-lg"/>
+                    <p className="text-lg leading-relaxed mt-4 max-w-[400px] text-center md:text-center">
+                        bet365 was chosen because it was a simple website that allowed me to get the link without too much work.
+                        It didn’t have an API however, so that made getting the information a bit tricky (but still possible).
+                    </p>
+                </div>
+            </div>
         </main>
     );
 }
