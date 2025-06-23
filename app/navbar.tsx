@@ -6,7 +6,15 @@ import {colorSchemes, useColorScheme } from "@/app/helper/colorScheme";
 import React from "react";
 import { usePathname } from "next/navigation";
 
-export default function Navbar() {
+/**
+ * Navbar component for the application.
+ * It includes links to different pages, a color scheme selector,
+ * and displays the current color scheme.
+ * It also highlights the current page link.
+ *
+ * @return { React.JSX.Element } - The Navbar component.
+ */
+export default function Navbar(): React.JSX.Element {
     const { scheme, setScheme } = useColorScheme();
     let pathName = usePathname()
 

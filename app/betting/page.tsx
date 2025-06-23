@@ -3,8 +3,15 @@
 import Image from "next/image";
 import Navbar from "@/app/navbar";
 import { useColorScheme } from "@/app/helper/colorScheme";
+import { JSX } from "react";
 
-export default function Betting() {
+/**
+ * Betting disclaimer page for the LoL Live app.
+ * Provides information about the betting system used in the app.
+ *
+ * @returns { JSX.Element } The Betting page component.
+ */
+export default function Betting(): JSX.Element {
     const { scheme } = useColorScheme();
 
     return (

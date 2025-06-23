@@ -3,8 +3,15 @@
 import Image from "next/image";
 import Navbar from "@/app/navbar";
 import { useColorScheme } from "@/app/helper/colorScheme";
+import { JSX } from "react";
 
-export default function About() {
+/**
+ * About page for the LoL Live app.
+ * Provides information about the app, its features, and me.
+ *
+ * @returns { JSX.Element } The About page component.
+ */
+export default function About(): JSX.Element {
     const { scheme } = useColorScheme();
 
     return (

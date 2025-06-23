@@ -15,7 +15,13 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-export default function Home() {
+/**
+ * Home component that displays the main page of the application.
+ * You can view matches, filter them, sort them, and toggle the visibility of different leagues.
+ *
+ * @returns { React.JSX.Element } - The main page of the application.
+ */
+export default function Home(): React.JSX.Element {
     const { scheme, setScheme } = useColorScheme();
     const [sort, setSort] = useState(getCurrentSortMode());
     const [filter, setFilter] = useState(getCurrentFilterMode());
