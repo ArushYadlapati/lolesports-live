@@ -28,6 +28,7 @@ export default function About(): JSX.Element {
                         This Next.js + TypeScript app gets live data for current, past, and future League of Legends pro matches.
                         It was built for Hack Club’s <a href="https://neighborhood.hackclub.com" className="underline { scheme.foreground }" target="_blank"> Neighborhood Program</a> by
                         lead (and only) developer <a href="https://arush.me" className="underline { scheme.foreground }" target="_blank"> Arush Y</a>.
+                        See the Betting page for more information about the betting.
                     </p>
 
                     <h2 className="text-3xl font-bold mb-4">

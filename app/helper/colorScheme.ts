@@ -10,7 +10,7 @@ export interface ColorScheme {
 
 export const colorSchemes: ColorScheme[] = [
     // TODO: make foreground colors nicer (not white or black)
-    { name: "Light", background: "#ffffff", foreground: "#aba6a6", buttonColor: "#e0e0e0" },
+    { name: "Light", background: "#ffffff", foreground: "#8d8888", buttonColor: "#d2d0d0" },
     { name: "Dark", background: "#0a0a0a", foreground: "#b4b1b1", buttonColor: "#656060" },
     { name: "Red", background: "#af2121", foreground: "#de6e6e", buttonColor: "#ffc1c1" },
     { name: "Orange", background: "#c2410c", foreground: "#f5c29e", buttonColor: "#fb923c" },
@@ -49,15 +49,15 @@ export function setCurrentColorScheme(scheme: ColorScheme) {
     getters.forEach(accessors => accessors(scheme));
 }
 
-function applyColorScheme(colorScheme: ColorScheme) {
+function applyColorScheme(scheme: ColorScheme) {
     if (typeof document !== 'undefined') {
         document.documentElement.style.setProperty(
             "--background-color",
-            colorScheme.background
+            scheme.background
         );
         document.documentElement.style.setProperty(
             "--foreground-color",
-            colorScheme.foreground
+            scheme.foreground
         );
     }
 }
@@ -82,13 +82,13 @@ export function useColorScheme() {
             }
         }
 
-        const listener = (newScheme: ColorScheme) => {
+        const accessor = (newScheme: ColorScheme) => {
             setScheme(newScheme);
         };
-        getters.push(listener);
+        getters.push(accessor);
 
         return () => {
-            getters = getters.filter(listen => listen !== listener);
+            getters = getters.filter(listen => listen !== accessor);
         };
     }, []);
 
