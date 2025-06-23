@@ -24,11 +24,12 @@ export const colorSchemes: ColorScheme[] = [
     { name: "Sky Blue", background: "#0284c7", foreground: "#aed7f2", buttonColor: "#38bdf8" },
     { name: "Royal Blue", background: "#1e3a8a", foreground: "#b4bff4", buttonColor: "#4f46e5" },
     { name: "Ocean Blue", background: "#0f2027", foreground: "#adc8e3", buttonColor: "#2563eb" },
-    { name: "Purple", background: "#5b21b6", foreground: "#ceb5f5", buttonColor: "#8b5cf6" },
-    { name: "Violet", background: "#7c3aed", foreground: "#d8c1fa", buttonColor: "#a78bfa" },
+    { name: "Purple", background: "#5b21b6", foreground: "#ceb5f5", buttonColor: "#6a3bd5" },
+    { name: "Violet", background: "#7c3aed", foreground: "#dbcaf5", buttonColor: "#9774ff" },
+    { name: "Indigo", background: "#3730a3", foreground: "#b8c6f4", buttonColor: "#6366f1" },
     { name: "Pueblo Brown", background: "#7c2d12", foreground: "#e0b199", buttonColor: "#ea580c" },
     { name: "Pink", background: "#be185d", foreground: "#f3b3cf", buttonColor: "#ec4899" },
-    { name: "Fuchsia Sunset", background: "#ff6e7f", foreground: "#f5c3cd", buttonColor: "#d946ef" },
+    { name: "Fuchsia Sunset", background: "#ff6e7f", foreground: "#4a148c", buttonColor: "#d946ef" },
 ];
 
 let globalColorScheme = colorSchemes[1];
