@@ -3,6 +3,10 @@ import { leagueNameMap } from "@/app/helper/leagues";
 
 dotenv.config();
 
+/**
+ * This file is used to fetch the latest Amazon GPR  data
+ * Uses a web scraper on the backend to get the data every day (24 hours)
+ */
 // TODO: use webhook to get latest taskId
 let taskId: string = "c9f453f5-e9a4-4f60-93f0-c359d53db332"
 

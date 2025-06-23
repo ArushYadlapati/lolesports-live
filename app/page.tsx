@@ -28,44 +28,35 @@ export default function Home(): React.JSX.Element {
     const [button, setButton] = useState<{ [key: string] : boolean }>({ });
     const [responseText, setResponseText] = useState("Loading Matches (just for you!)...");
 
-    // The main function that gets the matches, and updates the response text in the big box (runs automatically on refresh/changing filter/sort mode)
     let fetchMatches = async () => {
         await updateResponse();
         setResponseText(getFormattedMatches());
 
-        // console.log() for testing
         console.log("Fetched");
 
         await updateGPR();
     };
 
-    // A useEffect hook that fetches matches automatically after 10 min
     useEffect(() => {
         fetchMatches().then(() => null);
 
         const interval = setInterval(()=> {
             fetchMatches().then(() => null);
-        }, 600000); // in ms, so 600,000 = 600*1000 ms = 600*1 second = 600 seconds = 10 minutes
+        }, 600000);
         return () => clearInterval(interval);
     }, []);
 
-    // Updates scheme
     useEffect(() => {
         fetchMatches().then(() => { });
     }, [scheme]);
 
-    /**
-     * Creates a button for each league in leagues, which controls which leagues are shown
-     * @param league - the league for the button to based upon
-     * @return { React.JSX.Element } - A button for that league
-     */
     function getLeagueButton(league: string): React.JSX.Element {
         let buttonName = league.toUpperCase();
 
         if (league === "lta_n") {
-            buttonName = "LTA North";
+            buttonName = "LTA NORTH";
         } else if (league === "lta_s") {
-            buttonName = "LTA South";
+            buttonName = "LTA SOUTH";
         }
 
         return (
@@ -89,88 +80,86 @@ export default function Home(): React.JSX.Element {
 
     return (() => {
         return (
-            <div className="h-screen flex flex-col items-center justify-center px-4 py-3"
-                 style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
+            <div className="h-screen flex flex-col px-4 py-3"
+                style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
-                <Navbar/>
-                <div className="flex-shrink-0">
-                    { /* Logo: */ }
-                    <Image src="/logo-v1.svg" alt="Logo" width={ 150 } height={ 150 } />
-                </div>
-                <main className="w-full max-w-4xl flex flex-col flex-1 min-h-0 container mx-2 items-center">
-                    <div className="flex flex-wrap items-center flex-shrink-0">
-                        <div className="flex flex-wrap items-center justify-center gap-4 mb-3.5 w-full">
-                            { /* Filter By Dropdown: */ }
-                            <div className="flex items-center space-x-2">
-                                <label className="font-semibold">
-                                    Filter By:
+                <Navbar />
+
+                <div className="flex flex-1 min-h-0 justify-center gap-20">
+                    <div className="w-64 flex flex-col items-center space-y-6 flex-shrink-0 pt-30 pl-20">
+                        <Image src="/logo-v1.svg" alt="Logo" width={ 200 } height={ 200 } />
+
+                        <div className="flex flex-col space-y-4 w-full">
+                            <div className="flex flex-col space-y-2">
+                                <label className="font-semibold text-lg text-center">
+                                    Filter Mode:
                                 </label>
-                                <select value={ filter } onChange={(event) => {
-                                    setFilter(event.target.value);
-                                    setFilterMode(event.target.value);
-                                    fetchMatches().then(() => { });
-                                }}
-                                        className="p-2 text sm rounded border shadow flex"
+                                <select value={ filter }
+                                        onChange={ (event) => {
+                                            setFilter(event.target.value);
+                                            setFilterMode(event.target.value);
+                                            fetchMatches().then(() => { });
+                                        }}
+                                        className="p-3 text-sm rounded border shadow w-full"
                                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                 >
-                                    { Object.entries(FilterModes).map(([key, value]) => {
-                                        return (
-                                            <option key={ key } value={ value }>
-                                                { value }
-                                            </option>
-                                        );
-                                    })}
+                                    { Object.entries(FilterModes).map(([key, value]) => (
+                                        <option key={ key } value={ value }>
+                                            { value }
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
-                            { /* Sort By Dropdown: */ }
-                            <div className="flex items-center space-x-2">
-                                <label className="font-semibold">
-                                    Sort By:
+                            <div className="flex flex-col space-y-2">
+                                <label className="font-semibold text-lg text-center">
+                                    Sort Mode:
                                 </label>
-
-                                <select value={ sort } onChange={ (event) => {
-                                    setSort(event.target.value);
-                                    setSortMode(event.target.value);
-                                    fetchMatches().then(() => { });
-                                }}
-                                        className="p-2 rounded border shadow"
+                                <select value={ sort }
+                                        onChange={ (event) => {
+                                            setSort(event.target.value);
+                                            setSortMode(event.target.value);
+                                            fetchMatches().then(() => { });
+                                        }}
+                                        className="p-3 text-sm rounded border shadow w-full"
                                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                 >
-                                    { Object.values(SortModes).map(( sortMode) => {
-                                        return (
-                                            <option key={ sortMode } value={ sortMode }>
-                                                { capitalize( sortMode) }
-                                            </option>
-                                        );
-                                    })}
+                                    { Object.values(SortModes).map((sortMode) => (
+                                        <option key={ sortMode } value={ sortMode }>
+                                            { capitalize(sortMode) }
+                                        </option>
+                                    )) }
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                    {/* Box that shows all the information of the matches given the constraints (league restrictions + sort/filter modes): */}
-                    <div className="flex-1 shadow-md rounded-lg p-6 overflow-auto border mb-6 w-full max-w-3xl"
-                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                    >
-                        <div className="flex flex-col items-center w-full" style={{ accentColor: scheme.foreground }}>
-                            <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }} />
-                        </div>
+                    <div className="flex-1 flex flex-col items-center justify-center max-w-3xl">
+                        <main className="w-full flex flex-col flex-1 min-h-0 items-center">
+                            <h1 className="text-5xl pt-10 font-bold pb-10">
+                                View Matches
+                            </h1>
 
-                        <br/>
+                            <div className="flex-1 shadow-md rounded-2xl p-6 overflow-auto border mb-6 w-full"
+                                 style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                            >
+                                <div className="flex flex-col items-center w-full" style={{ accentColor: scheme.foreground }}>
+                                    <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
+                                </div>
+                            </div>
+                        </main>
                     </div>
 
-                    {/* And at the very bottom, the buttons to control what leagues to show: */}
-                    <div className="flex justify-center space-x-0 flex-wrap gap-4 flex-shrink-0">
+                    <div className="w-64 flex flex-col items-center space-y-4 flex-shrink-0 pt-20">
                         { getLeagueButton("msi") }
                         { getLeagueButton("lck") }
                         { getLeagueButton("lpl") }
                         { getLeagueButton("lec") }
+                        { getLeagueButton("lcp") }
                         { getLeagueButton("lta_n") }
                         { getLeagueButton("lta_s") }
-                        { getLeagueButton("lcp") }
                     </div>
-                </main>
+                </div>
             </div>
         );
     })();

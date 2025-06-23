@@ -3,9 +3,11 @@ import { filterMatch, getLeagues, ltaCrossExists } from "@/app/helper/leagues";
 
 dotenv.config();
 
-
+/**
+ * This file is used to fetch the League of Legends Esports API data.
+ * Uses unofficial API (= free!)
+ */
 const token = process.env.NEXT_PUBLIC_LOL_API || "";
-
 
 let response: any;
 let events: any[] = [];

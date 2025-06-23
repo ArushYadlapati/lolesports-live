@@ -1,10 +1,15 @@
 import { getMatches } from "@/app/api/lolAPI";
 import { getCurrentSortMode } from "@/app/helper/leagues";
 import { getCurrentColorScheme } from "@/app/helper/colorScheme";
-import {getGPR, gpr} from "@/app/api/gprAPI";
+import { gpr} from "@/app/api/gprAPI";
 import { betNameMap } from "@/app/api/betAPI";
 
-// The interface for the Team formatting
+
+/**
+ * Represents a team in a match.
+ * Includes properties such as name, image, abbreviation, and match score.
+ * There is also win %, match score, predictions, and a probability bar.
+ */
 interface Team {
     name: string;
     image: string;
@@ -12,11 +17,85 @@ interface Team {
     matchScore: number;
 }
 
-/**
- * Formats a match given a match (which I called event because match is a different thing)
- * @param event - The event/match/whatever to format
- * @return { string } - A formatted string that represents 1 match√
- */
+function predictWins(team1Score: number, team2Score: number, maxWins: number) {
+    const t1W = team1Score / 100;
+    const t2W = team2Score / 100;
+
+    const tWS = t1W + t2W;
+    const p1 = t1W / tWS;
+    const p2 = t2W / tWS;
+
+    const r = 100000;
+    let sT1W = 0;
+    let sT2W = 0;
+    let st1T = 0;
+    let st2T = 0;
+
+    for (let sim = 0; sim < r; sim++) {
+        let t1G = 0;
+        let t2G = 0;
+
+        while (t1G < maxWins && t2G < maxWins) {
+            if (Math.random() < p1) {
+                t1G++;
+            } else {
+                t2G++;
+            }
+        }
+
+        if (t1G === maxWins) {
+            sT1W++;
+            st1T += t1G;
+            st2T += t2G;
+        } else {
+            sT2W++;
+            st1T += t1G;
+            st2T += t2G;
+        }
+    }
+
+    let t1E = Math.round(st1T / r);
+    let t2E = Math.round(st2T / r);
+
+    const mTotal = 2 * maxWins - 1;
+    t1E = Math.min(t1E, maxWins);
+    t2E = Math.min(t2E, maxWins);
+
+    if (t1E < maxWins && t2E < maxWins) {
+        const rT1 = st1T / r;
+        const rT2 = st2T / r;
+
+        if (rT1 >= rT2) {
+            t1E = maxWins;
+        } else {
+            t2E = maxWins;
+        }
+    }
+
+    const tE = t1E + t2E;
+    if (tE > mTotal) {
+        if (t1E === maxWins) {
+            t2E = mTotal - maxWins;
+        } else if (t2E === maxWins) {
+            t1E = mTotal - maxWins;
+        } else {
+            const r1 = t1E / tE;
+            t1E = Math.round(mTotal * r1);
+            t2E = mTotal - t1E;
+
+            if (t1E < maxWins && t2E < maxWins) {
+                t1E = maxWins;
+                t2E = mTotal - maxWins;
+            }
+        }
+    }
+
+    t1E = Math.floor(t1E);
+    t2E = Math.floor(t2E);
+
+    return { t1E: t1E, t2E: t2E };
+}
+
 function formatMatch(event: any): string {
     const matchTime = new Date(event.startTime).toLocaleString("en-US", {
         minute: "2-digit",
@@ -25,6 +104,9 @@ function formatMatch(event: any): string {
         month: "short",
         day: "numeric"
     });
+
+    const matchNumber = event.match?.strategy.count;
+    const maxWins = Math.ceil(matchNumber / 2);
 
     let winnerIndex = -1;
 
@@ -92,6 +174,8 @@ function formatMatch(event: any): string {
             const team1Score: number = Math.round((Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) / scaledTotal) * 100);
             const team2Score: number = 100 - team1Score;
 
+            const team1Predict = predictWins(team1Score, team2Score, maxWins).t1E.toFixed(2).toString().charAt(0);
+            const team2Predict = predictWins(team1Score, team2Score, maxWins).t2E.toFixed(2).toString().charAt(0);
 
             probabilityBar = `
                 <div style="margin: 12px auto; width: 360px; height: 12px; display: flex; border-radius: 6px; overflow: hidden; background: #e0e0e0;">
@@ -104,12 +188,22 @@ function formatMatch(event: any): string {
                     </div>
                     
                 </div>
-                    <div style="width: 360px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
-                        <span>
-                            ${ team1.abbreviation } ${ team1Score }%
-                        </span>
+                  
+                <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                    <span>
+                        ${ team1.abbreviation } ${ team1Score }%
+                    </span>
                     <span>
                         ${ team2.abbreviation } ${ team2Score }%
+                    </span>
+                </div>   
+                   
+                <div style="width: 360px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
+                    <span>
+                        Expected: ${ team1Predict }
+                    </span>
+                    <span>
+                        Expected: ${ team2Predict }
                     </span>
                 </div>
             `;
@@ -153,13 +247,6 @@ function formatMatch(event: any): string {
     `;
 }
 
-
-/**
- * Gets formatted match (by using the {@link formatMatch()} function)
- * @param matches The matches to format
- * @param matchType The match type ("Live", "Next" or "Past")
- * @return { string } - A formatted string of formatted matches
- */
 function getFormattedMatch(matches: any[], matchType: string): string {
     let formattedMatch;
 
@@ -181,13 +268,8 @@ function getFormattedMatch(matches: any[], matchType: string): string {
     `;
 }
 
-/**
- * Gets formatted match given the current sort mode combined with HTML string & formatting
- * @return { string } - A HTML string of formatted matches that can be directly called in the UI page.tsx
- */
 export function getFormattedMatches(): string {
     let result = "";
-
 
     const sortMode = getCurrentSortMode();
 

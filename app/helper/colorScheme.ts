@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { hasLeague } from "@/app/helper/leagues";
 
+/**
+ * Color scheme interface that controls the colors (background, foreground, and button color)
+ * of the page and navbar.
+ *
+ * @interface ColorScheme handles color scheme of page + navbar
+ */
 export interface ColorScheme {
     name: string;
     background: string;

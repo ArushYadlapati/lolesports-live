@@ -1,7 +1,9 @@
-// Controls what leagues are shown on website (and also their sort order as a result of this)
-// let leagues = ["lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
+/**
+ * Controls Leagues and matches shown
+ * Filters only show matches that fit a certain selectable criteria
+ * Sort modes sort the matches by a certain mode
+ */
 let leagues = ["msi", "lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
-// const allLeagues = ["lck", "lpl", "lec", "lta_n", "lta_s" "lta_cross", "lcp"];
 const allLeagues = ["msi", "lck", "lpl", "lec", "lta_n", "lta_s", "lta_cross", "lcp"];
 
 export const leagueNameMap: { [key: string]: string } = {
@@ -33,21 +35,10 @@ export enum FilterModes {
 export let currentSortMode = SortModes.status;
 export let currentFilterMode = FilterModes.none;
 
-/**
- * Getter method for leagues
- * @return { string[] } - leagues that are currently selected that we want to show
- */
 export function getLeagues(): string[] {
     return leagues;
 }
 
-/**
- * This is an interesting method. Basically, I was too lazy to have LTA Cross Conference (which is LTA North + LTA South) to be a separate league,
- * so I made it so that the LTA Cross Conference only shows up if both LTA North AND LTA South are selected.
- * Basically, this method checks whether the LTA Cross Conference should exist based off the currently-selected leagues.
- *
- * @return { void } Nothing, because it updates the leagues array directly.
- */
 export function ltaCrossExists(): void {
     if (leagues.includes("lta_n") && leagues.includes("lta_s")) {
         addLeagues("lta_cross");
@@ -125,30 +116,3 @@ export function getCurrentFilterMode() {
     return currentFilterMode.toString();
 }
 
-/* Old Methods (I might use them later, so I shoved them at the bottom for now):
-export function getCurrentFilterKey() : string {
-    // returns the key in the currentFilterMode of FilterModes
-    const key = Object.entries(FilterModes).find(([key, value]) => value === currentFilterMode);
-    if (key) {
-        return key[0];
-    }
-    return "None"
-}
-
-export function getSortMode() {
-    return Object.values(SortModes).map((sortMode) => {
-        `<option key = { sortMode } value = { sortMode } >`
-            { capitalize(sortMode) }
-        `</option>`;
-    })
-}
-
-export function getFilterMode() {
-    return Object.values(FilterModes).map((filterMode) => {
-        `<option key = { filterMode } value = { filterMode } >`
-        { capitalize(filterMode) }
-        `</option>`;
-    })
-}
-
-*/
