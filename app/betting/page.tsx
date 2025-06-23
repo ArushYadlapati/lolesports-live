@@ -17,8 +17,8 @@ export default function Betting() {
                     </h1>
 
                     <p className="text-lg leading-relaxed mb-10 max-w-xl">
-                        The betting system uses an unaffiliated (meaning that I don't make any commissions) betting website called bet365.
-                        Specifically, it uses the League of Legends section of their website. It is a match betting website
+                        The betting system uses an unaffiliated (meaning that I don't make any commissions) betting website called <a href="https://www.bet365.com/" className="underline { scheme.foreground }" target="_blank"> bet365</a>.
+                        Specifically, it uses the <a href="https://www.co.bet365.com/#/AC/B151/C1/D50/E3/F163/" className="underline { scheme.foreground }" target="_blank"> League of Legends section</a> of their website. It is a match betting website
                         that allows you to bet with REAL MONEY on that League of Legends esports match.
                     </p>
 
