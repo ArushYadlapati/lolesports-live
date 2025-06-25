@@ -11,7 +11,7 @@ import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortMode
 import { useColorScheme, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
 import { updateGPR} from "@/app/api/gprAPI";
 import * as dotenv from "dotenv";
-import Menu from "@/app/menu/menu";
+import Menu, {dimClass} from "@/app/menu/menu";
 
 dotenv.config();
 
@@ -79,15 +79,13 @@ export default function Home(): React.JSX.Element {
         );
     }
 
-    const dimClass = isSidebarOpen ? "opacity-40 pointer-events-none transition-opacity duration-300" : "opacity-100 transition-opacity duration-300";
-
     return (() => {
         return (
             <div className="h-screen flex flex-col px-4 py-3"
                 style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
-                <Menu isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-                <div className={dimClass}>
+                <Menu isOpen={ isSidebarOpen } setIsOpen={ setIsSidebarOpen } />
+                <div className={ dimClass(isSidebarOpen) }>
                 <div className="flex flex-1 min-h-0 justify-center gap-20">
                     <div className="w-64 flex flex-col items-center space-y-6 flex-shrink-0 pt-30 pl-20">
                         <Image src="/logo-v1.svg" alt="Logo" width={ 200 } height={ 200 } />

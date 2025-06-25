@@ -33,3 +33,10 @@ export default function Menu({ isOpen, setIsOpen }: MenuProps): React.JSX.Elemen
     }
     return <Navbar/>;
 }
+
+export function dimClass(isSidebarOpen: boolean): string {
+    if (isSidebarOpen) {
+        return "opacity-40 pointer-events-none transition-opacity duration-300";
+    }
+    return "opacity-100 transition-opacity duration-300";
+}
