@@ -10,8 +10,8 @@ import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { useColorScheme, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
 import { updateGPR} from "@/app/api/gprAPI";
-import Navbar from "@/app/navbar";
 import * as dotenv from "dotenv";
+import Menu from "@/app/menu/menu";
 
 dotenv.config();
 
@@ -27,6 +27,7 @@ export default function Home(): React.JSX.Element {
     const [filter, setFilter] = useState(getCurrentFilterMode());
     const [button, setButton] = useState<{ [key: string] : boolean }>({ });
     const [responseText, setResponseText] = useState("Loading Matches (just for you!)...");
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     let fetchMatches = async () => {
         await updateResponse();
@@ -78,13 +79,15 @@ export default function Home(): React.JSX.Element {
         );
     }
 
+    const dimClass = isSidebarOpen ? "opacity-40 pointer-events-none transition-opacity duration-300" : "opacity-100 transition-opacity duration-300";
+
     return (() => {
         return (
             <div className="h-screen flex flex-col px-4 py-3"
                 style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
             >
-                <Navbar />
-
+                <Menu isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+                <div className={dimClass}>
                 <div className="flex flex-1 min-h-0 justify-center gap-20">
                     <div className="w-64 flex flex-col items-center space-y-6 flex-shrink-0 pt-30 pl-20">
                         <Image src="/logo-v1.svg" alt="Logo" width={ 200 } height={ 200 } />
@@ -160,6 +163,7 @@ export default function Home(): React.JSX.Element {
                         { getLeagueButton("lta_s") }
                     </div>
                 </div>
+            </div>
             </div>
         );
     })();

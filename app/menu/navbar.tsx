@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {colorSchemes, useColorScheme } from "@/app/helper/colorScheme";
+import { colorSchemes, useColorScheme } from "@/app/helper/colorScheme";
 import React from "react";
 import { usePathname } from "next/navigation";
 

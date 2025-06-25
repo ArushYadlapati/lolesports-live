@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Navbar from "@/app/navbar";
 import { useColorScheme } from "@/app/helper/colorScheme";
-import { JSX } from "react";
+import React, {JSX, useState} from "react";
+import Menu from "@/app/menu/menu";
 
 /**
  * Betting disclaimer page for the LoL Live app.
@@ -13,10 +13,11 @@ import { JSX } from "react";
  */
 export default function Betting(): JSX.Element {
     const { scheme } = useColorScheme();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
         <main className="flex flex-col min-h-screen px-4 py-3" style={{ backgroundColor: scheme.background, color: scheme.foreground }}>
-            <Navbar />
+            <Menu isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
             <div className="flex flex-col md:flex-row justify-between items-start mt-12 gap-12 pl-10 pt-7">
                 <div className="flex-1">
                     <h1 className="text-5xl font-bold mb-6">
