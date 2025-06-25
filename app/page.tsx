@@ -86,82 +86,82 @@ export default function Home(): React.JSX.Element {
             >
                 <Menu isOpen={ isSidebarOpen } setIsOpen={ setIsSidebarOpen } />
                 <div className={ dimClass(isSidebarOpen) }>
-                <div className="flex flex-1 min-h-0 justify-center gap-20">
-                    <div className="w-64 flex flex-col items-center space-y-6 flex-shrink-0 pt-30 pl-20">
-                        <Image src="/logo-v1.svg" alt="Logo" width={ 200 } height={ 200 } />
+                    <div className="flex flex-1 min-h-0 justify-center gap-20">
+                        <div className="w-64 flex flex-col items-center space-y-6 flex-shrink-0 pt-30 pl-20">
+                            <Image src="/logo-v1.svg" alt="Logo" width={ 200 } height={ 200 } />
 
-                        <div className="flex flex-col space-y-4 w-full">
-                            <div className="flex flex-col space-y-2">
-                                <label className="font-semibold text-lg text-center">
-                                    Filter Mode:
-                                </label>
-                                <select value={ filter }
-                                        onChange={ (event) => {
-                                            setFilter(event.target.value);
-                                            setFilterMode(event.target.value);
-                                            fetchMatches().then(() => { });
-                                        }}
-                                        className="p-3 text-sm rounded border shadow w-full"
-                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                                >
-                                    { Object.entries(FilterModes).map(([key, value]) => (
-                                        <option key={ key } value={ value }>
-                                            { value }
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                            <div className="flex flex-col space-y-4 w-full">
+                                <div className="flex flex-col space-y-2">
+                                    <label className="font-semibold text-lg text-center">
+                                        Filter Mode:
+                                    </label>
+                                    <select value={ filter }
+                                            onChange={ (event) => {
+                                                setFilter(event.target.value);
+                                                setFilterMode(event.target.value);
+                                                fetchMatches().then(() => { });
+                                            }}
+                                            className="p-3 text-sm rounded border shadow w-full"
+                                            style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                    >
+                                        { Object.entries(FilterModes).map(([key, value]) => (
+                                            <option key={ key } value={ value }>
+                                                { value }
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                            <div className="flex flex-col space-y-2">
-                                <label className="font-semibold text-lg text-center">
-                                    Sort Mode:
-                                </label>
-                                <select value={ sort }
-                                        onChange={ (event) => {
-                                            setSort(event.target.value);
-                                            setSortMode(event.target.value);
-                                            fetchMatches().then(() => { });
-                                        }}
-                                        className="p-3 text-sm rounded border shadow w-full"
-                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                                >
-                                    { Object.values(SortModes).map((sortMode) => (
-                                        <option key={ sortMode } value={ sortMode }>
-                                            { capitalize(sortMode) }
-                                        </option>
-                                    )) }
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex-1 flex flex-col items-center justify-center max-w-3xl">
-                        <main className="w-full flex flex-col flex-1 min-h-0 items-center">
-                            <h1 className="text-5xl pt-10 font-bold pb-10">
-                                View Matches
-                            </h1>
-
-                            <div className="flex-1 shadow-md rounded-2xl p-6 overflow-auto border mb-6 w-full"
-                                 style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
-                            >
-                                <div className="flex flex-col items-center w-full" style={{ accentColor: scheme.foreground }}>
-                                    <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
+                                <div className="flex flex-col space-y-2">
+                                    <label className="font-semibold text-lg text-center">
+                                        Sort Mode:
+                                    </label>
+                                    <select value={ sort }
+                                            onChange={ (event) => {
+                                                setSort(event.target.value);
+                                                setSortMode(event.target.value);
+                                                fetchMatches().then(() => { });
+                                            }}
+                                            className="p-3 text-sm rounded border shadow w-full"
+                                            style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                    >
+                                        { Object.values(SortModes).map((sortMode) => (
+                                            <option key={ sortMode } value={ sortMode }>
+                                                { capitalize(sortMode) }
+                                            </option>
+                                        )) }
+                                    </select>
                                 </div>
                             </div>
-                        </main>
-                    </div>
+                        </div>
 
-                    <div className="w-64 flex flex-col items-center space-y-4 flex-shrink-0 pt-20">
-                        { getLeagueButton("msi") }
-                        { getLeagueButton("lck") }
-                        { getLeagueButton("lpl") }
-                        { getLeagueButton("lec") }
-                        { getLeagueButton("lcp") }
-                        { getLeagueButton("lta_n") }
-                        { getLeagueButton("lta_s") }
+                        <div className="flex-1 flex flex-col items-center justify-center max-w-3xl">
+                            <main className="w-full flex flex-col flex-1 min-h-0 items-center">
+                                <h1 className="text-5xl pt-10 font-bold pb-10">
+                                    View Matches
+                                </h1>
+
+                                <div className="flex-1 shadow-md rounded-2xl p-6 overflow-auto border mb-6 w-full"
+                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                >
+                                    <div className="flex flex-col items-center w-full" style={{ accentColor: scheme.foreground }}>
+                                        <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+
+                        <div className="w-64 flex flex-col items-center space-y-4 flex-shrink-0 pt-20">
+                            { getLeagueButton("msi") }
+                            { getLeagueButton("lck") }
+                            { getLeagueButton("lpl") }
+                            { getLeagueButton("lec") }
+                            { getLeagueButton("lcp") }
+                            { getLeagueButton("lta_n") }
+                            { getLeagueButton("lta_s") }
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         );
     })();
