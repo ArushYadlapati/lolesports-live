@@ -9,9 +9,9 @@ import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { useColorScheme, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
-import { updateGPR} from "@/app/api/gprAPI";
+import { updateGPR } from "@/app/api/gprAPI";
 import * as dotenv from "dotenv";
-import Menu, {dimClass} from "@/app/menu/menu";
+import Menu, { dimClass } from "@/app/menu/menu";
 
 dotenv.config();
 
@@ -25,7 +25,7 @@ export default function Home(): React.JSX.Element {
     const { scheme, setScheme } = useColorScheme();
     const [sort, setSort] = useState(getCurrentSortMode());
     const [filter, setFilter] = useState(getCurrentFilterMode());
-    const [button, setButton] = useState<{ [key: string] : boolean }>({ });
+    const [button, setButton] = useState<{ [key: string]: boolean }>({ });
     const [responseText, setResponseText] = useState("Loading Matches (just for you!)...");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -41,7 +41,7 @@ export default function Home(): React.JSX.Element {
     useEffect(() => {
         fetchMatches().then(() => null);
 
-        const interval = setInterval(()=> {
+        const interval = setInterval(() => {
             fetchMatches().then(() => null);
         }, 600000);
         return () => clearInterval(interval);
@@ -71,7 +71,6 @@ export default function Home(): React.JSX.Element {
                 }));
             }}
                 className={ getButtonClassName(league) }
-
                 style={ getButtonStyle(button[league], scheme) }
             >
                 { buttonName }
@@ -82,9 +81,10 @@ export default function Home(): React.JSX.Element {
     return (() => {
         return (
             <div className="h-screen flex flex-col px-4 py-3"
-                style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s" }}
+                 style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s", overflow: "hidden" }}
             >
                 <Menu isOpen={ isSidebarOpen } setIsOpen={ setIsSidebarOpen } />
+
                 <div className={ dimClass(isSidebarOpen) }>
                     <div className="flex flex-1 min-h-0 justify-center gap-20">
                         <div className="w-64 flex flex-col items-center space-y-6 flex-shrink-0 pt-30 pl-20">
@@ -135,17 +135,23 @@ export default function Home(): React.JSX.Element {
                             </div>
                         </div>
 
-                        <div className="flex-1 flex flex-col items-center justify-center max-w-3xl">
+                        <div className="flex flex-col items-center justify-center max-w-3xl overflow-hidden min-w-xl"
+                             style={{ flexGrow: 1, maxHeight: "100vh", display: "flex", flexDirection: "column" }}
+                        >
                             <main className="w-full flex flex-col flex-1 min-h-0 items-center">
-                                <h1 className="text-5xl pt-10 font-bold pb-10">
+                                <h1 className="text-5xl pt-10 font-bold pb-10 flex-shrink-0">
                                     View Matches
                                 </h1>
 
-                                <div className="flex-1 shadow-md rounded-2xl p-6 overflow-auto border mb-6 w-full"
-                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                                <div className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0"
+                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground, maxHeight: "calc(100vh - 100px)" }}
                                 >
-                                    <div className="flex flex-col items-center w-full" style={{ accentColor: scheme.foreground }}>
-                                        <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
+                                    <div className="flex flex-col items-center w-full h-full"
+                                         style={{ accentColor: scheme.foreground, overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                    >
+                                        <div className="text-sm font-mono text-center"
+                                            dangerouslySetInnerHTML={{ __html: responseText }}
+                                        />
                                     </div>
                                 </div>
                             </main>
