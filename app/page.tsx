@@ -85,49 +85,40 @@ export default function Home(): React.JSX.Element {
                     <div className="content-center w-full flex flex-col items-center p-6 space-y-4">
                         <div className="w-full flex justify-center gap-4 items-center">
                             <div className="flex items-center space-x-1">
-                                <label className="font-semibold text-sm text-left">Filter Mode:</label>
-                                <select
-                                    value={filter}
-                                    onChange={(event) => {
-                                        setFilter(event.target.value);
-                                        setFilterMode(event.target.value);
-                                    }}
-                                    className="p-2 text-sm rounded border shadow w-25"
-                                    style={{
-                                        backgroundColor: scheme.background,
-                                        color: scheme.foreground,
-                                        borderColor: scheme.foreground
-                                    }}
+                                <label className="font-semibold text-sm text-left">
+                                    Filter Mode:
+                                </label>
+                                <select value={ filter }
+                                        onChange={ (event) => {
+                                            setFilter(event.target.value);
+                                            setFilterMode(event.target.value);
+                                        }}
+                                        className="p-2 text-sm rounded border shadow w-25"
+                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                 >
-                                    {Object.entries(FilterModes).map(([key, value]) => (
-                                        <option key={key} value={value}>
-                                            {value}
+                                    { Object.entries(FilterModes).map(([key, value]) => (
+                                        <option key={ key } value={ value }>
+                                            { value }
                                         </option>
                                     ))}
                                 </select>
                             </div>
 
-                            {/* Sort Mode */}
                             <div className="flex items-center space-x-1">
-                                <label className="font-semibold text-sm text-left">Sort Mode:</label>
-                                <select
-                                    value={sort}
-                                    onChange={(event) => {
-                                        setSort(event.target.value);
-                                        setSortMode(event.target.value);
-                                        fetchMatches().then(() => {
-                                        });
-                                    }}
-                                    className="p-2 text-sm rounded border shadow w-25"
-                                    style={{
-                                        backgroundColor: scheme.background,
-                                        color: scheme.foreground,
-                                        borderColor: scheme.foreground
-                                    }}
+                                <label className="font-semibold text-sm text-left">
+                                    Sort Mode:
+                                </label>
+                                <select value={ sort } className="p-2 text-sm rounded border shadow w-25"
+                                        onChange={ (event) => {
+                                            setSort(event.target.value);
+                                            setSortMode(event.target.value);
+                                            fetchMatches().then(() => { });
+                                        }}
+                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                 >
-                                    {Object.values(SortModes).map((sortMode) => (
-                                        <option key={sortMode} value={sortMode}>
-                                            {capitalize(sortMode)}
+                                    { Object.values(SortModes).map((sortMode) => (
+                                        <option key={ sortMode } value={ sortMode }>
+                                            { capitalize(sortMode) }
                                         </option>
                                     ))}
                                 </select>
@@ -137,7 +128,9 @@ export default function Home(): React.JSX.Element {
                 );
             }
             return null;
-        } catch (e) {
+        }
+
+        catch (e) {
             return null;
         }
     }
@@ -162,42 +155,31 @@ try {
     return (() => {
         return (
             <div className="h-screen flex flex-col px-4 py-3"
-                 style={{
-                     backgroundColor: scheme.background,
-                     color: scheme.foreground,
-                     transition: "background-color 0.3s, color 0.3s",
-                     overflow: "hidden"
-                 }}
+                 style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s", overflow: "hidden" }}
             >
-                <Menu isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}/>
+                <Menu isOpen={ isSidebarOpen } setIsOpen={ setIsSidebarOpen }/>
 
-                <div className={dimClass(isSidebarOpen)}>
+                <div className={ dimClass(isSidebarOpen) }>
                     <div className="flex flex-1 min-h-0 justify-center gap-20">
                         <div className="w-64 flex flex-col items-center space-y-6 flex-shrink-0 pt-30 pl-20">
-                            <Image src="/logo-v1.svg" alt="Logo" width={200} height={200}/>
+                            <Image src="/logo-v1.svg" alt="Logo" width={200  } height={ 200 }/>
 
                             <div className="flex flex-col space-y-4 w-full">
                                 <div className="flex flex-col space-y-2">
                                     <label className="font-semibold text-lg text-center">
                                         Filter Mode:
                                     </label>
-                                    <select value={filter}
+                                    <select value={ filter } className="p-3 text-sm rounded border shadow w-full"
                                             onChange={(event) => {
                                                 setFilter(event.target.value);
                                                 setFilterMode(event.target.value);
-                                                fetchMatches().then(() => {
-                                                });
+                                                fetchMatches().then(() => { });
                                             }}
-                                            className="p-3 text-sm rounded border shadow w-full"
-                                            style={{
-                                                backgroundColor: scheme.background,
-                                                color: scheme.foreground,
-                                                borderColor: scheme.foreground
-                                            }}
+                                            style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                     >
-                                        {Object.entries(FilterModes).map(([key, value]) => (
-                                            <option key={key} value={value}>
-                                                {value}
+                                         { Object.entries(FilterModes).map(([key, value]) => (
+                                            <option key={ key } value={ value }>
+                                                { value }
                                             </option>
                                         ))}
                                     </select>
@@ -207,23 +189,17 @@ try {
                                     <label className="font-semibold text-lg text-center">
                                         Sort Mode:
                                     </label>
-                                    <select value={sort}
+                                    <select value={ sort } className="p-3 text-sm rounded border shadow w-full"
                                             onChange={(event) => {
                                                 setSort(event.target.value);
                                                 setSortMode(event.target.value);
-                                                fetchMatches().then(() => {
-                                                });
+                                                fetchMatches().then(() => { });
                                             }}
-                                            className="p-3 text-sm rounded border shadow w-full"
-                                            style={{
-                                                backgroundColor: scheme.background,
-                                                color: scheme.foreground,
-                                                borderColor: scheme.foreground
-                                            }}
+                                            style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                                     >
-                                        {Object.values(SortModes).map((sortMode) => (
-                                            <option key={sortMode} value={sortMode}>
-                                                {capitalize(sortMode)}
+                                        { Object.values(SortModes).map((sortMode) => (
+                                            <option key={ sortMode } value={ sortMode }>
+                                                { capitalize(sortMode) }
                                             </option>
                                         ))}
                                     </select>
@@ -232,44 +208,36 @@ try {
                         </div>
 
                         <div className="flex flex-col items-center justify-center max-w-3xl overflow-hidden min-w-xl"
-                             style={{flexGrow: 1, maxHeight: "100vh", display: "flex", flexDirection: "column"}}
+                             style={{ flexGrow: 1, maxHeight: "100vh", display: "flex", flexDirection: "column" }}
                         >
                             <main className="w-full flex flex-col flex-1 min-h-0 items-center">
-                                {viewMatchesText()}
-                                {selectModes()}
-                                <div
-                                    className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0"
-                                    style={{
-                                        backgroundColor: scheme.background,
-                                        color: scheme.foreground,
-                                        borderColor: scheme.foreground,
-                                        maxHeight: "calc(100vh - 100px)"
-                                    }}
+                                { viewMatchesText() }
+                                { selectModes() }
+                                <div className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0"
+                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground, maxHeight: "calc(100vh - 100px)" }}
                                 >
                                     <div
                                         className="flex flex-col items-center w-full h-full"
-                                        style={{
-                                            accentColor: scheme.foreground,
-                                            overflowY: "auto",
-                                            scrollbarWidth: "none",
-                                            msOverflowStyle: "none"
-                                        }}
+                                        style={{ accentColor: scheme.foreground, overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}
                                     >
                                         <div className="text-sm font-mono text-center"
-                                             dangerouslySetInnerHTML={{__html: responseText}}/>
+                                             dangerouslySetInnerHTML={{ __html: responseText }}/>
                                     </div>
                                 </div>
                             </main>
                         </div>
 
                         <div className="w-64 flex flex-col items-center space-y-4 flex-shrink-0 pt-20">
-                            {getLeagueButton("msi")}
-                            {getLeagueButton("lck")}
-                            {getLeagueButton("lpl")}
-                            {getLeagueButton("lec")}
-                            {getLeagueButton("lcp")}
-                            {getLeagueButton("lta_n")}
-                            {getLeagueButton("lta_s")}
+                            <h1 className="text-3xl font-bold text-center pt-13 pb-6">
+                                Select Leagues:
+                            </h1>
+                            { getLeagueButton("msi") }
+                            { getLeagueButton("lck") }
+                            { getLeagueButton("lpl") }
+                            { getLeagueButton("lec") }
+                            { getLeagueButton("lcp") }
+                            { getLeagueButton("lta_n") }
+                            { getLeagueButton("lta_s") }
                         </div>
                     </div>
                 </div>
