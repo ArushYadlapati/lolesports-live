@@ -11,7 +11,7 @@ import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortMode
 import { useColorScheme, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
 import { updateGPR } from "@/app/api/gprAPI";
 import * as dotenv from "dotenv";
-import Menu, { dimClass } from "@/app/menu/menu";
+import Menu, {dimClass, isMobile, viewMatchesText} from "@/app/menu/menu";
 
 dotenv.config();
 
@@ -78,28 +78,11 @@ export default function Home(): React.JSX.Element {
         );
     }
 
-    function viewMatchesText() {
-        if (window.innerWidth < 768) {
-            return (
-                <h1 className="text-3xl pt-5 font-bold pb-10 flex-shrink-0">
-                    View Matches
-                </h1>
-            );
-        }
-
-        return (
-            <h1 className="text-5xl pt-10 pl-10 font-bold pb-10 flex-shrink-0">
-                View Matches
-            </h1>
-        );
-    }
-
     function selectModes() {
-        if (window.innerWidth < 768) {
+        if (isMobile()) {
             return (
                 <div className="content-center w-full flex flex-col items-center p-6 space-y-4">
                     <div className="w-full flex justify-center gap-4 items-center">
-                        {/* Filter Mode */}
                         <div className="flex items-center space-x-1">
                             <label className="font-semibold text-sm text-left">Filter Mode:</label>
                             <select
@@ -107,12 +90,11 @@ export default function Home(): React.JSX.Element {
                                 onChange={(event) => {
                                     setFilter(event.target.value);
                                     setFilterMode(event.target.value);
-                                    fetchMatches().then(() => {});
                                 }}
                                 className="p-2 text-sm rounded border shadow w-25"
                                 style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                             >
-                                {Object.entries(FilterModes).map(([key, value]) => (
+                                { Object.entries(FilterModes).map(([key, value]) => (
                                     <option key={key} value={value}>
                                         {value}
                                     </option>

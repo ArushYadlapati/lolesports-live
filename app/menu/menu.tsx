@@ -40,3 +40,38 @@ export function dimClass(isSidebarOpen: boolean): string {
     }
     return "opacity-100 transition-opacity duration-300";
 }
+
+export function viewMatchesText() {
+    try {
+
+    if (window.innerWidth < 768) {
+        return (
+            <h1 className="text-3xl pt-5 font-bold pb-10 flex-shrink-0">
+                View Matches
+            </h1>
+        );
+    }
+    }
+    catch (e) {
+        return (
+            <h1 className="text-5xl pt-10 pl-10 font-bold pb-10 flex-shrink-0">
+                View Matches
+            </h1>
+        );
+    }
+    return (
+        <h1 className="text-5xl pt-10 pl-10 font-bold pb-10 flex-shrink-0">
+            View Matches
+        </h1>
+    );
+
+}
+
+export function isMobile(): boolean {
+    try {
+        return window.innerWidth < 768;
+    }
+    catch (e) {
+        return false;
+    }
+}
