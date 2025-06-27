@@ -25,6 +25,16 @@ export default function About(): JSX.Element {
                             About
                         </h1>
 
+                        <a href="https://neighborhood.hackclub.com/" target="_blank" rel="noopener noreferrer">
+                            <img
+                                src="https://img.shields.io/badge/made%20for%20neighborhood-bf8f73?style=for-the-badge&logo=hackclub&logoColor=ffffff"
+                                className="pt-2 pb-7"
+                                alt="Made for Neighborhood"
+                            />
+                        </a>
+
+
+
                         <p className="text-lg leading-relaxed mb-10 max-w-2xl">
                             This Next.js + TypeScript app gets live data for current, past, and future League of Legends pro matches.
                             It was built for Hack Club’s <a href="https://neighborhood.hackclub.com" className="underline { scheme.foreground }" target="_blank"> Neighborhood Program</a> by

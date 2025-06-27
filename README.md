@@ -1,4 +1,7 @@
 # [LoL Esports Live](https://lol.arush.me/)
+
+![nhbadge](https://img.shields.io/badge/made%20for%20neighborhood-bf8f73?style=for-the-badge&logo=hackclub&logoColor=ffffff)
+
 Get live data for current, past, and future League of Legends pro matches.
 This app was built with Next.js and TypeScript, and can be viewed at [https://lol.arush.me/](https://lol.arush.me/).
 
