@@ -50,7 +50,7 @@ export default function About(): JSX.Element {
                                 Filter matches by type of match (finals, playoffs, regular season)
                             </li>
                             <li>
-                                Sort modes for matches (by status, by date, and importance)
+                                Sort modes for matches (by status, by date, and im∑portance)
                             </li>
                             <li>
                                 League selector buttons

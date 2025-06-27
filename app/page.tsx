@@ -78,6 +78,92 @@ export default function Home(): React.JSX.Element {
         );
     }
 
+    function viewMatchesText() {
+        if (window.innerWidth < 768) {
+            return (
+                <h1 className="text-3xl pt-5 font-bold pb-10 flex-shrink-0">
+                    View Matches
+                </h1>
+            );
+        }
+
+        return (
+            <h1 className="text-5xl pt-10 pl-10 font-bold pb-10 flex-shrink-0">
+                View Matches
+            </h1>
+        );
+    }
+
+    function selectModes() {
+        if (window.innerWidth < 768) {
+            return (
+                <div className="content-center w-full flex flex-col items-center p-6 space-y-4">
+                    <div className="w-full flex justify-center gap-4 items-center">
+                        {/* Filter Mode */}
+                        <div className="flex items-center space-x-1">
+                            <label className="font-semibold text-sm text-left">Filter Mode:</label>
+                            <select
+                                value={filter}
+                                onChange={(event) => {
+                                    setFilter(event.target.value);
+                                    setFilterMode(event.target.value);
+                                    fetchMatches().then(() => {});
+                                }}
+                                className="p-2 text-sm rounded border shadow w-25"
+                                style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                            >
+                                {Object.entries(FilterModes).map(([key, value]) => (
+                                    <option key={key} value={value}>
+                                        {value}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Sort Mode */}
+                        <div className="flex items-center space-x-1">
+                            <label className="font-semibold text-sm text-left">Sort Mode:</label>
+                            <select
+                                value={sort}
+                                onChange={(event) => {
+                                    setSort(event.target.value);
+                                    setSortMode(event.target.value);
+                                    fetchMatches().then(() => {});
+                                }}
+                                className="p-2 text-sm rounded border shadow w-25"
+                                style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                            >
+                                {Object.values(SortModes).map((sortMode) => (
+                                    <option key={sortMode} value={sortMode}>
+                                        {capitalize(sortMode)}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        return null;
+    }
+
+    function leagueModes() {
+        if (window.innerWidth < 768) {
+            return (
+                <div className="w-64 flex flex-col items-center justify-center space-y-4 flex-shrink-0 pt-20">
+                    { getLeagueButton("msi") }
+                    { getLeagueButton("lck") }
+                    { getLeagueButton("lpl") }
+                    { getLeagueButton("lec") }
+                    { getLeagueButton("lcp") }
+                    { getLeagueButton("lta_n") }
+                    { getLeagueButton("lta_s") }
+                </div>
+            );
+        }
+        return null;
+    }
+
     return (() => {
         return (
             <div className="h-screen flex flex-col px-4 py-3"
@@ -139,19 +225,16 @@ export default function Home(): React.JSX.Element {
                              style={{ flexGrow: 1, maxHeight: "100vh", display: "flex", flexDirection: "column" }}
                         >
                             <main className="w-full flex flex-col flex-1 min-h-0 items-center">
-                                <h1 className="text-5xl pt-10 font-bold pb-10 flex-shrink-0">
-                                    View Matches
-                                </h1>
-
+                                { viewMatchesText() }
+                                { selectModes() }
                                 <div className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0"
                                     style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground, maxHeight: "calc(100vh - 100px)" }}
                                 >
-                                    <div className="flex flex-col items-center w-full h-full"
-                                         style={{ accentColor: scheme.foreground, overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                    <div
+                                        className="flex flex-col items-center w-full h-full"
+                                        style={{ accentColor: scheme.foreground, overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}
                                     >
-                                        <div className="text-sm font-mono text-center"
-                                            dangerouslySetInnerHTML={{ __html: responseText }}
-                                        />
+                                        <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
                                     </div>
                                 </div>
                             </main>
