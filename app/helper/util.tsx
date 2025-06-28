@@ -26,3 +26,54 @@ export function getTooltip(text: string, scheme: any) {
         </span>
     );
 }
+
+// Modified tooltip function with positioning support
+export function getTooltipString(
+    text: string,
+    scheme: any,
+    position: 'left' | 'right' = 'right'
+): string {
+    const isLeft = position === 'left';
+
+    return `
+        <span style="position: relative; display: inline-block;">
+            <span style="
+                width: 18px;
+                height: 18px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 13px;
+                font-weight: bold;
+                border-radius: 50%;
+                border: 1px solid ${scheme.foreground};
+                color: ${scheme.background};
+                background-color: ${scheme.foreground};
+                cursor: pointer;
+                position: relative;
+            " onmouseover="this.children[0].style.opacity=1" onmouseout="this.children[0].style.opacity=0">
+                ?
+                <div style="
+                    position: absolute;
+                    top: 50%;
+                    ${isLeft ? 'right: 100%; margin-right: 8px;' : 'left: 100%; margin-left: 8px;'}
+                    transform: translateY(-50%);
+                    z-index: 10;
+                    background-color: ${scheme.foreground};
+                    color: white;
+                    padding: 6px 8px;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    white-space: normal;
+                    min-width: 140px;
+                    max-width: 220px;
+                    opacity: 0;
+                    pointer-events: none;
+                    transition: opacity 0.2s ease;
+                ">
+                    ${text}
+                </div>
+            </span>
+        </span>
+    `;
+}

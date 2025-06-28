@@ -146,7 +146,7 @@ export default function Home(): React.JSX.Element {
     function leftBar() {
         if (!safeIsMobile()) {
             return (
-                <div className="flex flex-col items-center flex-shrink-0 pt-20">
+                <div className="flex flex-col items-center flex-shrink-0 pt-20 pl-10">
                     <Image src="/logo-v1.svg" alt="Logo" width={ 350  } height={ 350 }/>
 
                     <div className="flex flex-col w-full">
@@ -206,7 +206,7 @@ export default function Home(): React.JSX.Element {
     function rightBar() {
         if (!safeIsMobile()) {
             return (
-                <div className="w-fit flex flex-col items-center space-y-4 flex-shrink-0 pt-20 pl-10">
+                <div className="w-fit flex flex-col items-center space-y-4 flex-shrink-0 pt-20 pr-5">
                     <h1 className="text-3xl font-bold text-center pt-13 pb-6 flex items-center justify-center gap-2">
                         Select Leagues:
                         { getTooltip("Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)", scheme) }
@@ -255,14 +255,14 @@ export default function Home(): React.JSX.Element {
                         <div className="flex flex-1 min-h-0 justify-center gap-20">
                             { leftBar() }
 
-                            <div className="flex flex-col items-center justify-center max-w-3xl overflow-hidden min-w-xl"
+                            <div className="flex flex-col items-center justify-center max-w-5xl overflow-hidden min-w-xl"
                                  style={{ flexGrow: 1, maxHeight: "100vh", display: "flex", flexDirection: "column" }}
                             >
-                                <main className="w-full flex flex-col flex-1 min-h-0 items-center">
+                                <main className="w-5xl flex flex-col flex-1 min-h-0 items-center">
                                     { viewMatchesText() }
                                     { selectModes() }
 
-                                    <div className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0 themed-scrollbar"
+                                    <div className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-5xl min-h-0 themed-scrollbar"
                                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground,
                                                  maxHeight: "calc(100vh - 100px)", paddingRight: '1rem',
                                                  // @ts-ignore
@@ -271,7 +271,7 @@ export default function Home(): React.JSX.Element {
                                                  '--scrollbar-thumb-hover': scheme.foreground,
                                         }}
                                     >
-                                        <div className="items-center max-w-4xl h-full" style={{ overflowY: "auto" }}>
+                                        <div className="items-center max-w-5xl h-full" style={{ overflowY: "auto" }}>
                                             <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
                                         </div>
                                     </div>

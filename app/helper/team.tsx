@@ -1,10 +1,10 @@
-import { getMatches } from "@/app/api/lolAPI";
-import { getCurrentSortMode } from "@/app/helper/leagues";
-import { getCurrentColorScheme } from "@/app/helper/colorScheme";
-import { gpr} from "@/app/api/gprAPI";
-import { betNameMap } from "@/app/api/betAPI";
-import { safeIsMobile } from "@/app/menu/menu";
-import {getTooltip} from "@/app/helper/util";
+import {getMatches} from "@/app/api/lolAPI";
+import {getCurrentSortMode} from "@/app/helper/leagues";
+import {getCurrentColorScheme} from "@/app/helper/colorScheme";
+import {gpr} from "@/app/api/gprAPI";
+import {betNameMap} from "@/app/api/betAPI";
+import {safeIsMobile} from "@/app/menu/menu";
+import {getTooltipString} from "@/app/helper/util";
 
 /**
  * Represents a team in a match.
@@ -97,6 +97,7 @@ function predictWins(team1Score: number, team2Score: number, maxWins: number) {
     return { t1E: t1E, t2E: t2E };
 }
 
+
 function formatMatch(event: any): string | null {
     const matchTime = new Date(event.startTime).toLocaleString("en-US", {
         minute: "2-digit",
@@ -144,28 +145,44 @@ function formatMatch(event: any): string | null {
                 const [teamName, score] = line.split("|||");
                 return [teamName.trim(), score.trim()];
             }
-        })
+        }).filter(Boolean) as [string, string][]
     );
 
     const teamImages = teams.map((team: Team, index: number): string => {
-        let bold = "";
-
-        if (index === winnerIndex) {
-            bold = "font-weight: bold;";
-        }
-
-        let teamScore = "";
+        const isLeftTeam = index === 0;
+        const bold = index === winnerIndex ? "font-weight: bold;" : "";
         const score = scoreMap[team.name];
+        const tooltipPosition = isLeftTeam ? 'left' : 'right';
 
-        if (score) {
-            teamScore = ` (${ score })`;
-        }
+        const content = `${team.abbreviation}: ${team.matchScore}${score ? ` (${score})` : ""}`;
+
+        const fullLine = isLeftTeam
+            ? `
+                <span style="display: flex; align-items: center;">
+                    ${getTooltipString(
+                "Current GPR (Game Performance Rating) score - a measure of recent team performance",
+                getCurrentColorScheme(),
+                tooltipPosition
+            )}
+                    <span style="margin-left: 6px;">${content}</span>
+                </span>
+            `
+            : `
+                <span style="display: flex; align-items: center;">
+                    <span style="margin-right: 6px;">${content}</span>
+                    ${getTooltipString(
+                "Current GPR (Game Performance Rating) score - a measure of recent team performance",
+                getCurrentColorScheme(),
+                tooltipPosition
+            )}
+                </span>
+            `;
 
         return `
             <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
-                <img src="${ team.image }" alt="${ team.name }" width="60" height="60"/>
-                <span style="margin-top: 4px; text-align: center; font-size: 15px; ${ bold }">
-                    ${ team.abbreviation }: ${ team.matchScore } ${ teamScore }
+                <img src="${team.image}" alt="${team.name}" width="60" height="60"/>
+                <span style="margin-top: 4px; text-align: center; font-size: 15px; ${bold}">
+                    ${fullLine}
                 </span>
             </div>
         `;
@@ -174,44 +191,69 @@ function formatMatch(event: any): string | null {
     let probabilityBar = "";
     if (teams.length === 2) {
         const [team1, team2] = teams;
+        const team1ScoreVal = parseInt(scoreMap[team1.name] || "0", 10);
+        const team2ScoreVal = parseInt(scoreMap[team2.name] || "0", 10);
 
-        if (parseInt(scoreMap[team1.name] || "0", 10) + parseInt(scoreMap[team2.name] || "0", 10) > 0) {
+        if (team1ScoreVal + team2ScoreVal > 0) {
             const exp = 15;
-            const scaledTotal = Math.pow(parseInt(scoreMap[team1.name] || "0", 10), exp) + Math.pow(parseInt(scoreMap[team2.name] || "0", 10), exp);
+            const scaledTotal = Math.pow(team1ScoreVal, exp) + Math.pow(team2ScoreVal, exp);
 
-            const team1Score: number = Math.round((Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) / scaledTotal) * 100);
+            const team1Score: number = Math.round((Math.pow(team1ScoreVal, exp) / scaledTotal) * 100);
             const team2Score: number = 100 - team1Score;
 
-            const team1Predict = predictWins(team1Score, team2Score, maxWins).t1E.toFixed(2).toString().charAt(0);
-            const team2Predict = predictWins(team1Score, team2Score, maxWins).t2E.toFixed(2).toString().charAt(0);
+            const prediction = predictWins(team1Score, team2Score, maxWins);
+            const team1Predict = prediction.t1E.toFixed(2).toString().charAt(0);
+            const team2Predict = prediction.t2E.toFixed(2).toString().charAt(0);
 
             probabilityBar = `
-                <div style="margin: 12px auto; width: 500px; height: 15px; display: flex; border-radius: 6px; overflow: hidden; background: #e0e0e0;">
-                    <div style="width: ${ team1Score }%; background-color: #4caf50;"> 
-                        </br>
-                    </div>
-                    
-                    <div style="width: ${ team2Score }%; background-color: #f44336;">
-                        </br>
-                    </div>
-                    
+                <div style="margin: 12px auto; width: 600px; height: 15px; display: flex; border-radius: 6px; overflow: hidden; background: #e0e0e0;">
+                    <div style="width: ${team1Score}%; background-color: #4caf50;"></div>
+                    <div style="width: ${team2Score}%; background-color: #f44336;"></div>
                 </div>
-                  
-                <div style="width: 500px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
-                    <span>
-                        ${ team1.abbreviation } Win Chance: ${ team1Score }%
+
+                <div style="width: 600px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
+                    <span style="display: flex; align-items: center;">
+                        ${getTooltipString(
+                "Calculated from GPR scores using exponential weighting - represents probability of winning the match",
+                getCurrentColorScheme(),
+                'left'
+            )}
+                        <span style="margin-left: 6px;">
+                            ${team1.abbreviation} Win Chance: ${team1Score}%
+                        </span>
                     </span>
-                    <span>
-                        ${ team2.abbreviation }  Win Chance: ${ team2Score }%
+                    <span style="display: flex; align-items: center;">
+                        <span style="margin-right: 6px;">
+                            ${team2.abbreviation} Win Chance: ${team2Score}%
+                        </span>
+                        ${getTooltipString(
+                "Calculated from GPR scores using exponential weighting - represents probability of winning the match",
+                getCurrentColorScheme(),
+                'right'
+            )}
                     </span>
-                </div>   
-                   
-                <div style="width: 500px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
-                    <span>
-                        Expected Wins: ${ team1Predict }
+                </div>
+
+                <div style="width: 600px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
+                    <span style="display: flex; align-items: center;">
+                        ${getTooltipString(
+                "Monte Carlo simulation prediction of games won based on win probabilities",
+                getCurrentColorScheme(),
+                'left'
+            )}
+                        <span style="margin-left: 6px;">
+                            Expected Wins: ${team1Predict}
+                        </span>
                     </span>
-                    <span>
-                        Expected Wins: ${ team2Predict }
+                    <span style="display: flex; align-items: center;">
+                        <span style="margin-right: 6px;">
+                            Expected Wins: ${team2Predict}
+                        </span>
+                        ${getTooltipString(
+                "Monte Carlo simulation prediction of games won based on win probabilities",
+                getCurrentColorScheme(),
+                'right'
+            )}
                     </span>
                 </div>
             `;
@@ -221,41 +263,39 @@ function formatMatch(event: any): string | null {
     let betButton = ``;
 
     if (!isCompleted && betURL) {
-        betButton =
-            `<div style="margin-top: -30px; text-align: center;"> 
-                <a href="${ betURL }" target="_blank" rel="noopener noreferrer"
-                    style="padding: 6px 12px; background-color: #1e88e5; color: white; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 16px;">
+        betButton = `
+            <div style="margin-top: -30px; text-align: center;"> 
+                <a href="${betURL}" target="_blank" rel="noopener noreferrer"
+                   style="padding: 6px 12px; background-color: #1e88e5; color: white; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 16px;">
                     Bet Now
+                    ${getTooltipString(
+            "Allows you to bet REAL money on this match. See the Betting page for more information.",
+            getCurrentColorScheme(),
+            'right'
+        )}
                 </a>
-            </div>`
+            </div>`;
     }
 
     return `
-        <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 3px solid ${ getCurrentColorScheme().foreground }50; width: 650px; margin-left: auto; margin-right: auto;">
+        <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 3px solid ${getCurrentColorScheme().foreground}50; width: 750px; margin-left: auto; margin-right: auto;">
             <div style="text-align: center;">
-                <strong style="font-size: 18px;">
-                    ${ matchNames }
-                </strong>
-                <br>
-                <em style="font-size: 16px;">
-                    ${ league } (${ gameType })
-                </em> 
-                <span style="font-size: 16px;">
-                    — ${ matchTime } [${ matchStatus }]
-                </span>
+                <strong style="font-size: 18px;">${matchNames}</strong><br>
+                <em style="font-size: 16px;">${league} (${gameType})</em>
+                <span style="font-size: 16px;"> — ${matchTime} [${matchStatus}]</span>
             </div>
-    
+
             <div style="margin-top: 16px; display: flex; justify-content: center; align-items: center; gap: 24px;">
                 <div style="display: flex; justify-content: center; width: 100%;">
-                    ${ teamImages }
+                    ${teamImages}
                 </div>
             </div>
-    
+
             <div style="margin-top: 16px;">
-                ${ probabilityBar }
+                ${probabilityBar}
             </div>
-  
-            ${ betButton }
+
+            ${betButton}
         </div>
     `;
 }
@@ -476,4 +516,3 @@ export function getFormattedMatches(): string {
 
     return result || "No matches found.";
 }
-
