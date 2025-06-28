@@ -161,7 +161,7 @@ function formatMatch(event: any): string | null {
                 ? `
                 <span style="display: flex; align-items: center;">
                     ${getTooltipString(
-                    "Current GPR (Global Power Rankings) - a measure of a team's skill/performance currently",
+                    "Current GPR (Global Power Rankings) - a measure of a team's skill or performance currently",
                     getCurrentColorScheme(),
                     tooltipPosition
                 )}
@@ -172,7 +172,7 @@ function formatMatch(event: any): string | null {
                 <span style="display: flex; align-items: center;">
                     <span style="margin-right: 6px;">${content}</span>
                     ${getTooltipString(
-                    "Current GPR (Global Power Rankings) - a measure of a team's skill/performance currently",
+                    "Current GPR (Global Power Rankings) - a measure of a team's skill or performance currently",
                     getCurrentColorScheme(),
                     tooltipPosition
                 )}
@@ -189,23 +189,24 @@ function formatMatch(event: any): string | null {
         `;
         });
 
-        // Vertical separator
         const verticalLine = `
-        <div style="
-            width: 3px;
-            height: 80px;
-            background-color: ${getCurrentColorScheme().foreground}50;
-            margin: 0 20px;
-        "></div>
-    `;
+    <div style="
+        font-weight: bold;
+        font-size: 27px;
+        color: ${getCurrentColorScheme().foreground};
+    ">
+        VS
+    </div>
+`;
 
         return `
-        <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
-            ${teamBlocks[0]}
-            ${verticalLine}
-            ${teamBlocks[1]}
-        </div>
-    `;
+    <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+        ${teamBlocks[0]}
+        ${verticalLine}
+        ${teamBlocks[1]}
+    </div>
+`;
+
     })();
 
 
@@ -236,7 +237,7 @@ function formatMatch(event: any): string | null {
                 <div style="width: 600px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
                     <span style="display: flex; align-items: center;">
                         ${getTooltipString(
-                "Calculated from GPR scores using exponential weighting - represents probability of winning the match",
+                "Probability of this team winning the match (calculated from GPR scores)",
                 getCurrentColorScheme(),
                 'left'
             )}
@@ -249,7 +250,7 @@ function formatMatch(event: any): string | null {
                             ${team2.abbreviation} Win Chance: ${team2Score}%
                         </span>
                         ${getTooltipString(
-                "Calculated from GPR scores using exponential weighting - represents probability of winning the match",
+                "Probability of this team winning the match (calculated from GPR scores)",
                 getCurrentColorScheme(),
                 'right'
             )}
@@ -259,7 +260,7 @@ function formatMatch(event: any): string | null {
                 <div style="width: 600px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
                     <span style="display: flex; align-items: center;">
                         ${getTooltipString(
-                "Monte Carlo simulation prediction of games won based on win probabilities",
+                "A simulated prediction of the number of games this team will win (out of" + ` ${matchNumber})`,
                 getCurrentColorScheme(),
                 'left'
             )}
@@ -272,7 +273,7 @@ function formatMatch(event: any): string | null {
                             Expected Wins: ${team2Predict}
                         </span>
                         ${getTooltipString(
-                "Monte Carlo simulation prediction of games won based on win probabilities",
+                "A simulated prediction of the number of games this team will win (out of" + ` ${matchNumber})`,
                 getCurrentColorScheme(),
                 'right'
             )}
