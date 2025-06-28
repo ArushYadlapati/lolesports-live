@@ -121,10 +121,10 @@ export function getButtonStyle(button: any, scheme: ColorScheme): React.CSSPrope
 }
 
 export function getButtonClassName(league: any) {
-    let className = "px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md"
+    let className = "px-6 py-3 rounded-full text-sm sm:text-base transition duration-200 shadow-md w-full text-center";
 
     if (hasLeague(league)) {
-        className += "ring-4 scale-105";
+        className += "ring-4 scale-105 font-semibold ";
     }
 
     return className;
