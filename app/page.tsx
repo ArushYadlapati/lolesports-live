@@ -146,51 +146,61 @@ export default function Home(): React.JSX.Element {
     function leftBar() {
         if (!safeIsMobile()) {
             return (
-                <div className="flex flex-col items-center flex-shrink-0 pt-20 pl-10">
-                    <Image src="/logo-v1.svg" alt="Logo" width={ 350  } height={ 350 }/>
+                <div className="w-[200px] flex flex-col items-center flex-shrink-0 pt-20">
+                    <Image src="/logo-v1.svg" alt="Logo" width={200} height={200} />
 
                     <div className="flex flex-col w-full">
                         <div className="flex flex-col space-y-2">
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1">
                                 Filter Mode:
-                                { getTooltip("Choose what type of match level/importance to filter by (playoffs, finals, etc.)", scheme) }
+                                {getTooltip("Choose what type of match level/importance to filter by (playoffs, finals, etc.)", scheme)}
                             </label>
 
-                            <select value={ filter }
-                                    className="p-3 text-sm rounded border shadow w-full"
-                                    onChange={ (event) => {
-                                        setFilter(event.target.value);
-                                        setFilterMode(event.target.value);
-                                        fetchMatches().then(() => { });
-                                    }}
-                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                            <select
+                                value={filter}
+                                className="p-3 text-sm rounded border shadow w-full"
+                                onChange={(event) => {
+                                    setFilter(event.target.value);
+                                    setFilterMode(event.target.value);
+                                    fetchMatches();
+                                }}
+                                style={{
+                                    backgroundColor: scheme.background,
+                                    color: scheme.foreground,
+                                    borderColor: scheme.foreground,
+                                }}
                             >
-                                { Object.entries(FilterModes).map(([key, value]) => (
-                                    <option key={ key } value={ value }>
-                                        { value }
+                                {Object.entries(FilterModes).map(([key, value]) => (
+                                    <option key={key} value={value}>
+                                        {value}
                                     </option>
                                 ))}
                             </select>
                         </div>
 
                         <div className="flex flex-col space-y-2">
-
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1 pt-10">
                                 Sort Mode:
-                                { getTooltip("Choose how to sort the filtered results (date, status of match, how important the matches are)", scheme) }
+                                {getTooltip("Choose how to sort the filtered results (date, status of match, how important the matches are)", scheme)}
                             </label>
 
-                            <select value={ sort } className="p-3 text-sm rounded border shadow w-full"
-                                    onChange={ (event) => {
-                                        setSort(event.target.value);
-                                        setSortMode(event.target.value);
-                                        fetchMatches().then(() => { });
-                                    }}
-                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
+                            <select
+                                value={sort}
+                                className="p-3 text-sm rounded border shadow w-full"
+                                onChange={(event) => {
+                                    setSort(event.target.value);
+                                    setSortMode(event.target.value);
+                                    fetchMatches();
+                                }}
+                                style={{
+                                    backgroundColor: scheme.background,
+                                    color: scheme.foreground,
+                                    borderColor: scheme.foreground,
+                                }}
                             >
-                                { Object.values(SortModes).map((sortMode) => (
-                                    <option key={ sortMode } value={ sortMode }>
-                                        { capitalize(sortMode) }
+                                {Object.values(SortModes).map((sortMode) => (
+                                    <option key={sortMode} value={sortMode}>
+                                        {capitalize(sortMode)}
                                     </option>
                                 ))}
                             </select>
@@ -203,22 +213,23 @@ export default function Home(): React.JSX.Element {
         return null;
     }
 
+
     function rightBar() {
         if (!safeIsMobile()) {
             return (
-                <div className="w-fit flex flex-col items-center space-y-4 flex-shrink-0 pt-20 pr-5">
+                <div className="w-[200px] flex flex-col items-center space-y-4 flex-shrink-0 pr-5">
                     <h1 className="text-3xl font-bold text-center pt-13 pb-6 flex items-center justify-center gap-2">
                         Select Leagues:
-                        { getTooltip("Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)", scheme) }
+                        {getTooltip("Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)", scheme)}
                     </h1>
 
-                    { getLeagueButton("msi") }
-                    { getLeagueButton("lck") }
-                    { getLeagueButton("lpl") }
-                    { getLeagueButton("lec") }
-                    { getLeagueButton("lcp") }
-                    { getLeagueButton("lta_n") }
-                    { getLeagueButton("lta_s") }
+                    {getLeagueButton("msi")}
+                    {getLeagueButton("lck")}
+                    {getLeagueButton("lpl")}
+                    {getLeagueButton("lec")}
+                    {getLeagueButton("lcp")}
+                    {getLeagueButton("lta_n")}
+                    {getLeagueButton("lta_s")}
                 </div>
             );
         }
@@ -246,39 +257,63 @@ export default function Home(): React.JSX.Element {
     try {
         return (() => {
             return (
-                <div className="h-screen flex flex-col px-4 py-3"
-                     style={{ backgroundColor: scheme.background, color: scheme.foreground, transition: "background-color 0.3s, color 0.3s", overflow: "hidden" }}
+                <div
+                    className="h-screen flex flex-col px-4 py-3"
+                    style={{
+                        backgroundColor: scheme.background,
+                        color: scheme.foreground,
+                        transition: "background-color 0.3s, color 0.3s",
+                        overflow: "hidden",
+                    }}
                 >
-                    <Menu isOpen={ isSidebarOpen } setIsOpen={ setIsSidebarOpen }/>
+                    <Menu isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-                    <div className={ dimClass(isSidebarOpen) }>
-                        <div className="flex flex-1 min-h-0 justify-center gap-20">
-                            { leftBar() }
+                    <div className={dimClass(isSidebarOpen)}>
+                        <div className="flex flex-1 min-h-0 justify-center gap-8 px-2">
+                            {leftBar()}
 
-                            <div className="flex flex-col items-center justify-center max-w-5xl overflow-hidden min-w-xl"
-                                 style={{ flexGrow: 1, maxHeight: "100vh", display: "flex", flexDirection: "column" }}
+                            <div
+                                className="flex flex-col items-center justify-center flex-grow max-w-[90rem] overflow-hidden"
+                                style={{
+                                    flexGrow: 1,
+                                    maxHeight: "100vh",
+                                    minWidth: "640px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                }}
                             >
-                                <main className="w-5xl flex flex-col flex-1 min-h-0 items-center">
-                                    { viewMatchesText() }
-                                    { selectModes() }
+                                <main className="w-full flex flex-col flex-1 min-h-0 items-center">
+                                    {viewMatchesText()}
+                                    {selectModes()}
 
-                                    <div className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-5xl min-h-0 themed-scrollbar"
-                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground,
-                                                 maxHeight: "calc(100vh - 100px)", paddingRight: '1rem',
-                                                 // @ts-ignore
-                                                 '--scrollbar-thumb': scheme.buttonColor,
-                                                 '--scrollbar-track': scheme.background,
-                                                 '--scrollbar-thumb-hover': scheme.foreground,
+                                    <div
+                                        className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0 themed-scrollbar"
+                                        style={{
+                                            backgroundColor: scheme.background,
+                                            color: scheme.foreground,
+                                            borderColor: scheme.foreground,
+                                            maxHeight: "calc(100vh - 100px)",
+                                            paddingRight: "1rem",
+                                            // @ts-ignore
+                                            "--scrollbar-thumb": scheme.buttonColor,
+                                            "--scrollbar-track": scheme.background,
+                                            "--scrollbar-thumb-hover": scheme.foreground,
                                         }}
                                     >
-                                        <div className="items-center max-w-5xl h-full" style={{ overflowY: "auto" }}>
-                                            <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
+                                        <div
+                                            className="items-center h-full max-w-full"
+                                            style={{ overflowY: "auto" }}
+                                        >
+                                            <div
+                                                className="text-sm font-mono text-center"
+                                                dangerouslySetInnerHTML={{ __html: responseText }}
+                                            />
                                         </div>
                                     </div>
                                 </main>
                             </div>
 
-                            { rightBar() }
+                            {rightBar()}
                         </div>
                     </div>
                 </div>

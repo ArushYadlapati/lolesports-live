@@ -125,6 +125,12 @@ function formatMatch(event: any): string | null {
         matchScore: team?.result?.gameWins || 0
     })) || [];
 
+    try {
+        console.log(teams[0].abbreviation);
+    } catch (e) {
+        return "No matches found.";
+    }
+
     const matchNames = teams.map((team) => team.name).join(" vs ");
     const betURL = betNameMap[matchNames];
     const isCompleted = event.state === "completed";
@@ -350,6 +356,12 @@ function mobileFormatMatch(event: any): string | null {
         matchScore: team?.result?.gameWins || 0
     })) || [];
 
+    try {
+        console.log(teams[0].abbreviation);
+    } catch (e) {
+        return "No matches found.";
+    }
+
     const matchNames = teams.map((team) => team.name).join(" vs ");
     const betURL = betNameMap[matchNames];
     const isCompleted = event.state === "completed";
@@ -486,12 +498,12 @@ function getFormattedMatch(matches: any[], matchType: string): string {
 
     if (matches.length > 0 && safeIsMobile()) {
         formattedMatch = matches.map(event => mobileFormatMatch(event)).join("");
+        console.log(formattedMatch);
     }
-
     else if (matches.length > 0 && !safeIsMobile()) {
         formattedMatch = matches.map(event => formatMatch(event)).join("");
+        console.log(formattedMatch);
     }
-
     else if (matchType === "") {
         formattedMatch = "No Matches Found.";
     } else {
