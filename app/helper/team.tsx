@@ -478,7 +478,7 @@ function mobileFormatMatch(event: any): string | null {
                 <em>
                     ${ league } (${ gameType })
                 </em>
-                — ${ matchTime } [${ matchStatus }]
+                — ${ matchTime }
             <br/>
 
             <div style="margin-top: 8px; display: flex; justify-content: center; align-items: center; gap: 16px;">
