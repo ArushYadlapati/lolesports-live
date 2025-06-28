@@ -227,7 +227,7 @@ export default function Home(): React.JSX.Element {
     function rightBar() {
         if (!safeIsMobile()) {
             return (
-                <div className="w-fit flex flex-col items-center space-y-4 flex-shrink-0 pt-20">
+                <div className="w-fit flex flex-col items-center space-y-4 flex-shrink-0 pt-20 pl-10">
                     <h1 className="text-3xl font-bold text-center pt-13 pb-6 flex items-center justify-center gap-2">
                         Select Leagues:
                         <span className="relative cursor-pointer">
