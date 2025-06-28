@@ -148,45 +148,67 @@ function formatMatch(event: any): string | null {
         }).filter(Boolean) as [string, string][]
     );
 
-    const teamImages = teams.map((team: Team, index: number): string => {
-        const isLeftTeam = index === 0;
-        const bold = index === winnerIndex ? "font-weight: bold;" : "";
-        const score = scoreMap[team.name];
-        const tooltipPosition = isLeftTeam ? 'left' : 'right';
+    const teamImages = (() => {
+        const teamBlocks = teams.map((team: Team, index: number): string => {
+            const isLeftTeam = index === 0;
+            const bold = index === winnerIndex ? "font-weight: bold;" : "";
+            const score = scoreMap[team.name];
+            const tooltipPosition = isLeftTeam ? 'left' : 'right';
 
-        const content = `${team.abbreviation}: ${team.matchScore}${score ? ` (${score})` : ""}`;
+            const content = `${team.abbreviation}: ${team.matchScore}${score ? ` (GPR - ${score})` : ""}`;
 
-        const fullLine = isLeftTeam
-            ? `
+            const fullLine = isLeftTeam
+                ? `
                 <span style="display: flex; align-items: center;">
                     ${getTooltipString(
-                "Current GPR (Game Performance Rating) score - a measure of recent team performance",
-                getCurrentColorScheme(),
-                tooltipPosition
-            )}
+                    "Current GPR (Global Power Rankings) - a measure of a team's skill/performance currently",
+                    getCurrentColorScheme(),
+                    tooltipPosition
+                )}
                     <span style="margin-left: 6px;">${content}</span>
                 </span>
             `
-            : `
+                : `
                 <span style="display: flex; align-items: center;">
                     <span style="margin-right: 6px;">${content}</span>
                     ${getTooltipString(
-                "Current GPR (Game Performance Rating) score - a measure of recent team performance",
-                getCurrentColorScheme(),
-                tooltipPosition
-            )}
+                    "Current GPR (Global Power Rankings) - a measure of a team's skill/performance currently",
+                    getCurrentColorScheme(),
+                    tooltipPosition
+                )}
                 </span>
             `;
 
-        return `
-            <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
+            return `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 50%;">
                 <img src="${team.image}" alt="${team.name}" width="60" height="60"/>
-                <span style="margin-top: 4px; text-align: center; font-size: 15px; ${bold}">
+                <span style="margin-top: 4px; text-align: center; font-size: 16px; ${bold}">
                     ${fullLine}
                 </span>
             </div>
         `;
-    }).join("");
+        });
+
+        // Vertical separator
+        const verticalLine = `
+        <div style="
+            width: 3px;
+            height: 80px;
+            background-color: ${getCurrentColorScheme().foreground}50;
+            margin: 0 20px;
+        "></div>
+    `;
+
+        return `
+        <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+            ${teamBlocks[0]}
+            ${verticalLine}
+            ${teamBlocks[1]}
+        </div>
+    `;
+    })();
+
+
 
     let probabilityBar = "";
     if (teams.length === 2) {
