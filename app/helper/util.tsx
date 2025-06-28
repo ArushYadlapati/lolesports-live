@@ -29,7 +29,6 @@ export function getTooltip(text: string, scheme: any) {
     );
 }
 
-// Modified tooltip function with positioning support
 export function getTooltipString(
     text: string,
     scheme: any,
