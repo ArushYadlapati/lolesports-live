@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { updateResponse } from "./api/lolAPI";
-import {capitalize, getTooltip} from "@/app/helper/util";
+import {capitalize, getTooltip, getTooltipHTML, getTooltipString} from "@/app/helper/util";
 import {getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
@@ -220,7 +220,11 @@ export default function Home(): React.JSX.Element {
                 <div className="w-[200px] flex flex-col items-center space-y-4 flex-shrink-0 pr-5">
                     <h1 className="text-3xl font-bold text-center pt-13 pb-6 flex items-center justify-center gap-2">
                         Select Leagues:
-                        {getTooltip("Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)", scheme)}
+                        {getTooltipHTML(
+                        "Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)",
+                        scheme,
+                        'left'
+                    )}
                     </h1>
 
                     {getLeagueButton("msi")}

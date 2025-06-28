@@ -1,3 +1,5 @@
+import {JSX} from "react";
+
 /**
  * Capitalize the first letter of a string.
  * Used for league names in Buttons
@@ -76,4 +78,67 @@ export function getTooltipString(
             </span>
         </span>
     `;
+}
+
+import { useState } from 'react';
+
+export function getTooltipHTML(
+    text: string,
+    scheme: any,
+    position: 'left' | 'right' = 'right'
+): JSX.Element {
+    const [isHovered, setIsHovered] = useState(false);
+    const isLeft = position === 'left';
+
+    return (
+        <span style={{ position: 'relative', display: 'inline-block' }}>
+            <span
+                style={{
+                    width: '18px',
+                    height: '18px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '13px',
+                    fontWeight: 'bold',
+                    borderRadius: '50%',
+                    border: `1px solid ${scheme.foreground}`,
+                    color: scheme.background,
+                    backgroundColor: scheme.foreground,
+                    cursor: 'pointer',
+                    position: 'relative',
+                }}
+                onMouseOver={() => setIsHovered(true)}
+                onMouseOut={() => setIsHovered(false)}
+            >
+                ?
+                {isHovered && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            [isLeft ? 'right' : 'left']: '100%',
+                            marginRight: isLeft ? '8px' : '0',
+                            marginLeft: isLeft ? '0' : '8px',
+                            transform: 'translateY(-50%)',
+                            zIndex: 10,
+                            backgroundColor: scheme.foreground,
+                            color: 'white',
+                            padding: '6px 8px',
+                            borderRadius: '4px',
+                            fontSize: '12px',
+                            whiteSpace: 'normal',
+                            minWidth: '140px',
+                            maxWidth: '220px',
+                            opacity: isHovered ? 1 : 0,
+                            pointerEvents: 'none',
+                            transition: 'opacity 0.2s ease',
+                        }}
+                    >
+                        {text}
+                    </div>
+                )}
+            </span>
+        </span>
+    );
 }
