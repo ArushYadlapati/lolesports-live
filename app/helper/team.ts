@@ -4,6 +4,7 @@ import { getCurrentColorScheme } from "@/app/helper/colorScheme";
 import { gpr} from "@/app/api/gprAPI";
 import { betNameMap } from "@/app/api/betAPI";
 import { safeIsMobile } from "@/app/menu/menu";
+import {getTooltip} from "@/app/helper/util";
 
 /**
  * Represents a team in a match.
@@ -130,6 +131,13 @@ function formatMatch(event: any): string | null {
     const gameType = event.blockName;
     const league = event.league?.name;
 
+    let matchStatus = "Live";
+    if (event.state === "completed") {
+        matchStatus = "Past";
+    } else if (event.state === "unstarted") {
+        matchStatus = "Next";
+    }
+
     const scoreMap = Object.fromEntries(
         gpr.map((line: string) => {
             if (line) {
@@ -231,7 +239,10 @@ function formatMatch(event: any): string | null {
                 <br>
                 <em style="font-size: 16px;">
                     ${ league } (${ gameType })
-                </em> — <span style="font-size: 16px;">${ matchTime }</span>
+                </em> 
+                <span style="font-size: 16px;">
+                    — ${ matchTime } [${ matchStatus }]
+                </span>
             </div>
     
             <div style="margin-top: 16px; display: flex; justify-content: center; align-items: center; gap: 24px;">
@@ -282,6 +293,13 @@ function mobileFormatMatch(event: any): string | null {
 
     const gameType = event.blockName;
     const league = event.league?.name;
+
+    let matchStatus = "Live";
+    if (event.state === "completed") {
+        matchStatus = "Past";
+    } else if (event.state === "unstarted") {
+        matchStatus = "Next";
+    }
 
     const scoreMap = Object.fromEntries(
         gpr.map((line: string) => {
@@ -385,7 +403,7 @@ function mobileFormatMatch(event: any): string | null {
                 <em>
                     ${ league } (${ gameType })
                 </em>
-                — ${ matchTime }
+                — ${ matchTime } [${ matchStatus }]
             <br/>
 
             <div style="margin-top: 8px; display: flex; justify-content: center; align-items: center; gap: 16px;">

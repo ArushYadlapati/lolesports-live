@@ -4,8 +4,8 @@ import React from "react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { updateResponse } from "./api/lolAPI";
-import { capitalize } from "@/app/helper/util";
-import { getFormattedMatches } from "./helper/team";
+import {capitalize, getTooltip} from "@/app/helper/util";
+import {getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { useColorScheme, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
@@ -143,24 +143,6 @@ export default function Home(): React.JSX.Element {
         }
     }
 
-    function getTooltip(text: string) {
-        return (
-            <span className="relative cursor-pointer">
-                <span className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
-                      style={{ color: scheme.background, backgroundColor: scheme.foreground, borderColor: scheme.foreground}}
-                >
-                    ?
-                    <div style={{ backgroundColor: scheme.foreground }}
-                         className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs
-                         text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
-                    >
-                        { text }
-                    </div>
-                </span>
-            </span>
-        );
-    }
-
     function leftBar() {
         if (!safeIsMobile()) {
             return (
@@ -171,7 +153,7 @@ export default function Home(): React.JSX.Element {
                         <div className="flex flex-col space-y-2">
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1">
                                 Filter Mode:
-                                { getTooltip("Choose what type of match level/importance to filter by (playoffs, finals, etc.)") }
+                                { getTooltip("Choose what type of match level/importance to filter by (playoffs, finals, etc.)", scheme) }
                             </label>
 
                             <select value={ filter }
@@ -195,7 +177,7 @@ export default function Home(): React.JSX.Element {
 
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1 pt-10">
                                 Sort Mode:
-                                { getTooltip("Choose how to sort the filtered results (date, status of match, how important the matches are)") }
+                                { getTooltip("Choose how to sort the filtered results (date, status of match, how important the matches are)", scheme) }
                             </label>
 
                             <select value={ sort } className="p-3 text-sm rounded border shadow w-full"
@@ -227,7 +209,7 @@ export default function Home(): React.JSX.Element {
                 <div className="w-fit flex flex-col items-center space-y-4 flex-shrink-0 pt-20 pl-10">
                     <h1 className="text-3xl font-bold text-center pt-13 pb-6 flex items-center justify-center gap-2">
                         Select Leagues:
-                        { getTooltip("Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)") }
+                        { getTooltip("Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)", scheme) }
                     </h1>
 
                     { getLeagueButton("msi") }
