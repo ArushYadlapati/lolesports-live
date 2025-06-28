@@ -189,7 +189,7 @@ function formatMatch(event: any): string | null {
                     
                 </div>
                   
-                <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                <div style="width: 500px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
                     <span>
                         ${ team1.abbreviation } Win Chance: ${ team1Score }%
                     </span>
@@ -223,7 +223,7 @@ function formatMatch(event: any): string | null {
     }
 
     return `
-        <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid ${ getCurrentColorScheme().foreground }50; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 3px solid ${ getCurrentColorScheme().foreground }50; width: 650px; margin-left: auto; margin-right: auto;">
             <div style="text-align: center;">
                 <strong style="font-size: 18px;">
                     ${ matchNames }
