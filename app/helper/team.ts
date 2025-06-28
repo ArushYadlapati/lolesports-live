@@ -274,19 +274,19 @@ export function getFormattedMatches(): string {
     const sortMode = getCurrentSortMode();
 
     if (sortMode === "status") {
-        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center;
+        result += `<h2 style="margin-top: 16px; font-size: 23px; font-weight: bold; text-decoration: underline; align-content: center;
                          display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                          Live Matches:
                    </h2>`;
         result += getFormattedMatch(getMatches("live"), "Live");
 
-        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center;
+        result += `<h2 style="margin-top: 16px; font-size: 23px; font-weight: bold; text-decoration: underline; align-content: center;
                          display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                          Next Matches:
                    </h2>`;
         result += getFormattedMatch(getMatches("next"), "Next");
 
-        result += `<h2 style="margin-top: 16px; font-size: 18px; font-weight: bold; text-decoration: underline; align-content: center;
+        result += `<h2 style="margin-top: 16px; font-size: 23px; font-weight: bold; text-decoration: underline; align-content: center;
                          display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                          Past Matches:
                    </h2>`;
