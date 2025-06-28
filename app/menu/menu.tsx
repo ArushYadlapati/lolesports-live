@@ -75,3 +75,11 @@ export function isMobile(): boolean {
         return false;
     }
 }
+
+export function safeIsMobile() {
+    try {
+        return isMobile();
+    } catch (e) {
+        return false;
+    }
+}

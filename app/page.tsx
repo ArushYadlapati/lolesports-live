@@ -51,6 +51,14 @@ export default function Home(): React.JSX.Element {
         fetchMatches().then(() => { });
     }, [scheme]);
 
+    function safeIsMobile() {
+        try {
+            return isMobile();
+        } catch (e) {
+            return false;
+        }
+    }
+
     function getLeagueButton(league: string): React.JSX.Element {
         let buttonName = league.toUpperCase();
 
@@ -301,13 +309,5 @@ export default function Home(): React.JSX.Element {
             <div>
             </div>
         );
-    }
-}
-
-export function safeIsMobile() {
-    try {
-        return isMobile();
-    } catch (e) {
-        return false;
     }
 }

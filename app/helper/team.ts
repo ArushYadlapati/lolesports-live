@@ -3,8 +3,7 @@ import { getCurrentSortMode } from "@/app/helper/leagues";
 import { getCurrentColorScheme } from "@/app/helper/colorScheme";
 import { gpr} from "@/app/api/gprAPI";
 import { betNameMap } from "@/app/api/betAPI";
-import {safeIsMobile} from "@/app/page";
-
+import { safeIsMobile } from "@/app/menu/menu";
 
 /**
  * Represents a team in a match.
