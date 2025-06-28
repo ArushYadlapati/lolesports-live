@@ -154,17 +154,18 @@ export default function Home(): React.JSX.Element {
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1">
                                 Filter Mode:
                                 <span className="relative cursor-pointer">
-                                                <span className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
-                                                      style={{ color: scheme.background, backgroundColor: scheme.foreground, borderColor: scheme.foreground }}
-                                                >
-                                                    ?
-                                                    <div style={{ backgroundColor: scheme.foreground }}
-                                                         className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
-                                                    >
-                                                        Choose what type of match level/importance to filter by (playoffs, finals, etc.)
-                                                    </div>
-                                                </span>
-                                            </span>
+                                    <span className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
+                                          style={{ color: scheme.background, backgroundColor: scheme.foreground, borderColor: scheme.foreground }}
+                                    >
+                                        ?
+                                        <div style={{ backgroundColor: scheme.foreground }}
+                                             className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs
+                                             text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
+                                        >
+                                            Choose what type of match level/importance to filter by (playoffs, finals, etc.)
+                                        </div>
+                                    </span>
+                                </span>
                             </label>
 
                             <select value={ filter }
@@ -193,7 +194,8 @@ export default function Home(): React.JSX.Element {
                                                 >
                                                     ?
                                                     <div style={{ backgroundColor: scheme.foreground }}
-                                                         className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
+                                                         className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs
+                                                         text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
                                                     >
                                                         Choose how to sort the filtered results (date, status of match, how important the matches are)
                                                     </div>
@@ -236,7 +238,8 @@ export default function Home(): React.JSX.Element {
                             >
                                 ?
                                 <div style={{ backgroundColor: scheme.foreground }}
-                                     className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
+                                     className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs
+                                     text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
                                 >
                                     Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)
                                 </div>
@@ -257,6 +260,7 @@ export default function Home(): React.JSX.Element {
 
         return null;
     }
+
     function leagueModes() {
         if (window.innerWidth < 768) {
             return (
@@ -293,12 +297,16 @@ export default function Home(): React.JSX.Element {
                                     { viewMatchesText() }
                                     { selectModes() }
 
-                                    <div className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0"
-                                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground, maxHeight: "calc(100vh - 100px)" }}
+                                    <div className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0 themed-scrollbar"
+                                        style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground,
+                                                 maxHeight: "calc(100vh - 100px)", paddingRight: '1rem',
+                                                 // @ts-ignore
+                                                 '--scrollbar-thumb': scheme.buttonColor,
+                                                 '--scrollbar-track': scheme.background,
+                                                 '--scrollbar-thumb-hover': scheme.foreground,
+                                        }}
                                     >
-                                        <div className="items-center max-w-4xl h-full"
-                                             style={{ accentColor: scheme.foreground, overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}
-                                        >
+                                        <div className="items-center max-w-4xl h-full" style={{ overflowY: "auto" }}>
                                             <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
                                         </div>
                                     </div>
@@ -314,6 +322,9 @@ export default function Home(): React.JSX.Element {
     }
 
     catch (e) {
-        return (<div> </div>);
+        return (
+            <div>
+            </div>
+        );
     }
 }
