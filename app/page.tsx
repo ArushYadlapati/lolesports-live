@@ -231,22 +231,17 @@ export default function Home(): React.JSX.Element {
                     <h1 className="text-3xl font-bold text-center pt-13 pb-6 flex items-center justify-center gap-2">
                         Select Leagues:
                         <span className="relative cursor-pointer">
-                                        <span
-                                            className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
-                                            style={{
-                                                color: scheme.background,
-                                                backgroundColor: scheme.foreground,
-                                                borderColor: scheme.foreground,
-                                            }}
-                                        >
-                                            ?
-                                            <div style={{ backgroundColor: scheme.foreground }}
-                                                 className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
-                                            >
-                                                Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)
-                                            </div>
-                                        </span>
-                                    </span>
+                            <span className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
+                                  style={{ color: scheme.background, backgroundColor: scheme.foreground, borderColor: scheme.foreground}}
+                            >
+                                ?
+                                <div style={{ backgroundColor: scheme.foreground }}
+                                     className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
+                                >
+                                    Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)
+                                </div>
+                            </span>
+                        </span>
                     </h1>
 
                     { getLeagueButton("msi") }
@@ -289,7 +284,7 @@ export default function Home(): React.JSX.Element {
 
                     <div className={ dimClass(isSidebarOpen) }>
                         <div className="flex flex-1 min-h-0 justify-center gap-20">
-                            {leftBar()}
+                            { leftBar() }
 
                             <div className="flex flex-col items-center justify-center max-w-3xl overflow-hidden min-w-xl"
                                  style={{ flexGrow: 1, maxHeight: "100vh", display: "flex", flexDirection: "column" }}
@@ -310,7 +305,7 @@ export default function Home(): React.JSX.Element {
                                 </main>
                             </div>
 
-                            {rightBar()}
+                            { rightBar() }
                         </div>
                     </div>
                 </div>

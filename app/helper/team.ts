@@ -96,7 +96,7 @@ function predictWins(team1Score: number, team2Score: number, maxWins: number) {
     return { t1E: t1E, t2E: t2E };
 }
 
-function formatMatch(event: any): string {
+function formatMatch(event: any): string | null {
     const matchTime = new Date(event.startTime).toLocaleString("en-US", {
         minute: "2-digit",
         hour: "2-digit",
