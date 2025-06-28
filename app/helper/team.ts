@@ -3,6 +3,7 @@ import { getCurrentSortMode } from "@/app/helper/leagues";
 import { getCurrentColorScheme } from "@/app/helper/colorScheme";
 import { gpr} from "@/app/api/gprAPI";
 import { betNameMap } from "@/app/api/betAPI";
+import {safeIsMobile} from "@/app/page";
 
 
 /**
@@ -97,6 +98,159 @@ function predictWins(team1Score: number, team2Score: number, maxWins: number) {
 }
 
 function formatMatch(event: any): string | null {
+    const matchTime = new Date(event.startTime).toLocaleString("en-US", {
+        minute: "2-digit",
+        hour: "2-digit",
+        weekday: "short",
+        month: "short",
+        day: "numeric"
+    });
+
+    const matchNumber = event.match?.strategy.count;
+    const maxWins = Math.ceil(matchNumber / 2);
+
+    let winnerIndex = -1;
+
+    if (event.match?.teams[0].result?.outcome === "win") {
+        winnerIndex = 0;
+    } else if (event.match?.teams[1].result?.outcome === "win") {
+        winnerIndex = 1;
+    }
+
+    const teams: Team[] = event.match?.teams?.map((team: any): Team => ({
+        name: team?.name,
+        image: team?.image,
+        abbreviation: team?.code || team?.abbreviation,
+        matchScore: team?.result?.gameWins || 0
+    })) || [];
+
+    const matchNames = teams.map((team) => team.name).join(" vs ");
+    const betURL = betNameMap[matchNames];
+    const isCompleted = event.state === "completed";
+
+    const gameType = event.blockName;
+    const league = event.league?.name;
+
+    const scoreMap = Object.fromEntries(
+        gpr.map((line: string) => {
+            if (line) {
+                const [teamName, score] = line.split("|||");
+                return [teamName.trim(), score.trim()];
+            }
+        })
+    );
+
+    const teamImages = teams.map((team: Team, index: number): string => {
+        let bold = "";
+
+        if (index === winnerIndex) {
+            bold = "font-weight: bold;";
+        }
+
+        let teamScore = "";
+        const score = scoreMap[team.name];
+
+        if (score) {
+            teamScore = ` (${ score })`;
+        }
+
+        return `
+            <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
+                <img src="${ team.image }" alt="${ team.name }" width="60" height="60"/>
+                <span style="margin-top: 4px; text-align: center; font-size: 15px; ${ bold }">
+                    ${ team.abbreviation }: ${ team.matchScore } ${ teamScore }
+                </span>
+            </div>
+        `;
+    }).join("");
+
+    let probabilityBar = "";
+    if (teams.length === 2) {
+        const [team1, team2] = teams;
+
+        if (parseInt(scoreMap[team1.name] || "0", 10) + parseInt(scoreMap[team2.name] || "0", 10) > 0) {
+            const exp = 15;
+            const scaledTotal = Math.pow(parseInt(scoreMap[team1.name] || "0", 10), exp) + Math.pow(parseInt(scoreMap[team2.name] || "0", 10), exp);
+
+            const team1Score: number = Math.round((Math.pow(parseInt(scoreMap[team1.name] || "0", 10), 15) / scaledTotal) * 100);
+            const team2Score: number = 100 - team1Score;
+
+            const team1Predict = predictWins(team1Score, team2Score, maxWins).t1E.toFixed(2).toString().charAt(0);
+            const team2Predict = predictWins(team1Score, team2Score, maxWins).t2E.toFixed(2).toString().charAt(0);
+
+            probabilityBar = `
+                <div style="margin: 12px auto; width: 500px; height: 15px; display: flex; border-radius: 6px; overflow: hidden; background: #e0e0e0;">
+                    <div style="width: ${ team1Score }%; background-color: #4caf50;"> 
+                        </br>
+                    </div>
+                    
+                    <div style="width: ${ team2Score }%; background-color: #f44336;">
+                        </br>
+                    </div>
+                    
+                </div>
+                  
+                <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                    <span>
+                        ${ team1.abbreviation } Win Chance: ${ team1Score }%
+                    </span>
+                    <span>
+                        ${ team2.abbreviation }  Win Chance: ${ team2Score }%
+                    </span>
+                </div>   
+                   
+                <div style="width: 500px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
+                    <span>
+                        Expected Wins: ${ team1Predict }
+                    </span>
+                    <span>
+                        Expected Wins: ${ team2Predict }
+                    </span>
+                </div>
+            `;
+        }
+    }
+
+    let betButton = ``;
+
+    if (!isCompleted && betURL) {
+        betButton =
+            `<div style="margin-top: -30px; text-align: center;"> 
+                <a href="${ betURL }" target="_blank" rel="noopener noreferrer"
+                    style="padding: 6px 12px; background-color: #1e88e5; color: white; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 16px;">
+                    Bet Now
+                </a>
+            </div>`
+    }
+
+    return `
+        <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid ${ getCurrentColorScheme().foreground }50; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div style="text-align: center;">
+                <strong style="font-size: 18px;">
+                    ${ matchNames }
+                </strong>
+                <br>
+                <em style="font-size: 16px;">
+                    ${ league } (${ gameType })
+                </em> — <span style="font-size: 16px;">${ matchTime }</span>
+            </div>
+    
+            <div style="margin-top: 16px; display: flex; justify-content: center; align-items: center; gap: 24px;">
+                <div style="display: flex; justify-content: center; width: 100%;">
+                    ${ teamImages }
+                </div>
+            </div>
+    
+            <div style="margin-top: 16px;">
+                ${ probabilityBar }
+            </div>
+  
+            ${ betButton }
+        </div>
+    `;
+}
+
+function mobileFormatMatch(event: any): string | null {
     const matchTime = new Date(event.startTime).toLocaleString("en-US", {
         minute: "2-digit",
         hour: "2-digit",
@@ -250,9 +404,15 @@ function formatMatch(event: any): string | null {
 function getFormattedMatch(matches: any[], matchType: string): string {
     let formattedMatch;
 
-    if (matches.length > 0) {
+    if (matches.length > 0 && safeIsMobile()) {
+        formattedMatch = matches.map(event => mobileFormatMatch(event)).join("");
+    }
+
+    else if (matches.length > 0 && !safeIsMobile()) {
         formattedMatch = matches.map(event => formatMatch(event)).join("");
-    } else if (matchType === "") {
+    }
+
+    else if (matchType === "") {
         formattedMatch = "No Matches Found.";
     } else {
         formattedMatch = "No " + matchType + " Matches Found.";

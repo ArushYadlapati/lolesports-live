@@ -135,12 +135,22 @@ export default function Home(): React.JSX.Element {
         }
     }
 
-    function safeIsMobile() {
-        try {
-            return isMobile();
-        } catch (e) {
-            return false;
-        }
+    function getTooltip(text: string) {
+        return (
+            <span className="relative cursor-pointer">
+                <span className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
+                      style={{ color: scheme.background, backgroundColor: scheme.foreground, borderColor: scheme.foreground}}
+                >
+                    ?
+                    <div style={{ backgroundColor: scheme.foreground }}
+                         className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs
+                         text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
+                    >
+                        { text }
+                    </div>
+                </span>
+            </span>
+        );
     }
 
     function leftBar() {
@@ -153,19 +163,7 @@ export default function Home(): React.JSX.Element {
                         <div className="flex flex-col space-y-2">
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1">
                                 Filter Mode:
-                                <span className="relative cursor-pointer">
-                                    <span className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
-                                          style={{ color: scheme.background, backgroundColor: scheme.foreground, borderColor: scheme.foreground }}
-                                    >
-                                        ?
-                                        <div style={{ backgroundColor: scheme.foreground }}
-                                             className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs
-                                             text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
-                                        >
-                                            Choose what type of match level/importance to filter by (playoffs, finals, etc.)
-                                        </div>
-                                    </span>
-                                </span>
+                                { getTooltip("Choose what type of match level/importance to filter by (playoffs, finals, etc.)") }
                             </label>
 
                             <select value={ filter }
@@ -186,21 +184,10 @@ export default function Home(): React.JSX.Element {
                         </div>
 
                         <div className="flex flex-col space-y-2">
+
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1 pt-10">
                                 Sort Mode:
-                                <span className="relative cursor-pointer">
-                                                <span className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
-                                                      style={{ color: scheme.background, backgroundColor: scheme.foreground, borderColor: scheme.foreground }}
-                                                >
-                                                    ?
-                                                    <div style={{ backgroundColor: scheme.foreground }}
-                                                         className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs
-                                                         text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
-                                                    >
-                                                        Choose how to sort the filtered results (date, status of match, how important the matches are)
-                                                    </div>
-                                                </span>
-                                            </span>
+                                { getTooltip("Choose how to sort the filtered results (date, status of match, how important the matches are)") }
                             </label>
 
                             <select value={ sort } className="p-3 text-sm rounded border shadow w-full"
@@ -232,19 +219,7 @@ export default function Home(): React.JSX.Element {
                 <div className="w-fit flex flex-col items-center space-y-4 flex-shrink-0 pt-20 pl-10">
                     <h1 className="text-3xl font-bold text-center pt-13 pb-6 flex items-center justify-center gap-2">
                         Select Leagues:
-                        <span className="relative cursor-pointer">
-                            <span className="w-6 h-6 flex items-center justify-center text-base font-bold rounded-full border group"
-                                  style={{ color: scheme.background, backgroundColor: scheme.foreground, borderColor: scheme.foreground}}
-                            >
-                                ?
-                                <div style={{ backgroundColor: scheme.foreground }}
-                                     className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max max-w-xs text-xs
-                                     text-white p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none"
-                                >
-                                    Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)
-                                </div>
-                            </span>
-                        </span>
+                        { getTooltip("Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)") }
                     </h1>
 
                     { getLeagueButton("msi") }
@@ -326,5 +301,13 @@ export default function Home(): React.JSX.Element {
             <div>
             </div>
         );
+    }
+}
+
+export function safeIsMobile() {
+    try {
+        return isMobile();
+    } catch (e) {
+        return false;
     }
 }
