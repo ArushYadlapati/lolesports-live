@@ -160,68 +160,65 @@ function formatMatch(event: any): string | null {
             const bold = index === winnerIndex ? "font-weight: bold;" : "";
             const score = scoreMap[team.name];
             const tooltipPosition = isLeftTeam ? 'left' : 'right';
+            const content = `${ team.abbreviation }: ${ team.matchScore }${ score ? ` (GPR - ${ score })` : "" }`;
 
-            const content = `${team.abbreviation}: ${team.matchScore}${score ? ` (GPR - ${score})` : ""}`;
-
-            const fullLine = isLeftTeam
-                ? `
-                <span style="display: flex; align-items: center;">
-                    ${getTooltipString(
-                    "Current GPR (Global Power Rankings) - a measure of a team's skill or performance currently",
-                    getCurrentColorScheme(),
-                    tooltipPosition
-                )}
-                    <span style="margin-left: 6px;">${content}</span>
-                </span>
-            `
-                : `
-                <span style="display: flex; align-items: center;">
-                    <span style="margin-right: 6px;">${content}</span>
-                    ${getTooltipString(
-                    "Current GPR (Global Power Rankings) - a measure of a team's skill or performance currently",
-                    getCurrentColorScheme(),
-                    tooltipPosition
-                )}
-                </span>
-            `;
+            const fullLine = isLeftTeam ?
+                `<span style="display: flex; align-items: center;">
+                    ${ getTooltipString("Current GPR (Global Power Rankings) - a measure of a team's skill" +
+                                        " or performance currently", getCurrentColorScheme(), tooltipPosition) }
+                    <span style="margin-left: 6px;">
+                        ${ content }
+                    </span>
+                </span>`
+            :
+                `<span style="display: flex; align-items: center;">
+                    <span style="margin-right: 6px;">
+                        ${content }
+                    </span>
+                    ${ getTooltipString("Current GPR (Global Power Rankings) - a measure of a team's skill " +
+                                        "or performance currently", getCurrentColorScheme(), tooltipPosition) }
+                </span>`
+            ;
 
             return `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 50%;">
-                <img src="${team.image}" alt="${team.name}" width="60" height="60"/>
-                <span style="margin-top: 4px; text-align: center; font-size: 16px; ${bold}">
-                    ${fullLine}
-                </span>
-            </div>
-        `;
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 50%;">
+                    <img src="${ team.image }" alt="${ team.name }" width="60" height="60"/>
+                    <span style="margin-top: 4px; text-align: center; font-size: 16px; ${ bold }">
+                        ${ fullLine }
+                    </span>
+                </div>
+            `;
         });
 
         const verticalLine = `
-    <div style="
-        font-weight: bold;
-        font-size: 27px;
-        color: ${getCurrentColorScheme().foreground};
-    ">
-        VS
-    </div>
-`;
+            <div style="font-weight: bold; font-size: 27px; color: ${getCurrentColorScheme().foreground};">
+                VS
+            </div>
+        `;
 
         return `
-    <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
-        ${teamBlocks[0]}
-        ${verticalLine}
-        ${teamBlocks[1]}
-    </div>
-`;
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+                ${teamBlocks[0]}
+                ${verticalLine}
+                ${teamBlocks[1]}
+            </div>
+        `;
 
     })();
 
-
-
+    let isFixed = false;
     let probabilityBar = "";
+    
     if (teams.length === 2) {
         const [team1, team2] = teams;
-        const team1ScoreVal = parseInt(scoreMap[team1.name] || "0", 10);
-        const team2ScoreVal = parseInt(scoreMap[team2.name] || "0", 10);
+        let team1ScoreVal = parseInt(scoreMap[team1.name] || "0", 10);
+        let team2ScoreVal = parseInt(scoreMap[team2.name] || "0", 10);
+
+        if (team1.name === "TBD" || team2.name === "TBD") {
+            isFixed = true;
+            team1ScoreVal = 0;
+            team2ScoreVal = 0;
+        }
 
         if (team1ScoreVal + team2ScoreVal > 0) {
             const exp = 15;
@@ -236,17 +233,17 @@ function formatMatch(event: any): string | null {
 
             probabilityBar = `
                 <div style="margin: 12px auto; width: 600px; height: 15px; display: flex; border-radius: 6px; overflow: hidden; background: #e0e0e0;">
-                    <div style="width: ${team1Score}%; background-color: #4caf50;"></div>
-                    <div style="width: ${team2Score}%; background-color: #f44336;"></div>
+                    <div style="width: ${ team1Score }%; background-color: #4caf50;">
+                    </div>
+                    
+                    <div style="width: ${ team2Score }%; background-color: #f44336;">
+                    </div>
                 </div>
 
                 <div style="width: 600px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
                     <span style="display: flex; align-items: center;">
-                        ${getTooltipString(
-                "Probability of this team winning the match (calculated from GPR scores)",
-                getCurrentColorScheme(),
-                'left'
-            )}
+                        ${ getTooltipString("Probability of this team winning the match " +
+                                            "(calculated from GPR scores)", getCurrentColorScheme(), 'left') }
                         <span style="margin-left: 6px;">
                             ${ team1.abbreviation } Win Chance: ${ team1Score }%
                         </span>
@@ -261,24 +258,18 @@ function formatMatch(event: any): string | null {
 
                 <div style="width: 600px; margin: 6px auto 0; display: flex; justify-content: space-between; font-size: 14px;">
                     <span style="display: flex; align-items: center;">
-                        ${getTooltipString(
-                "A simulated prediction of the number of games this team will win (out of" + ` ${matchNumber})`,
-                getCurrentColorScheme(),
-                'left'
-            )}
+                        ${getTooltipString("A simulated prediction of the number of games this team will win " +
+                                            "(out of" + ` ${ matchNumber })`, getCurrentColorScheme(), 'left') }
                         <span style="margin-left: 6px;">
-                            Expected Wins: ${team1Predict}
+                            Expected Wins: ${ team1Predict }
                         </span>
                     </span>
                     <span style="display: flex; align-items: center;">
                         <span style="margin-right: 6px;">
-                            Expected Wins: ${team2Predict}
+                            Expected Wins: ${ team2Predict }
                         </span>
-                        ${getTooltipString(
-                "A simulated prediction of the number of games this team will win (out of" + ` ${matchNumber})`,
-                getCurrentColorScheme(),
-                'right'
-            )}
+                        ${ getTooltipString("A simulated prediction of the number of games this team will win " +
+                                            "(out of" + ` ${ matchNumber })`, getCurrentColorScheme(), 'right') }
                     </span>
                 </div>
             `;
@@ -287,40 +278,46 @@ function formatMatch(event: any): string | null {
 
     let betButton = ``;
 
-    if (!isCompleted && betURL) {
+    if (!isCompleted && betURL && !isFixed) {
         betButton = `
             <div style="margin-top: -30px; text-align: center;"> 
-                <a href="${betURL}" target="_blank" rel="noopener noreferrer"
+                <a href="${ betURL }" target="_blank" rel="noopener noreferrer"
                    style="padding: 6px 12px; background-color: #1e88e5; color: white; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 16px;">
                     Bet Now
-                    ${getTooltipString(
-            "Allows you to bet REAL money on this match. See the Betting page for more information.",
-            getCurrentColorScheme(),
-            'right'
-        )}
+                    ${ getTooltipString("Allows you to bet REAL money on this match. See the Betting page for " +
+                                        "more information.", getCurrentColorScheme(), 'right') }
                 </a>
             </div>`;
     }
 
     return `
-        <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 3px solid ${getCurrentColorScheme().foreground}50; width: 750px; margin-left: auto; margin-right: auto;">
+        <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 3px solid 
+                    ${ getCurrentColorScheme().foreground}50; width: 750px; margin-left: auto; margin-right: auto;"
+        >
             <div style="text-align: center;">
-                <strong style="font-size: 18px;">${matchNames}</strong><br>
-                <em style="font-size: 16px;">${league} (${gameType})</em>
-                <span style="font-size: 16px;"> — ${matchTime} [${matchStatus}]</span>
+                <strong style="font-size: 18px;">
+                    ${ matchNames }
+                </strong>
+                <br>
+                <em style="font-size: 16px;">
+                    ${ league } (${ gameType })
+                </em>
+                <span style="font-size: 16px;">
+                    — ${ matchTime } [${ matchStatus }]
+                </span>
             </div>
 
             <div style="margin-top: 16px; display: flex; justify-content: center; align-items: center; gap: 24px;">
                 <div style="display: flex; justify-content: center; width: 100%;">
-                    ${teamImages}
+                    ${ teamImages }
                 </div>
             </div>
 
             <div style="margin-top: 16px;">
-                ${probabilityBar}
+                ${ probabilityBar }
             </div>
 
-            ${betButton}
+            ${ betButton }
         </div>
     `;
 }
@@ -353,7 +350,7 @@ function mobileFormatMatch(event: any): string | null {
     })) || [];
 
     try {
-        console.log(teams[0].abbreviation);
+        teams[0].abbreviation;
     } catch (e) {
         return "No matches found.";
     }
@@ -494,11 +491,9 @@ function getFormattedMatch(matches: any[], matchType: string): string {
 
     if (matches.length > 0 && safeIsMobile()) {
         formattedMatch = matches.map(event => mobileFormatMatch(event)).join("");
-        console.log(formattedMatch);
     }
     else if (matches.length > 0 && !safeIsMobile()) {
         formattedMatch = matches.map(event => formatMatch(event)).join("");
-        console.log(formattedMatch);
     }
     else if (matchType === "") {
         formattedMatch = "No Matches Found.";

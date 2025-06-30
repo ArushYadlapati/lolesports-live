@@ -153,26 +153,20 @@ export default function Home(): React.JSX.Element {
                         <div className="flex flex-col space-y-2">
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1">
                                 Filter Mode:
-                                {getTooltip("Choose what type of match level/importance to filter by (playoffs, finals, etc.)", scheme)}
+                                { getTooltip("Choose what type of match level/importance to filter by (playoffs, finals, etc.)", scheme) }
                             </label>
 
-                            <select
-                                value={filter}
-                                className="p-3 text-sm rounded border shadow w-full"
-                                onChange={(event) => {
-                                    setFilter(event.target.value);
-                                    setFilterMode(event.target.value);
-                                    fetchMatches();
-                                }}
-                                style={{
-                                    backgroundColor: scheme.background,
-                                    color: scheme.foreground,
-                                    borderColor: scheme.foreground,
-                                }}
+                            <select value={ filter } className="p-3 text-sm rounded border shadow w-full"
+                                    onChange={ (event) => {
+                                        setFilter(event.target.value);
+                                        setFilterMode(event.target.value);
+                                        fetchMatches().then(r => { });
+                                    }}
+                                    style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                             >
-                                {Object.entries(FilterModes).map(([key, value]) => (
-                                    <option key={key} value={value}>
-                                        {value}
+                                { Object.entries(FilterModes).map(([key, value]) => (
+                                    <option key={ key } value={ value }>
+                                        { value }
                                     </option>
                                 ))}
                             </select>
@@ -181,26 +175,20 @@ export default function Home(): React.JSX.Element {
                         <div className="flex flex-col space-y-2">
                             <label className="font-semibold text-3xl text-center flex items-center justify-center gap-1 pt-10">
                                 Sort Mode:
-                                {getTooltip("Choose how to sort the filtered results (date, status of match, how important the matches are)", scheme)}
+                                { getTooltip("Choose how to sort the filtered results (date, status of match, how important the matches are)", scheme) }
                             </label>
 
-                            <select
-                                value={sort}
-                                className="p-3 text-sm rounded border shadow w-full"
-                                onChange={(event) => {
+                            <select value={ sort } className="p-3 text-sm rounded border shadow w-full"
+                                onChange={ (event) => {
                                     setSort(event.target.value);
                                     setSortMode(event.target.value);
-                                    fetchMatches();
+                                    fetchMatches().then(r => { });
                                 }}
-                                style={{
-                                    backgroundColor: scheme.background,
-                                    color: scheme.foreground,
-                                    borderColor: scheme.foreground,
-                                }}
+                                style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground }}
                             >
-                                {Object.values(SortModes).map((sortMode) => (
-                                    <option key={sortMode} value={sortMode}>
-                                        {capitalize(sortMode)}
+                                { Object.values(SortModes).map((sortMode) => (
+                                    <option key={ sortMode } value={ sortMode }>
+                                        { capitalize(sortMode) }
                                     </option>
                                 ))}
                             </select>
@@ -213,38 +201,16 @@ export default function Home(): React.JSX.Element {
         return null;
     }
 
-
     function rightBar() {
         if (!safeIsMobile()) {
             return (
                 <div className="w-[200px] flex flex-col items-center space-y-4 flex-shrink-0 pr-5">
                     <h1 className="text-3xl font-bold text-center pt-13 pb-6 flex items-center justify-center gap-2">
                         Select Leagues:
-                        {getTooltipHTML(
-                        "Choose which leagues or tournaments to include in the View Matches section (click on a league button to toggle its visibility)",
-                        scheme,
-                        'left'
-                    )}
+                        { getTooltipHTML("Choose which leagues or tournaments to include in the View Matches section " +
+                                         "(click on a league button to toggle its visibility)", scheme, 'left') }
                     </h1>
 
-                    {getLeagueButton("msi")}
-                    {getLeagueButton("lck")}
-                    {getLeagueButton("lpl")}
-                    {getLeagueButton("lec")}
-                    {getLeagueButton("lcp")}
-                    {getLeagueButton("lta_n")}
-                    {getLeagueButton("lta_s")}
-                </div>
-            );
-        }
-
-        return null;
-    }
-
-    function leagueModes() {
-        if (window.innerWidth < 768) {
-            return (
-                <div className="w-64 flex flex-col items-center justify-center space-y-4 flex-shrink-0 pt-20">
                     { getLeagueButton("msi") }
                     { getLeagueButton("lck") }
                     { getLeagueButton("lpl") }
@@ -255,67 +221,46 @@ export default function Home(): React.JSX.Element {
                 </div>
             );
         }
+
         return null;
     }
 
     try {
         return (() => {
             return (
-                <div
-                    className="h-screen flex flex-col px-4 py-3"
-                    style={{
-                        backgroundColor: scheme.background,
-                        color: scheme.foreground,
-                        transition: "background-color 0.3s, color 0.3s",
-                        overflow: "hidden",
-                    }}
+                <div className="h-screen flex flex-col px-4 py-3"
+                     style={{ backgroundColor: scheme.background, color: scheme.foreground,
+                              transition: "background-color 0.3s, color 0.3s", overflow: "hidden"
+                           }}
                 >
-                    <Menu isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+                    <Menu isOpen={ isSidebarOpen } setIsOpen={ setIsSidebarOpen }/>
 
-                    <div className={dimClass(isSidebarOpen)}>
+                    <div className={ dimClass(isSidebarOpen) }>
                         <div className="flex flex-1 min-h-0 justify-center gap-8 px-2">
                             { leftBar() }
 
-                            <div
-                                className="flex flex-col items-center justify-center flex-grow"
-                                style={{
-                                    flexGrow: 1,
-                                    maxHeight: "100vh",
-                                    minWidth: "640px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                }}
+                            <div className="flex flex-col items-center justify-center flex-grow"
+                                style={{ flexGrow: 1, maxHeight: "100vh", minWidth: "640px", display: "flex", flexDirection: "column" }}
                             >
                                 <main className="w-full flex flex-col flex-1 min-h-0 items-center">
-                                    {viewMatchesText()}
-                                    {selectModes()}
+                                    { viewMatchesText() }
+                                    { selectModes() }
 
-                                    <div
-                                        className="scroll-container flex-1 shadow-md rounded-2xl p-6 border mb-6 w-full min-h-0 overflow-y-auto"
-                                        style={{
-                                            backgroundColor: scheme.background,
-                                            color: scheme.foreground,
-                                            borderColor: scheme.foreground,
+                                    <div className="scroll-container flex-1 shadow-md rounded-2xl p-6 border mb-6 w-full min-h-0 overflow-y-auto"
+                                         style={{ backgroundColor: scheme.background, color: scheme.foreground, borderColor: scheme.foreground,
                                             //@ts-ignore
                                             '--scrollbar-thumb': scheme.buttonColor,
                                         }}
                                     >
 
-
-
-                                    <div
-                                            className="items-center h-full max-w-full"
-                                        >
-                                            <div
-                                                className="text-sm font-mono text-center"
-                                                dangerouslySetInnerHTML={{ __html: responseText }}
-                                            />
+                                    <div className="items-center h-full max-w-full">
+                                        <div className="text-sm font-mono text-center" dangerouslySetInnerHTML={{ __html: responseText }}/>
                                         </div>
                                     </div>
                                 </main>
                             </div>
 
-                            {rightBar()}
+                            { rightBar() }
                         </div>
                     </div>
                 </div>
