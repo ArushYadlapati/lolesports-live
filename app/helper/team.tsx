@@ -248,18 +248,14 @@ function formatMatch(event: any): string | null {
                 'left'
             )}
                         <span style="margin-left: 6px;">
-                            ${team1.abbreviation} Win Chance: ${team1Score}%
+                            ${ team1.abbreviation } Win Chance: ${ team1Score }%
                         </span>
                     </span>
                     <span style="display: flex; align-items: center;">
                         <span style="margin-right: 6px;">
-                            ${team2.abbreviation} Win Chance: ${team2Score}%
+                            ${ team2.abbreviation } Win Chance: ${ team2Score }%
                         </span>
-                        ${getTooltipString(
-                "Probability of this team winning the match (calculated from GPR scores)",
-                getCurrentColorScheme(),
-                'right'
-            )}
+                        ${ getTooltipString("Probability of this team winning the match (calculated from GPR scores)", getCurrentColorScheme(), 'right' ) }
                     </span>
                 </div>
 

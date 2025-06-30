@@ -4,8 +4,8 @@ import React from "react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { updateResponse } from "./api/lolAPI";
-import {capitalize, getTooltip, getTooltipHTML, getTooltipString} from "@/app/helper/util";
-import {getFormattedMatches } from "./helper/team";
+import { capitalize, getTooltip, getTooltipHTML } from "@/app/helper/util";
+import { getFormattedMatches } from "./helper/team";
 import { changeLeagues, getCurrentSortMode } from "@/app/helper/leagues";
 import { FilterModes, getCurrentFilterMode, setFilterMode, setSortMode, SortModes } from "@/app/helper/leagues";
 import { useColorScheme, getButtonStyle, getButtonClassName } from "./helper/colorScheme";
@@ -274,10 +274,10 @@ export default function Home(): React.JSX.Element {
 
                     <div className={dimClass(isSidebarOpen)}>
                         <div className="flex flex-1 min-h-0 justify-center gap-8 px-2">
-                            {leftBar()}
+                            { leftBar() }
 
                             <div
-                                className="flex flex-col items-center justify-center flex-grow max-w-[90rem] overflow-hidden"
+                                className="flex flex-col items-center justify-center flex-grow"
                                 style={{
                                     flexGrow: 1,
                                     maxHeight: "100vh",
@@ -291,22 +291,20 @@ export default function Home(): React.JSX.Element {
                                     {selectModes()}
 
                                     <div
-                                        className="flex-1 shadow-md rounded-2xl p-6 overflow-y-auto border mb-6 w-full min-h-0 themed-scrollbar"
+                                        className="scroll-container flex-1 shadow-md rounded-2xl p-6 border mb-6 w-full min-h-0 overflow-y-auto"
                                         style={{
                                             backgroundColor: scheme.background,
                                             color: scheme.foreground,
                                             borderColor: scheme.foreground,
-                                            maxHeight: "calc(100vh - 100px)",
-                                            paddingRight: "1rem",
-                                            // @ts-ignore
-                                            "--scrollbar-thumb": scheme.buttonColor,
-                                            "--scrollbar-track": scheme.background,
-                                            "--scrollbar-thumb-hover": scheme.foreground,
+                                            //@ts-ignore
+                                            '--scrollbar-thumb': scheme.buttonColor,
                                         }}
                                     >
-                                        <div
+
+
+
+                                    <div
                                             className="items-center h-full max-w-full"
-                                            style={{ overflowY: "auto" }}
                                         >
                                             <div
                                                 className="text-sm font-mono text-center"
