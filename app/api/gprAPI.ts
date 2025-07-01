@@ -8,7 +8,7 @@ dotenv.config();
  * Uses a web scraper on the backend to get the data every day (24 hours)
  */
 // TODO: use webhook to get latest taskId
-let taskId: string = "dfbb2f97-56c8-4005-bbe2-430bcd95441a"
+let taskId: string = "245b40ab-f32a-4001-9fa8-87b627a84739"
 
 let robotId: string = process.env.NEXT_PUBLIC_ROBOT_ID || "";
 let authorization: string = process.env.NEXT_PUBLIC_BROWSE_AUTH || "";
