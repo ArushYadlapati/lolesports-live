@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useColorScheme } from "@/app/helper/colorScheme";
 import React, {JSX, useState} from "react";
-import Menu, {dimClass} from "@/app/menu/menu";
+import Menu, {dimClass, safeIsMobile} from "@/app/menu/menu";
 
 /**
  * Betting disclaimer page for the LoL Live app.
@@ -14,6 +14,8 @@ import Menu, {dimClass} from "@/app/menu/menu";
 export default function Betting(): JSX.Element {
     const { scheme } = useColorScheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const divCN = safeIsMobile() ? "w-full" : "flex flex-col items-center md:items-end pr-50 pt-15";
 
     return (
         <main className="flex flex-col min-h-screen px-4 py-3" style={{ backgroundColor: scheme.background, color: scheme.foreground }}>
@@ -38,7 +40,7 @@ export default function Betting(): JSX.Element {
                         </p>
                     </div>
 
-                    <div className="flex flex-col items-center md:items-end pr-50 pt-15">
+                    <div className={divCN}>
                         <Image src="/bet365.webp" alt="bet365 Logo" width={ 400 } height={ 400 } className="drop-shadow-lg"/>
                         <p className="text-lg leading-relaxed mt-4 max-w-[400px] text-center md:text-center pt-5">
                             bet365 was chosen because it was a simple website that allowed me to get the link without too much work.

@@ -208,7 +208,7 @@ function formatMatch(event: any): string | null {
 
     let isFixed = false;
     let probabilityBar = "";
-    
+
     if (teams.length === 2) {
         const [team1, team2] = teams;
         let team1ScoreVal = parseInt(scoreMap[team1.name] || "0", 10);

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useColorScheme } from "@/app/helper/colorScheme";
 import {JSX, useState} from "react";
-import Menu, {dimClass} from "@/app/menu/menu";
+import Menu, {dimClass, safeIsMobile} from "@/app/menu/menu";
 
 /**
  * About page for the LoL Live app.
@@ -15,11 +15,15 @@ export default function About(): JSX.Element {
     const { scheme } = useColorScheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    const divCN = safeIsMobile()
+        ?{ backgroundColor: scheme.background, color: scheme.foreground, overflow: "hidden", height: "100vh" }
+        :{ backgroundColor: scheme.background, color: scheme.foreground };
+
     return (
-        <main className="flex flex-col min-h-screen px-4 py-3" style={{ backgroundColor: scheme.background, color: scheme.foreground }}>
+        <main className="flex flex-col min-h-screen px-4 py-3" style={ divCN }>
             <Menu isOpen={ isSidebarOpen } setIsOpen={ setIsSidebarOpen } />
             <div className={ dimClass(isSidebarOpen) }>
-                <div className="flex flex-col md:flex-row justify-between items-start mt-12 gap-12 pl-10 pt-7">
+                <div className="flex flex-col md:flex-row justify-between items-start mt-12 gap-12 pl-10">
                     <div className="flex-1">
                         <h1 className="text-5xl font-bold mb-6">
                             About
@@ -32,8 +36,6 @@ export default function About(): JSX.Element {
                                 alt="Made for Neighborhood"
                             />
                         </a>
-
-
 
                         <p className="text-lg leading-relaxed mb-10 max-w-2xl">
                             This Next.js + TypeScript app gets live data for current, past, and future League of Legends pro matches.
@@ -60,7 +62,7 @@ export default function About(): JSX.Element {
                                 Filter matches by type of match (finals, playoffs, regular season)
                             </li>
                             <li>
-                                Sort modes for matches (by status, by date, and im∑portance)
+                                Sort modes for matches (by status, by date, and importance)
                             </li>
                             <li>
                                 League selector buttons
