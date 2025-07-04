@@ -24,6 +24,8 @@ export enum SortModes {
 }
 
 // FilterModes: Filter (hides) matches that do not fix a certain criteria
+// TODO: Add upcoming match button
+// TODO: Merge playoffs and regional qualifier into one button
 export enum FilterModes {
     none = "None",
     playoffs = "Playoffs",
