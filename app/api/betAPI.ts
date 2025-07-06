@@ -3,8 +3,7 @@
  */
 // TODO: Add webhook or more scrapers to automate this
 export const betNameMap: { [key: string]: string } = {
-    "G2 Esports vs FlyQuest": "https://www.co.bet365.com/#/AC/B151/C21065353/D19/E23123384/F19/",
-    "Gen.G Esports vs Anyone's Legend": "https://www.co.bet365.com/#/AC/B151/C21065353/D19/E23123385/F19/",
-    "Movistar KOI vs CTBC Flying Oyster": "https://www.co.bet365.com/#/AC/B151/C21065353/D19/E23131886/F19/",
-    "BILIBILI GAMING DREAMSMART vs T1": "https://www.co.bet365.com/#/AC/B151/C21065353/D19/E23131887/F19/",
+    "CTBC Flying Oyster vs Anyone's Legend": "https://www.co.bet365.com/#/AC/B151/C21065353/D19/E23147180/F19/",
+    "FlyQuest vs BILIBILI GAMING DREAMSMART": "https://www.co.bet365.com/#/AC/B151/C21065353/D19/E23147323/F19/",
+    "T1 vs Gen.G Esports": "https://www.co.bet365.com/#/AC/B151/C21065353/D19/E23147324/F19/",
 };
