@@ -1,9 +1,9 @@
-# [LoL Esports Live](https://lol.arush.me/)
+# [LoL Esports Live](https://lol.arush.dev/)
 
 ![nhbadge](https://img.shields.io/badge/made%20for%20neighborhood-bf8f73?style=for-the-badge&logo=hackclub&logoColor=ffffff)
 
 Get live data for current, past, and future League of Legends pro matches.
-This app was built with Next.js and TypeScript, and can be viewed at [https://lol.arush.me/](https://lol.arush.me/).
+This app was built with Next.js and TypeScript, and can be viewed at [https://lol.arush.dev/](https://lol.arush.dev/).
 
 ## API
 The API is built from the free LoL esports API, combined with a modified one to get live, real-time data (which normally costs money that I am not spending).
